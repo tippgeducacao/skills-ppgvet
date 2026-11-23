@@ -15,6 +15,13 @@ Depoimento de aluno usa este mesmo fluxo: no lugar do professor, o aluno; a past
 - Pasta das chamadas: a linha `chamadas:` de `"$PY" "$S/comum.py" --pastas`.
 - O layout (legenda e logo) e o volume final da chamada são os desta skill, não os dos Reels; o resto segue `edicao.md`.
 
+## O que preciso de você
+Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
+- **Os vídeos do celular** do professor (ou do aluno): em `chamadas/<PROFESSOR>/_originais/` ou o link do Drive.
+- **A arte de CTA** da campanha (PNG 1080x1350), na pasta do professor. Sem ela a chamada não fecha: nunca inventar.
+- **O curso e o tema** de cada chamada, e quantas são.
+- Exemplo de pedido: *"monta as chamadas 2 e 3 da Paola, pós de Bovinos; os vídeos e a arte estão na pasta dela"*.
+
 ## O padrão
 - 1080x1920, 30 fps. Fala do professor, sem cortes visíveis.
 - Legenda: Montserrat Bold 78, branca com sombra, de 2 a 4 palavras por vez, centro em y=1100 (peito). **Nunca cobre o rosto.**

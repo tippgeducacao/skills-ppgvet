@@ -16,6 +16,7 @@ Cada skill traz só o próprio passo a passo. O que vale para todas está aqui. 
 - **Organização:** o trabalho fica na pasta padrão do tipo (`--pastas`), com o nome padrão; a entrega vai onde a skill diz. Nada solto fora disso.
 
 ## Como trabalhar
+0. **Primeira vez ou pedido sem material:** antes do plano, explicar em poucas linhas o que a skill precisa, onde pôr (o caminho real da pasta da pessoa) e um exemplo de pedido, pela seção "O que preciso de você" da skill. Se o material já veio, só perguntar o que faltar, no plano.
 1. **Plano, uma vez:** antes de começar, mostrar o que vai ser feito (cada skill diz o que o plano dela inclui) e perguntar o que falta saber. Esperar o ok.
 2. **Depois do ok, fazer tudo sem parar:** o lote inteiro, um atrás do outro. As dúvidas vão no plano; parar no meio só se surgir uma que a pessoa precisa decidir.
 3. **Conferir e dar nota** a cada entrega: nota de 0 a 10 em cada critério da skill, mais acabamento geral. Abaixo de 8: corrigir sozinho e conferir de novo. O que vale para todo vídeo:

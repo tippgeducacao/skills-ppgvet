@@ -14,6 +14,13 @@ Só confere e aponta. Não mexe nos vídeos: quem decide e corrige é a pessoa. 
 - `PY=$(cat ~/.ppgvet/python)` e `S="${CLAUDE_PLUGIN_ROOT}/scripts"`.
 - Pasta: a linha `conferir:` de `"$PY" "$S/comum.py" --pastas` (aqui chamada de `<conferir>`). A pessoa põe as aulas em `<conferir>/entrada/`, e os resultados saem em `<conferir>/resultados/`.
 
+## O que preciso de você
+Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
+- **As aulas já editadas**, em `<conferir>/entrada/`.
+- **A edição (pós)** das aulas, ou "genérica".
+- Opcional: a ficha da aula (professor, títulos), para conferir a cartela.
+- Exemplo de pedido: *"confere as aulas da pasta entrada, edição de Bovinos"*.
+
 ## 0. O que saber antes
 - **Edição (pós):** perguntar se não estiver claro. "Pós-graduações com a edição genérica" = `GENERICA`. Pós com edição própria = a sigla dela (`marca.md`). Não adivinhar pelo tema.
 - **Referência:** imagem com a intro e a moldura de uma aula aprovada da pós (`<SIGLA>.jpg`). Vale primeiro a da pessoa (`<conferir>/referencias/`) e, se não houver, a que vem no pacote (`acervo/aulas-referencia/`). A primeira aula aprovada de cada pós vira a referência (passo 4).

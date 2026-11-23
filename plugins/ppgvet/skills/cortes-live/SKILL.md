@@ -12,6 +12,14 @@ description: Tira cortes de uma live ou aula gravada da PPGVET (Meet/Zoom com mo
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`.
 - Pasta: a linha `cortes:` de `"$PY" "$S/comum.py" --pastas` (aqui chamada de `<cortes>`). Todos os comandos rodam de dentro de `<cortes>/`.
 
+## O que preciso de você
+Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
+- **A live:** o link (YouTube, Facebook…) ou o arquivo.
+- **A pós** que aparece nos posts e o tema da live.
+- **Se quer também a aula completa** (a live sem as partes de live, com a abertura).
+- Opcional: quantos cortes (o padrão é 7 ou 8) e algum trecho que não pode faltar.
+- Exemplo de pedido: *"tira os cortes dessa live de micotoxinas, pós de Sanidade Avícola, e faz a aula completa"* + link.
+
 ## Pastas
 ```
 cortes-live/<tema>/

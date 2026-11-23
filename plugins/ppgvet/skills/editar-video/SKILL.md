@@ -10,6 +10,13 @@ description: Edição de vídeo da PPGVET/PPG com ffmpeg, whisper local e HyperF
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`.
 - Trabalho: `<edicoes>/<assunto>/<video>/`, com roteiro, legenda, `tmp/` e o projeto `hf/`. Entrega: ao lado dos originais (`pasta_saida` no roteiro), como `<assunto>-<tema>-vN.mp4`.
 
+## O que preciso de você
+Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
+- **O vídeo** (arquivo ou link) e **o que quer**: Reels de fala, corte, legenda, compressão…
+- **Onde vai** (Instagram, site, WhatsApp) e, se tiver, **uma referência** do estilo (link).
+- Para Reels com textos animados: o que destacar, se já souber (senão o Claude propõe no plano).
+- Exemplo de pedido: *"edita esse vídeo do Rafael pra Reels, no estilo dessa referência"* + arquivo e link.
+
 ## Passo a passo
 1. **Ver sem mexer.** Rodar `ffprobe`, olhar a folha de quadros e conferir orientação, cor e os canais de áudio (regras de cor e áudio da câmera em `edicao.md`). Câmera deitada: `transpose=1` ou `2`, conferir num quadro.
 2. **Transcrever local** (o áudio não sai do computador):

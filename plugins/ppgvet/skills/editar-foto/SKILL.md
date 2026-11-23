@@ -14,6 +14,12 @@ O Claude olha a foto, decide o que fazer e explica o porquê; os scripts aplicam
 - **Não inventar:** a edição não muda a pessoa, o animal, o lugar nem o produto. Nada de apagar ou acrescentar coisa na cena, nem trocar céu ou fundo (tirar o fundo só quando pedirem).
 - **Fluxo:** plano (para cada foto ou grupo: tipo, o que vai ser feito, recorte e tamanho de uso) e ok; depois todas sem parar; no fim, a revisão com o antes e depois e a nota de cada uma. Muitas fotos parecidas (mesmo evento, mesma luz): mesmos ajustes para todas, para o conjunto ficar igual.
 
+## O que preciso de você
+Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
+- **As fotos** (arquivo ou pasta) e **onde vão ser usadas** (site, card de professor, post, capa): isso define o recorte e o tamanho.
+- O que incomoda, se souber ("está escura", "tira o fundo").
+- Exemplo de pedido: *"deixa essas fotos do evento profissionais pro Instagram"* + pasta.
+
 ## 1. O que o pedido pede
 | pedido | o que fazer |
 |---|---|

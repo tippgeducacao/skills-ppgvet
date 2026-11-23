@@ -12,6 +12,12 @@ description: Baixa vídeo do YouTube, TikTok, Facebook, Reddit, Twitch, X, Vimeo
 - **Para que serve:** referência de estilo ou material da própria PPGVET. Vídeo de terceiros não entra em post nosso, e da referência se copia o estilo (ritmo, transição, texto), nunca o conteúdo nem a marca (`edicao.md`).
 - **Nunca pedir nem digitar senha.** Se o site pedir login, usar direto a sessão do navegador ("Conteúdo que pede login"): a pessoa pediu o download, não precisa perguntar de novo.
 
+## O que preciso de você
+Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
+- **O link** do vídeo e **para quê** (referência de estilo ou material nosso para editar).
+- Opcional: só um trecho (início e fim) ou só o áudio.
+- Exemplo de pedido: *"baixa essa live do YouTube, só de 10:00 a 25:00"*.
+
 ## YouTube, TikTok, Facebook, Reddit, Twitch e outros sites
 ```
 "$PY" -m yt_dlp --quiet --no-warnings --print after_move:filepath --ffmpeg-location "$FF" -S "res:1080,ext:mp4" --merge-output-format mp4 \

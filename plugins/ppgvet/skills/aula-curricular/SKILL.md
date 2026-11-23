@@ -15,8 +15,14 @@ Uma tabela só, com uma linha por tarefa: aula, gravação achada, sigla e moldu
 
 **Limpar depois da aprovação:** as subpastas de `<aulas>/trabalho/`. Ficam a gravação original e a aula pronta.
 
-## O que chega
-A pessoa baixa as gravações, põe na raiz de `<aulas>`, chama esta skill e cola a tarefa de cada aula:
+## O que preciso de você
+Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
+- **As gravações do Meet**, baixadas e postas na raiz de `<aulas>`.
+- **A tarefa de cada aula**, colada (abertura, nome da aula e caminho da Panda).
+- Opcional: **o link da pasta da Panda** de cada aula, para a tabela do fim.
+- Exemplo de pedido: *"edita essas 3 aulas"* + as tarefas coladas.
+
+Como a tarefa chega e o que tirar de cada linha:
 ```
 Inserir abertura animada: PPGVET
 Nomear aula como: 03/11 | Extensão Rural - Parte II | Prof. Gabriela Tonial Knappmann Bittencourt

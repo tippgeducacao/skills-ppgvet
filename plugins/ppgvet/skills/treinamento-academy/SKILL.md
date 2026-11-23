@@ -11,7 +11,7 @@ description: Edita treinamentos para o PPGVET Academy (time comercial, embaixado
 - Pasta: a linha `treinamentos:` de `"$PY" "$S/comum.py" --pastas` (aqui `<treinos>`). As gravações ficam na raiz dela, os prontos em `<treinos>/prontos/` e o trabalho de cada treinamento (transcrição e `treinamento.json`) em `<treinos>/trabalho/<nome>/`.
 
 ## O que preciso de você
-Se a pessoa chamou sem o material, explicar em poucas linhas:
+Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
 - **As gravações:** o arquivo do Meet ("… - Recording.mp4") ou da câmera do estúdio, na pasta `<treinos>` (mostrar o caminho real), ou o link do Drive (baixar com a skill `baixar-video` ou pelo conector do Google Drive, se houver).
 - **O que é cada treinamento:** o assunto e para quem (ex.: "vendas dia 1, time comercial"). Se uma gravação vira mais de um treinamento, ou se dois dias viram um só, dizer onde dividir.
 - Exemplo de pedido: *"edita esses dois treinamentos pro Academy: o de marketing do dia 1 e o de vendas do dia 2"* + link ou arquivos.
