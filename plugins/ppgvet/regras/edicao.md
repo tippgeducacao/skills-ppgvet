@@ -29,7 +29,7 @@ Cada skill traz só o próprio passo a passo. O que vale para todas está aqui. 
 - **Doc oficial:** ferramenta, formato de rede social ou plataforma segue a documentação oficial, conferida na hora quando o detalhe pode ter mudado (limite, formato, licença). Dizer qual doc foi usada.
 
 ## PC e tokens
-- **PC:** os scripts já rodam com prioridade baixa; o que demora vai em segundo plano. Um whisper por vez (ele já usa todos os núcleos); dá para renderizar um vídeo enquanto transcreve o próximo. Nunca vários renders pesados ao mesmo tempo.
+- **PC:** todo render e transcrição dos scripts roda com prioridade baixa (`nice` no Mac, "abaixo do normal" no Windows): com o computador livre, usa a CPU toda e vai rápido; com a pessoa usando, cede a vez e nada trava. Comando pesado rodado direto, fora dos scripts (`npx hyperframes render`), vai com `nice -n 10` na frente no Mac. Não usar `taskpolicy -b` (prende nos núcleos econômicos e deixa lento mesmo com a máquina livre). O que demora vai em segundo plano. Um whisper por vez (ele já usa todos os núcleos); dá para renderizar um vídeo enquanto transcreve o próximo. Nunca vários renders pesados ao mesmo tempo.
 - **Tokens** (quase tudo roda no computador, então quase nada precisa passar pela conversa):
   - comando sem progresso na saída (os scripts já saem em silêncio; ffmpeg com `-v error -nostats`, yt-dlp com `--quiet --no-warnings`, pip com `-q`). Saída longa: só o fim (`| tail -5`);
   - vídeo se olha por folha de quadros (`"$PY" "$S/folha.py" video.mp4 folha.jpg [a cada N s]`), nunca quadro a quadro;

@@ -2,7 +2,7 @@
 """Monta uma chamada a partir do roteiro.json: fala + legenda no peito + logo + transição para a arte (CTA) + música."""
 import json, os, re, shutil, subprocess, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import FF, acervo, caminho, dur, filtro_caminho, registrar_musica  # noqa: E402
+from comum import baixo, FF, acervo, caminho, dur, filtro_caminho, registrar_musica  # noqa: E402
 
 W, H, FPS, TRANS = 1080, 1920, 30, 0.3
 MUS_VOZ, MUS_ARTE = 0.063, 1.6  # música normalizada a -14 LUFS: -24 dB sob a voz (~22 dB abaixo dela), +4 dB na arte
@@ -89,7 +89,7 @@ def main(roteiro):
            "-c:v", "libx264", "-crf", "20", "-preset", "slow", "-pix_fmt", "yuv420p",
            "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv",
            "-c:a", "aac", "-b:a", "256k", "-movflags", "+faststart", saida]
-    subprocess.run(cmd, check=True)
+    baixo(cmd, check=True)
     shutil.rmtree(os.path.dirname(ass), ignore_errors=True)
 
     origem = musica + ".origem.txt"

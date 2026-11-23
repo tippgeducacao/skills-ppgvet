@@ -8,7 +8,7 @@ Etapas (cada uma reaproveita o que já existe em tmp/):
 uso: reels.py pasta/roteiro.json [base|legenda|final] [--previa]"""
 import json, os, re, subprocess, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import FF, WHISPER, MODELO, caminho, dur, registrar_musica  # noqa: E402
+from comum import baixo, FF, WHISPER, MODELO, caminho, dur, registrar_musica  # noqa: E402
 
 W, H, FPS = 1080, 1920, "30000/1001"
 VINHETAS = {"ppgvet": "acervo:logos-animadas/encerramento-ppgvet-vertical.mp4",
@@ -19,7 +19,7 @@ MIN_TROCA = 5.0  # s mínimos num mesmo plano antes de trocar o zoom
 
 
 def run(cmd):
-    subprocess.run(cmd, check=True)
+    baixo(cmd, check=True)
 
 
 def trechos(r, com_quem=False):
@@ -111,7 +111,7 @@ def etapa_final(r, pasta, tr, previa):
     assert dm >= total, f"música curta ({dm:.0f}s para {total:.0f}s): escolha outra, nunca em loop"
     # música medida (LUFS) e ajustada: fundo a -33 LUFS, 17 dB sob a voz (-16), para a fala ficar clara (pedido do usuário);
     # na vinheta, sem voz, sobe a -15,5 LUFS; vale para qualquer faixa
-    lufs = float(re.search(r"Input Integrated:\s+(-?[\d.]+)", subprocess.run(
+    lufs = float(re.search(r"Input Integrated:\s+(-?[\d.]+)", baixo(
         [FF(), "-hide_banner", "-t", f"{total:.1f}", "-i", musica, "-af", "loudnorm=print_format=summary", "-f", "null", "-"],
         capture_output=True, text=True).stderr).group(1))
     mv = r.get("musica_volume", round(10 ** ((-33 - lufs) / 20), 4))

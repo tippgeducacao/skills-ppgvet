@@ -47,7 +47,7 @@ def compartilhando_quadro(px):
 
 def quadros(args, antes=""):
     """lê quadros cinza reduzidos do ffmpeg; devolve [(tempo, compartilhando)]"""
-    p = subprocess.run([FF(), "-v", "info", *args, "-vf", f"{antes}scale={PW}:{PH},format=gray,showinfo", "-f", "rawvideo", "-"],
+    p = baixo([FF(), "-v", "info", *args, "-vf", f"{antes}scale={PW}:{PH},format=gray,showinfo", "-f", "rawvideo", "-"],
                        capture_output=True, check=True)
     tempos = [float(l.split("pts_time:")[1].split()[0]) for l in p.stderr.decode(errors="ignore").splitlines() if "pts_time:" in l]
     n = PW * PH

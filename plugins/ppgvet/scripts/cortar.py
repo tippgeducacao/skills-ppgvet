@@ -6,7 +6,7 @@ Uso: cortar.py <pasta-da-live>/cortes.json <tema>   ->  cortes/corte-<tema>-<tit
 Usado também por aula.py (tc, slug, palavras, acha): não mudar a assinatura dessas funções."""
 import glob, json, os, re, shutil, subprocess, sys, tempfile, unicodedata
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import FF, FFPROBE, WHISPER, MODELO, acervo  # noqa: E402
+from comum import baixo, FF, FFPROBE, WHISPER, MODELO, acervo  # noqa: E402
 
 JANELA, FOLGA = 20, 3  # s ouvidos além da minutagem; s deixados antes/depois da fala
 
@@ -28,9 +28,9 @@ def slug(t):
 def palavras(aula, ini, dur):
     """[(início, fim, palavra)] da janela, em segundos da aula"""
     d = tempfile.mkdtemp()
-    subprocess.run([FF(), "-v", "error", "-ss", f"{ini:.3f}", "-i", aula, "-t", f"{dur:.3f}", "-ar", "16000", "-ac", "1",
+    baixo([FF(), "-v", "error", "-ss", f"{ini:.3f}", "-i", aula, "-t", f"{dur:.3f}", "-ar", "16000", "-ac", "1",
                     os.path.join(d, "a.wav")], check=True)
-    subprocess.run([WHISPER(), "-m", MODELO(), "-l", "pt", "-mc", "0", "-sns", "-ml", "1", "-sow", "-osrt", "-of", os.path.join(d, "a"), "-f", os.path.join(d, "a.wav")],
+    baixo([WHISPER(), "-m", MODELO(), "-l", "pt", "-mc", "0", "-sns", "-ml", "1", "-sow", "-osrt", "-of", os.path.join(d, "a"), "-f", os.path.join(d, "a.wav")],
                    check=True, capture_output=True)
     out = []
     texto = open(os.path.join(d, "a.srt"), encoding="utf-8").read().strip()
@@ -107,7 +107,7 @@ def main(cortes_json, tema):
             cmd = [*ent, "-filter_complex", fc, "-map", "[v]", "-map", "[a]"]
         else:
             cmd = ["-ss", f"{ini:.3f}", "-i", aulas[0], "-t", f"{d:.3f}", "-af", fade]
-        subprocess.run([FF(), "-v", "error", *cmd, "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p",
+        baixo([FF(), "-v", "error", *cmd, "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p",
                         "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", saida], check=True)
         print(f"ok: {os.path.basename(saida)} ({fim - ini:.0f} s; minutagem errou {ini + folga - a:+.1f} s no início)")
 

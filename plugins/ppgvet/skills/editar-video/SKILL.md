@@ -59,7 +59,7 @@ Comandos:
 4. Ler a skill `hyperframes` antes. Todo comando do HyperFrames roda com `eval "$("$PY" "$S/comum.py" --hf-env)"` antes, para ele achar o ffmpeg completo. No projeto `hf/`:
    - `npx hyperframes check` e `snapshot`;
    - **Studio no navegador** (na revisão do fim, para ajuste fino): `npx hyperframes preview --background`. Mandar para a pessoa o link que ele mostrar (com `#project/hf` no fim); depois dos ajustes, renderizar de novo e parar com `npx hyperframes preview --stop`;
-   - render: `npx hyperframes render . -o ../tmp/hf.mp4 --fps 30000/1001 --quality delivery`.
+   - render (no Mac com `nice -n 10` na frente): `npx hyperframes render . -o ../tmp/hf.mp4 --fps 30000/1001 --quality delivery`.
 5. `"$PY" "$S/reels.py" roteiro.json final` junta a vinheta da marca e a mixagem e salva em `pasta_saida`. `--previa` faz uma versão leve na pasta de trabalho.
 
 O que o `hf.py` desenha, na identidade da marca e com Montserrat, nas faixas do padrão Instagram (`edicao.md`):

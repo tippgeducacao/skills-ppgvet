@@ -6,7 +6,7 @@ import html, json, os, re, shutil, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from reels import trechos, mapa  # noqa: E402
-from comum import FF, acervo, dur  # noqa: E402
+from comum import baixo, FF, acervo, dur  # noqa: E402
 
 ACERVO = acervo()
 LOGOS = acervo("logos")
@@ -199,7 +199,7 @@ def main(rot):
     base = f"{hf}/assets/base.mp4"
     if not os.path.exists(base) or os.path.getmtime(base) < os.path.getmtime(f"{pasta}/tmp/base.mov"):
         # keyframe a cada segundo (seek preciso no render), sem áudio: a mixagem é feita depois no ffmpeg
-        subprocess.run([FF(), "-v", "error", "-y", "-i", f"{pasta}/tmp/base.mov", "-an", "-c:v", "libx264",
+        baixo([FF(), "-v", "error", "-y", "-i", f"{pasta}/tmp/base.mov", "-an", "-c:v", "libx264",
                         "-crf", "14", "-preset", "fast", "-g", "30", "-pix_fmt", "yuv420p", base], check=True)
     shutil.copy(f"{ACERVO}/fontes/montserrat-variavel.ttf", f"{hf}/assets/fonts/")
     global M

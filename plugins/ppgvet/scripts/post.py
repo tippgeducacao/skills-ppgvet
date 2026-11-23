@@ -5,7 +5,7 @@ Uso: post.py <post.json>              monta o vídeo
 import json, os, re, subprocess, sys
 from PIL import Image, ImageDraw, ImageFont
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import FF, WHISPER, MODELO, acervo, caminho, dur, filtro_caminho, registrar_musica  # noqa: E402
+from comum import baixo, FF, WHISPER, MODELO, acervo, caminho, dur, filtro_caminho, registrar_musica  # noqa: E402
 
 BOLD = acervo("fontes", "montserrat-bold.ttf")
 VAR = acervo("fontes", "montserrat-variavel.ttf")  # tem a Regular
@@ -17,7 +17,7 @@ CAM = (42, 831, 996)  # x, y e largura da câmera do professor no post
 
 def lufs(f, dur):
     """volume só do trecho usado (muita faixa começa baixa e cresce)"""
-    out = subprocess.run([FF(), "-nostats", "-t", f"{dur:.3f}", "-i", f, "-af", "ebur128", "-f", "null", "-"], capture_output=True, text=True).stderr
+    out = baixo([FF(), "-nostats", "-t", f"{dur:.3f}", "-i", f, "-af", "ebur128", "-f", "null", "-"], capture_output=True, text=True).stderr
     return float(re.findall(r"I:\s+(-?[\d.]+) LUFS", out)[-1])
 
 
@@ -138,8 +138,8 @@ def main(post_json, so_legenda=False):
     srt_arq = os.path.join(tmp, "legenda.srt")
     if not os.path.exists(srt_arq):  # transcrição local do corte inteiro, guardada para não refazer
         wav = os.path.join(tmp, "fala.wav")
-        subprocess.run([FF(), "-v", "error", "-y", "-i", corte, "-ar", "16000", "-ac", "1", wav], check=True)
-        subprocess.run([WHISPER(), "-m", MODELO(), "-l", "pt", "-ml", "26", "-sow", "-osrt",
+        baixo([FF(), "-v", "error", "-y", "-i", corte, "-ar", "16000", "-ac", "1", wav], check=True)
+        baixo([WHISPER(), "-m", MODELO(), "-l", "pt", "-ml", "26", "-sow", "-osrt",
                         "-of", srt_arq[:-4], "-f", wav], check=True, capture_output=True)
     if so_legenda:
         print(srt_arq)
@@ -207,7 +207,7 @@ def main(post_json, so_legenda=False):
            f"[{k_mus}:a]aresample=48000,aformat=channel_layouts=stereo,atrim=duration={total:.3f},volume={-35 - lufs(musica, total):.1f}dB,"
            f"afade=t=in:d=0.5,afade=t=out:st={total - 1.5:.3f}:d=1.5,volume='1+2.16*clip((t-{fala:.3f})/0.6,0,1)':eval=frame[mus]",
            "[voz][mus]amix=inputs=2:normalize=0:duration=first,alimiter=limit=0.84:level=0[a]"]
-    subprocess.run([FF(), "-v", "error", "-nostats", *ent, "-filter_complex", ";".join(fc), "-map", "[v]", "-map", "[a]",
+    baixo([FF(), "-v", "error", "-nostats", *ent, "-filter_complex", ";".join(fc), "-map", "[v]", "-map", "[a]",
                     "-c:v", "libx264", "-crf", "20", "-preset", "slow", "-pix_fmt", "yuv420p",
                     "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-color_range", "tv",
                     "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", saida], check=True)
