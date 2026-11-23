@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Tira ruído de fundo do microfone (zumbido, ar-condicionado, sala) com DeepFilterNet 3, preservando a voz.
 uso: limpar_voz.py <entrada (vídeo ou áudio)> <saida.wav>
-Vem no kit do instalar.py (~1 GB)."""
+Parte 'voz' do kit, instalada quando alguém precisa (instalar.py --voz)."""
 import os, shutil, subprocess, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import FF, HOME, WIN, baixo  # noqa: E402
+from comum import FF, HOME, WIN, baixo, falta_parte  # noqa: E402
 
 DF = HOME / "deepfilternet" / ("Scripts/deepFilter.exe" if WIN else "bin/deepFilter")
 
 
 def main(entrada, saida):
     if not DF.exists():
-        sys.exit("Falta a limpeza de voz: rode a skill instalar")
+        falta_parte("voz")
     t = tempfile.mkdtemp()
     try:
         voz = os.path.join(t, "voz.wav")

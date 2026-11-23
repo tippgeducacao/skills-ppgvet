@@ -12,7 +12,7 @@ Um pacote só, o **ppgvet**, com as skills de vídeo e de foto da equipe, no pad
 | `/ppgvet:cortes-live` | live (arquivo ou link) vira 7 ou 8 posts 9:16, com o professor em foco e slide e quem pergunta como apoio; também a aula completa com abertura, sem as partes da live | "tira os cortes dessa live" + link |
 | `/ppgvet:editar-video` | edição livre e Reels de fala com textos animados (HyperFrames, com o Studio no navegador), legenda, cor, música, compressão | "edita esse vídeo para Reels" |
 | `/ppgvet:baixar-video` | baixar vídeo do YouTube, TikTok, Facebook, Reddit, Twitch, X, Instagram e outros ~1.700 sites | "baixa esse vídeo" + link |
-| `/ppgvet:editar-foto` | foto como um fotógrafo: retoque de luz, cor, pele, nitidez e horizonte, recorte no tamanho de uso, ampliar, tirar o fundo, melhorar rosto borrado (só no Mac, baixado na primeira vez que pedir) | "deixa essa foto profissional", "tira o fundo" |
+| `/ppgvet:editar-foto` | foto como um fotógrafo: retoque de luz, cor, pele, nitidez e horizonte, recorte no tamanho de uso, ampliar, tirar o fundo, melhorar rosto borrado (este só no Mac) | "deixa essa foto profissional", "tira o fundo" |
 | `/ppgvet:instalar` | prepara o computador (uma vez) e diz o que falta quando algo dá erro | "instala o kit", "está tudo instalado?" |
 
 Não precisa digitar o comando: pedir com as próprias palavras basta. Em todas, o Claude mostra o plano, espera o ok, faz tudo, confere com nota e no fim mostra o resultado para aprovar ou pedir ajuste.
@@ -24,7 +24,7 @@ Não precisa digitar o comando: pedir com as próprias palavras basta. Em todas,
 **1. Colar o link no Claude Code** e pedir:
 > instala as skills da PPGVET seguindo o README: https://github.com/tippgeducacao/skills-ppgvet
 
-O Claude adiciona o pacote, liga a atualização automática e instala o kit, seguindo a seção "Para o Claude", lá embaixo. Ele pede permissão antes de cada instalação: é só permitir. No fim, você fecha e abre o Claude Code. Se ele parar depois de adicionar o pacote, peça *"instala o kit"*.
+O Claude adiciona o pacote, liga a atualização automática e instala o kit essencial, seguindo a seção "Para o Claude", lá embaixo. Ele pede permissão antes de cada instalação: é só permitir. No fim, você fecha e abre o Claude Code. Se ele parar depois de adicionar o pacote, peça *"instala o kit"*.
 
 À mão, no Claude Code:
 ```
@@ -33,18 +33,22 @@ O Claude adiciona o pacote, liga a atualização automática e instala o kit, se
 ```
 Depois: `/plugin` → **Marketplaces** → **ppgvet** → ligar auto-update; fechar e abrir o Claude Code; e pedir *"instala o kit"*.
 
-**2. O kit** (~2,5 GB, de 20 a 40 min; o Claude pergunta só onde guardar os vídeos):
+**2. O kit essencial**, o estúdio de edição (~1 GB, de 10 a 20 min; o Claude pergunta só onde guardar os vídeos):
 
 | ferramenta | para quê |
 |---|---|
 | ffmpeg completo | cortar, montar, legenda, cor |
 | whisper + modelo em português | transcrição no próprio computador |
-| Python do pacote (com OpenCV, rembg e yt-dlp) | rodar os scripts, retocar e tirar fundo, baixar vídeos |
-| Real-ESRGAN | ampliar imagem |
-| DeepFilterNet | limpar ruído da voz |
-| Node.js, Playwright e os plugins **HyperFrames** e **animate** | textos animados nos Reels e animações de motion design |
+| Python do pacote (com OpenCV e yt-dlp) | rodar os scripts, baixar vídeos |
 
-Fora do kit, baixado só quando alguém pedir: **GFPGAN** (melhorar rosto borrado, só no Mac, ~1,6 GB).
+**Sob demanda:** o resto é instalado sozinho na primeira vez que uma skill precisar. O Claude avisa antes, em uma linha.
+
+| parte | para quê | peso |
+|---|---|---|
+| voz (DeepFilterNet) | limpar ruído da voz | ~0,4 GB |
+| motion (Node.js, Playwright, HyperFrames, animate) | textos animados nos Reels e animações de motion design | ~0,6 GB |
+| foto (Real-ESRGAN, rembg) | ampliar imagem, tirar fundo | ~0,7 GB |
+| rosto (GFPGAN, só no Mac) | melhorar rosto borrado | ~1,6 GB |
 
 No Mac, se faltar o Homebrew, o Claude pede para você colar no Terminal o comando do site https://brew.sh, porque esse comando pede a senha do Mac.
 
@@ -70,13 +74,13 @@ Tudo numa ida só; a pessoa só fecha e abre o Claude Code no fim.
 1. **Git:** `git --version`. Se faltar: no Mac, esse mesmo comando dispara a instalação das ferramentas de linha de comando (a pessoa clica em Instalar e espera); no Windows, `winget install -e --id Git.Git` e pedir para a pessoa fechar e abrir o Claude Code antes de seguir.
 2. **Pacote:** se o comando `claude` existir no terminal: `claude plugin marketplace add https://github.com/tippgeducacao/skills-ppgvet` e `claude plugin install ppgvet@ppgvet`. Use o link `https://`: ele não precisa de chave SSH nem de conta. Se o `claude` não existir, pedir para a pessoa digitar os comandos com `/plugin` (seção "Instalar") e seguir quando ela disser que foi.
 3. **Atualização automática**, que vem desligada em marketplace de terceiros: em `~/.claude/settings.json`, na entrada `extraKnownMarketplaces.ppgvet` que o comando criou, pôr `"autoUpdate": true`.
-4. **Kit**, sem esperar reiniciar: o caminho do pacote instalado é o `installPath` de `ppgvet@ppgvet` em `~/.claude/plugins/installed_plugins.json`. Abrir `<installPath>/skills/instalar/SKILL.md` e seguir os passos dele, usando `<installPath>` no lugar de `${CLAUDE_PLUGIN_ROOT}`.
+4. **Kit essencial**, sem esperar reiniciar: o caminho do pacote instalado é o `installPath` de `ppgvet@ppgvet` em `~/.claude/plugins/installed_plugins.json`. Abrir `<installPath>/skills/instalar/SKILL.md` e seguir os passos dele, usando `<installPath>` no lugar de `${CLAUDE_PLUGIN_ROOT}`.
 5. No fim, pedir para a pessoa fechar e abrir o Claude Code, para as skills carregarem.
 
 ## Para quem cuida do pacote
 - **Publicar:** commit e `./publicar.sh` (roda os testes dos scripts, valida o pacote e dá push). Sem número de versão no `plugin.json`, cada commit é uma versão nova, e a equipe recebe sozinha.
 - **Organização:** tudo em `plugins/ppgvet/`. As regras que valem para todas as skills de vídeo ficam num lugar só, `regras/edicao.md` (ambiente, arquivo e versões, como trabalhar, PC e tokens, conteúdo, técnica, motion, padrão Instagram, música), e a marca em `regras/marca.md` (marcas, peças, siglas e molduras). Cada skill traz só o próprio passo a passo. Regra nova que vale para todas: entra em `edicao.md`, não na skill.
 - **Skill nova:** criar `plugins/ppgvet/skills/<nome>/SKILL.md`; chega sozinha para todo mundo.
-- **Ferramenta nova no kit:** acrescentar em `scripts/instalar.py` e fazer a skill que depende dela avisar "rode o instalar" quando faltar (quem já instalou precisa rodar de novo).
+- **Ferramenta nova:** se toda skill usa, vai no essencial (`instalar()` em `scripts/instalar.py`; quem já instalou roda de novo). Se é de poucas, vira parte sob demanda: entra em `partes()` do `instalar.py` e em `PARTES` do `comum.py`, e o script que usa chama `falta_parte("<parte>")` quando faltar.
 - **Peças no repositório:** só as gerais da marca, em `acervo/`. O detector de rosto (YuNet, licença MIT) fica em `modelos/`. Música, som e efeito não entram: as licenças (Pixabay, Mixkit) não permitem redistribuir o arquivo solto.
 - **Referência de aula aprovada** por alguém (`<conferir>/referencias/<SIGLA>.jpg`): pôr em `acervo/aulas-referencia/` e publicar.

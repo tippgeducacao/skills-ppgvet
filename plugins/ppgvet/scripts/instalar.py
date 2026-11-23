@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Prepara o computador para o pacote ppgvet (Mac e Windows) com o kit completo e grava ~/.ppgvet/video.json.
-uso: instalar.py --conferir            só mostra o que está ok e o que falta (não muda nada)
-     instalar.py [--trabalho <pasta>]  instala o que falta (padrão da pasta: Filmes/PPGVET no Mac, Vídeos/PPGVET no Windows)
-     instalar.py --rosto               instala só o GFPGAN (melhorar rosto, só no Mac, ~1,6 GB), quando alguém pedir
-Kit: ffmpeg completo, whisper + modelo, Python do pacote (Pillow, numpy, rembg, yt-dlp), Real-ESRGAN,
-limpeza de voz (DeepFilterNet), Node.js, plugins HyperFrames e animate (com Playwright). O GFPGAN fica fora (raro e pesado).
+"""Prepara o computador para o pacote ppgvet (Mac e Windows) e grava ~/.ppgvet/video.json.
+uso: instalar.py --conferir            só mostra o que está ok, o que falta e as partes de fora (não muda nada)
+     instalar.py [--trabalho <pasta>]  instala o essencial (padrão da pasta: Filmes/PPGVET no Mac, Vídeos/PPGVET no Windows)
+     instalar.py --voz|--motion|--foto|--rosto   instala uma parte sob demanda, quando uma skill precisar
+Essencial (o estúdio de edição): ffmpeg completo, whisper + modelo, Python do pacote (Pillow, numpy, OpenCV, yt-dlp).
+Sob demanda: voz (DeepFilterNet), motion (Node.js, Playwright, plugins HyperFrames e animate),
+foto (Real-ESRGAN e rembg), rosto (GFPGAN, só Mac).
 Usa só a biblioteca padrão do Python: roda antes de existir o ambiente do pacote."""
 import glob, json, os, re, shutil, subprocess, sys, urllib.request, zipfile
 from pathlib import Path
@@ -27,7 +28,8 @@ GFP_URL = "https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv
 # última versão do Real-ESRGAN com programa pronto (ncnn) para Mac e Windows
 ESRGAN_URL = ("https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/"
               f"realesrgan-ncnn-vulkan-20220424-{'windows' if WIN else 'macos'}.zip")
-PIP_PACOTE = ["pillow", "numpy", "opencv-python-headless", "yt-dlp", "rembg[cpu,cli]"]
+PIP_PACOTE = ["pillow", "numpy", "opencv-python-headless", "yt-dlp"]
+PIP_FOTO = ["rembg[cpu,cli]"]  # sozinho puxa ~600 MB (onnxruntime, scipy, gradio): fica na parte foto
 PLUGINS = {"hyperframes": "https://github.com/heygen-com/hyperframes",  # https: não precisa de chave SSH
            "animate": "https://github.com/cth9191/animate"}
 
@@ -155,7 +157,11 @@ def achar_esrgan():
 def venv_ok():
     if not VENV_PY.exists() or (versao_py([str(VENV_PY)]) or (0, 0)) < (3, 11):
         return False
-    return subprocess.run([VENV_PY, "-c", "import PIL, numpy, cv2, rembg, yt_dlp"], capture_output=True).returncode == 0
+    return subprocess.run([VENV_PY, "-c", "import PIL, numpy, cv2, yt_dlp"], capture_output=True).returncode == 0
+
+
+def rembg_ok():
+    return VENV_PY.exists() and VENV_PY.with_name(f"rembg{EXE}").exists()
 
 
 def gfpgan_ok():
@@ -204,6 +210,21 @@ def playwright_ok():
 
 # ---------- conferir ----------
 
+def motion_ok():
+    return node_ok() and bool(shutil.which("ffmpeg")) and playwright_ok() and plugin_ok("hyperframes") and plugin_ok("animate")
+
+
+def partes():
+    """partes sob demanda: chave -> (nome, peso, está instalada?, instalar)"""
+    p = {"voz": ("limpeza de voz (DeepFilterNet)", "~0,4 GB", DF.exists, instalar_voz),
+         "motion": ("motion: Node.js, Playwright, HyperFrames e animate", "~0,6 GB", motion_ok, instalar_motion),
+         "foto": ("foto: Real-ESRGAN (ampliar) e rembg (tirar fundo)", "~0,7 GB",
+                  lambda: bool(achar_esrgan()) and rembg_ok(), instalar_foto)}
+    if MAC:
+        p["rosto"] = ("rosto: GFPGAN (melhorar rosto)", "~1,6 GB", gfpgan_ok, instalar_rosto)
+    return p
+
+
 def conferir():
     cfg = ler_config()
     ff = cfg.get("ffmpeg") or achar_ffmpeg()[0]
@@ -211,29 +232,22 @@ def conferir():
     itens = [
         ("configuração (~/.ppgvet/video.json)", CONFIG.exists()),
         ("ffmpeg completo (zscale, legenda, texto)", bool(ff) and ffmpeg_completo(ff)),
-        ("ffmpeg no PATH (para o animate)", bool(shutil.which("ffmpeg"))),
         ("whisper (transcrição local)", bool(cfg.get("whisper") and os.path.exists(cfg["whisper"]))),
         ("modelo do whisper em português (~574 MB)", bool(achar_modelo(cfg))),
-        ("Python do pacote (Pillow, numpy, OpenCV, rembg, yt-dlp)", venv_ok()),
-        ("Real-ESRGAN (ampliar imagem)", bool(achar_esrgan())),
-        ("limpeza de voz (DeepFilterNet)", DF.exists()),
-        ("Node.js 22+", node_ok()),
-        ("Playwright com Chromium (para o animate)", playwright_ok()),
-        ("plugin HyperFrames (textos animados nos Reels)", plugin_ok("hyperframes")),
-        ("plugin animate (animações de motion design)", plugin_ok("animate")),
+        ("Python do pacote (Pillow, numpy, OpenCV, yt-dlp)", venv_ok()),
         ("peças padrão do pacote (intro, molduras, vinhetas, fontes)", not falta),
         ("pasta de trabalho " + (f"({cfg['trabalho']})" if cfg.get("trabalho") else "(não escolhida)"), bool(cfg.get("trabalho"))),
     ]
     for nome, ok in itens:
         print(("ok    " if ok else "falta ") + nome)
-    if MAC:  # fora do kit: não conta como falta
-        print(("ok    " if gfpgan_ok() else "fora  ") + "GFPGAN (melhorar rosto; só quando pedirem: instalar.py --rosto)")
     if falta:
         print("      faltam no pacote:", ", ".join(falta), "(reinstalar o pacote: /plugin)")
+    for chave, (nome, peso, ok, _) in partes().items():  # sob demanda: "fora" não é falta
+        print(("ok    " if ok() else "fora  ") + f"{nome} (--{chave}, {peso})")
     return all(ok for _, ok in itens)
 
 
-# ---------- instalar ----------
+# ---------- instalar o essencial ----------
 
 def instalar(trabalho):
     HOME.mkdir(exist_ok=True)
@@ -242,17 +256,15 @@ def instalar(trabalho):
         sys.exit("Falta o Homebrew. Instale pelo site oficial https://brew.sh (o comando pede a senha do Mac) "
                  "e rode o instalar de novo.")
 
-    print("1/8 ffmpeg completo")
+    print("1/4 ffmpeg completo")
     ff, fp = achar_ffmpeg()
     if not (ff and ffmpeg_completo(ff)):
         winget("Gyan.FFmpeg") if WIN else sh([brew(), "install", "ffmpeg-full"], check=True)
         ff, fp = achar_ffmpeg()
     if not (ff and ffmpeg_completo(ff)):
         sys.exit("ffmpeg completo não encontrado depois da instalação (feche e abra o Claude Code e rode de novo)")
-    if MAC and not shutil.which("ffmpeg"):  # o ffmpeg-full fica fora do PATH; o animate procura um ffmpeg no PATH
-        sh([brew(), "install", "ffmpeg"], check=True)
 
-    print("2/8 whisper")
+    print("2/4 whisper")
     wh = achar_whisper()
     if not wh:
         if MAC:
@@ -267,7 +279,7 @@ def instalar(trabalho):
         baixar(MODELO_URL, modelo)
         assert os.path.getsize(modelo) > MODELO_MIN, "o modelo do whisper veio incompleto: rode de novo"
 
-    print("3/8 Python do pacote (yt-dlp e rembg pedem Python 3.11+)")
+    print("3/4 Python do pacote (yt-dlp pede Python 3.11+)")
     if not venv_ok():
         if VENV_PY.exists() and (versao_py([str(VENV_PY)]) or (0, 0)) < (3, 11):
             shutil.rmtree(HOME / "venv")  # versão antiga do pacote criou com Python velho
@@ -276,16 +288,41 @@ def instalar(trabalho):
         sh([VENV_PY, "-m", "pip", "install", "-q", "--upgrade", "pip", *PIP_PACOTE], check=True)
     (HOME / "python").write_text(barra(VENV_PY), encoding="utf-8")
 
-    print("4/8 pastas")
+    print("4/4 pastas")
     trabalho = trabalho or trabalho_padrao(cfg)
     os.makedirs(trabalho, exist_ok=True)
     cfg.update({"ffmpeg": barra(ff), "ffprobe": barra(fp), "whisper": barra(wh), "modelo": barra(modelo),
                 "trabalho": barra(trabalho)})
     cfg.pop("acervo", None)  # versão antiga apontava para o Drive
-    CONFIG.write_text(json.dumps(cfg, ensure_ascii=False, indent=1), encoding="utf-8")
+    salvar(cfg)
     print("  configuração salva em", CONFIG)
+    print()
+    return conferir()
 
-    print("5/8 imagem: Real-ESRGAN")
+
+def salvar(cfg):
+    CONFIG.write_text(json.dumps(cfg, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+# ---------- partes sob demanda ----------
+
+def exigir_essencial():
+    cfg = ler_config()
+    if not (cfg.get("ffmpeg") and VENV_PY.exists()):
+        sys.exit("Instale o essencial antes (instalar.py sem opção, pela skill instalar).")
+    return cfg
+
+
+def instalar_voz():
+    exigir_essencial()
+    if not DF.exists():  # torch 2.1.2 só existe para Python 3.9 a 3.11
+        sh([*garantir_python((3, 9), (3, 11), "3.11"), "-m", "venv", HOME / "deepfilternet"], check=True)
+        sh([DF.with_name(f"pip{EXE}"), "install", "-q", "torch==2.1.2", "torchaudio==2.1.2", "numpy<2", "soundfile",
+            "deepfilternet"], check=True)
+
+
+def instalar_foto():
+    cfg = exigir_essencial()
     if not achar_esrgan():
         z = HOME / "realesrgan.zip"
         baixar(ESRGAN_URL, z)
@@ -294,30 +331,29 @@ def instalar(trabalho):
         if not WIN:
             os.chmod(achar_esrgan(), 0o755)  # o zip não guarda a permissão de executar
     cfg["realesrgan"] = barra(achar_esrgan())
-    CONFIG.write_text(json.dumps(cfg, ensure_ascii=False, indent=1), encoding="utf-8")
+    salvar(cfg)
+    if not rembg_ok():
+        sh([VENV_PY, "-m", "pip", "install", "-q", *PIP_FOTO], check=True)
 
-    print("6/8 limpeza de voz (DeepFilterNet, ~1 GB)")
-    if not DF.exists():  # torch 2.1.2 só existe para Python 3.9 a 3.11
-        sh([*garantir_python((3, 9), (3, 11), "3.11"), "-m", "venv", HOME / "deepfilternet"], check=True)
-        sh([DF.with_name(f"pip{EXE}"), "install", "-q", "torch==2.1.2", "torchaudio==2.1.2", "numpy<2", "soundfile",
-            "deepfilternet"], check=True)
 
-    print("7/8 Node.js e navegadores (HyperFrames e animate)")
+def instalar_motion():
+    cfg = exigir_essencial()
+    if MAC and not shutil.which("ffmpeg"):  # o ffmpeg-full fica fora do PATH; o animate procura um ffmpeg no PATH
+        sh([brew(), "install", "ffmpeg"], check=True)
     if not node_ok():
         winget("OpenJS.NodeJS.LTS") if WIN else sh([brew(), "install", "node"], check=True)
     npx, npm = shutil.which("npx"), shutil.which("npm")
-    if npx:
-        env = dict(os.environ, HYPERFRAMES_FFMPEG_PATH=ff, HYPERFRAMES_FFPROBE_PATH=fp)
-        sh([npx, "-y", "hyperframes", "browser", "ensure"], check=True, env=env)
-    if npm and not playwright_ok():
+    if not (npx and npm):
+        sys.exit("Node.js instalado, mas não encontrado: feche e abra o Claude Code e rode de novo.")
+    env = dict(os.environ, HYPERFRAMES_FFMPEG_PATH=cfg["ffmpeg"], HYPERFRAMES_FFPROBE_PATH=cfg["ffprobe"])
+    sh([npx, "-y", "hyperframes", "browser", "ensure"], check=True, env=env)
+    if not playwright_ok():
         if not os.access(npm_global(), os.W_OK):
             # Node do instalador oficial: pasta global do sistema pede senha. Doc do npm ("Resolving EACCES
             # permissions errors"): mudar a pasta global para dentro da pasta pessoal
             sh([npm, "config", "set", "prefix", Path.home() / ".npm-global"], check=True)
         sh([npm, "install", "-g", "playwright"], check=True)
         sh([shutil.which("node"), Path(npm_global()) / "playwright" / "cli.js", "install", "chromium"], check=True)
-
-    print("8/8 plugins HyperFrames e animate")
     for nome, url in PLUGINS.items():
         if plugin_ok(nome):
             continue
@@ -326,13 +362,13 @@ def instalar(trabalho):
             sh(["claude", "plugin", "install", f"{nome}@{nome}"], check=True)
         else:
             print(f"  digite no Claude Code: /plugin marketplace add {url}  e depois  /plugin install {nome}@{nome}")
-    print()
-    return conferir()
+    print("  plugins novos valem depois de /reload-plugins (ou de fechar e abrir o Claude Code)")
 
 
 def instalar_rosto():
     if not MAC:
         sys.exit("O GFPGAN só roda no Mac. No Windows, use 'ampliar' para melhorar a imagem.")
+    cfg = exigir_essencial()
     if not gfpgan_ok():
         if not GFP_PY.exists():
             sh([*garantir_python((3, 11), (3, 13), "3.12"), "-m", "venv", HOME / "gfpgan"], check=True)
@@ -342,11 +378,22 @@ def instalar_rosto():
         consertar_basicsr()
         if not GFP_MODELO.exists():
             baixar(GFP_URL, GFP_MODELO)
-    cfg = ler_config()
     cfg["gfpgan"] = barra(GFP_PY)
-    CONFIG.write_text(json.dumps(cfg, ensure_ascii=False, indent=1), encoding="utf-8")
-    ok = gfpgan_ok()
-    print(("ok    " if ok else "falta ") + "GFPGAN (melhorar rosto)")
+    salvar(cfg)
+
+
+def instalar_partes(chaves):
+    todas = partes()
+    if not MAC and "rosto" in chaves:
+        sys.exit("O GFPGAN só roda no Mac. No Windows, use 'ampliar' para melhorar a imagem.")
+    ok = True
+    for k in chaves:
+        nome, _, pronto, fazer = todas[k]
+        print(f"parte {k}: {nome}", flush=True)
+        if not pronto():
+            fazer()
+        ok &= pronto()
+        print(("ok    " if pronto() else "falta ") + nome)
     return ok
 
 
@@ -368,6 +415,8 @@ def teste():
     assert consertar_import("from torchvision.transforms.functional_tensor import rgb_to_grayscale") == \
         "from torchvision.transforms.functional import rgb_to_grayscale"
     assert versao_py([sys.executable]) == sys.version_info[:2]
+    assert set(partes()) == ({"voz", "motion", "foto", "rosto"} if MAC else {"voz", "motion", "foto"})
+    assert "rembg" not in " ".join(PIP_PACOTE)
     print("ok")
 
 
@@ -375,8 +424,8 @@ if __name__ == "__main__":
     a = sys.argv[1:]
     if a == ["--teste"]:
         teste()
-    elif a == ["--rosto"]:
-        sys.exit(0 if instalar_rosto() else 1)
+    elif a and all(x.lstrip("-") in ("voz", "motion", "foto", "rosto") for x in a):
+        sys.exit(0 if instalar_partes([x.lstrip("-") for x in a]) else 1)
     elif "--conferir" in a:
         sys.exit(0 if conferir() else 1)
     else:

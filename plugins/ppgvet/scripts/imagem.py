@@ -6,7 +6,7 @@ uso: imagem.py ampliar <entrada> <saida.png> [2|3|4] [--arte]   Real-ESRGAN (--a
 import os, subprocess, sys
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import EXE, HOME, c  # noqa: E402
+from comum import EXE, HOME, MAC, c, falta_parte  # noqa: E402
 
 
 def comando(acao, entrada, saida, extra):
@@ -19,10 +19,14 @@ def comando(acao, entrada, saida, extra):
         return [esr, "-i", entrada, "-o", saida, "-n", modelo, "-s", escala, "-m", str(Path(esr).parent / "models")]
     if acao == "fundo":
         rembg = Path(sys.executable).with_name(f"rembg{EXE}")  # roda com o Python do pacote, onde o rembg está
+        if not rembg.exists():
+            falta_parte("foto")
         return [str(rembg), "i", *(["-m", "birefnet-portrait"] if "--pessoa" in extra else []), entrada, saida]
     if acao == "rosto":
+        if not MAC:
+            sys.exit("O GFPGAN só roda no Mac. No Windows, use 'ampliar' para melhorar a imagem.")
         if not (HOME / "gfpgan").exists():
-            sys.exit("Falta o GFPGAN (fora do kit). No Mac: instalar.py --rosto (~1,6 GB). No Windows não existe: use 'ampliar'.")
+            falta_parte("rosto")
         return [c("gfpgan"), os.path.join(os.path.dirname(os.path.abspath(__file__)), "rosto.py"), entrada, saida]
     sys.exit(__doc__)
 

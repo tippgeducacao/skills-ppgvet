@@ -24,10 +24,22 @@ def config():
 _C = None
 
 
+PARTES = {"voz": "limpeza de voz, ~0,4 GB", "motion": "HyperFrames e animate, ~0,6 GB",
+          "foto": "ampliar e tirar fundo, ~0,7 GB", "rosto": "GFPGAN, só no Mac, ~1,6 GB"}
+PARTE_DA_CHAVE = {"realesrgan": "foto", "gfpgan": "rosto"}
+
+
+def falta_parte(parte):
+    """parte do kit que só é instalada quando alguém precisa (regra em regras/edicao.md, "Ambiente")"""
+    sys.exit(f"Falta a parte '{parte}' do kit ({PARTES[parte]}): rode instalar.py --{parte} e depois este comando de novo")
+
+
 def c(chave):
     global _C
     _C = _C or config()
     v = _C.get(chave)
+    if not v and chave in PARTE_DA_CHAVE:
+        falta_parte(PARTE_DA_CHAVE[chave])
     if not v:
         sys.exit(f"Falta '{chave}' na configuração: rode a skill instalar")
     return v
@@ -128,6 +140,9 @@ elif __name__ == "__main__" and sys.argv[1:] == ["--musicas"]:
     musicas()
 elif __name__ == "__main__" and sys.argv[1:] == ["--hf-env"]:
     # o ffmpeg completo do Mac (ffmpeg-full) não fica no PATH: o HyperFrames acha por estas variáveis
+    import shutil
+    if not shutil.which("npx"):
+        falta_parte("motion")
     print(f"export HYPERFRAMES_FFMPEG_PATH='{FF()}' HYPERFRAMES_FFPROBE_PATH='{FFPROBE()}'")
 elif __name__ == "__main__" and sys.argv[1:] == ["--ff"]:
     print(FF())  # para comandos soltos: FF=$("$PY" "$S/comum.py" --ff)
