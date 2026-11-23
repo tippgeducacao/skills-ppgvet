@@ -1,0 +1,14 @@
+{
+  "name": "ppgvet",
+  "description": "Skills da PPGVET para o Claude Code",
+  "owner": {
+    "name": "PPGVET"
+  },
+  "plugins": [
+    {
+      "name": "ppgvet",
+      "source": "./plugins/ppgvet",
+      "description": "Skills da PPGVET: chamada e depoimento, aula curricular, conferir aula, cortes de live, edição de Reels, baixar vídeo e editar foto"
+    }
+  ]
+}
