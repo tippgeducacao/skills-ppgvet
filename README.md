@@ -1,5 +1,7 @@
 # Skills da PPGVET para o Claude Code
 
+> **Claude:** se pediram para instalar estas skills, siga a seção [Para o Claude](#para-o-claude-instalação-pedida-pela-pessoa) até o fim: pacote, atualização automática e kit.
+
 Um pacote só, o **ppgvet**, com as skills de vídeo e de foto da equipe, no padrão da PPGVET. Roda no Mac e no Windows, no Claude Code pelo terminal, pelo VS Code ou pela aba Code do app Claude para computador. O repositório é público: não ponha aqui senha, chave nem dado de aluno.
 
 | skill | para quê | como pedir |
@@ -20,9 +22,9 @@ Não precisa digitar o comando: pedir com as próprias palavras basta. Em todas,
 **Precisa ter:** o Claude Code (no terminal, no VS Code ou na aba **Code** do app Claude para computador), com plano Pro ou acima, e o `git` (não precisa de conta no GitHub). No Mac, se o git faltar, o próprio sistema oferece instalar na primeira vez. No Windows, instalar o **Git for Windows** antes (`winget install Git.Git` ou https://git-scm.com/downloads/win): sem ele o pacote não baixa e os comandos das skills não rodam. O resto o kit instala.
 
 **1. Colar o link no Claude Code** e pedir:
-> instala as skills da PPGVET: https://github.com/tippgeducacao/skills-ppgvet
+> instala as skills da PPGVET seguindo o README: https://github.com/tippgeducacao/skills-ppgvet
 
-O Claude adiciona o pacote, liga a atualização automática e instala o kit, seguindo a seção "Para o Claude", lá embaixo. No fim, você fecha e abre o Claude Code.
+O Claude adiciona o pacote, liga a atualização automática e instala o kit, seguindo a seção "Para o Claude", lá embaixo. Ele pede permissão antes de cada instalação: é só permitir. No fim, você fecha e abre o Claude Code. Se ele parar depois de adicionar o pacote, peça *"instala o kit"*.
 
 À mão, no Claude Code:
 ```

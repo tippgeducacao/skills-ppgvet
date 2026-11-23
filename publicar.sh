@@ -4,7 +4,7 @@
 set -e
 cd "$(dirname "$0")"
 S=plugins/ppgvet/scripts
-PY="$(cat "$HOME/.ppgvet/python" 2>/dev/null || echo python3)"
+PY="${PY:-$(cat "$HOME/.ppgvet/python" 2>/dev/null || echo python3)}"  # PY=<python> ./publicar.sh para usar outro
 for s in comum transcrever cortar chamada aula conferir post instalar retocar; do
   printf "teste %-12s " "$s"; "$PY" "$S/$s.py" --teste
 done
