@@ -11,7 +11,8 @@ EXE = ".exe" if WIN else ""
 
 # subpastas de trabalho de cada tipo de vídeo (dentro da pasta "trabalho" escolhida no instalar)
 TIPOS = {"chamadas": "chamadas", "aulas": "aulas-curriculares", "conferir": "conferir-aula",
-         "cortes": "cortes-live", "edicoes": "edicoes", "musicas": "musicas", "downloads": "downloads"}
+         "cortes": "cortes-live", "treinamentos": "treinamentos", "edicoes": "edicoes", "musicas": "musicas",
+         "downloads": "downloads"}
 USADAS = "musicas-usadas.txt"  # dentro de musicas/: data, música e vídeo, uma por linha
 
 

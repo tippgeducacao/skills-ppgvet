@@ -28,7 +28,7 @@ Se a pessoa só quis saber o que falta, ou veio por causa de um erro, explicar c
 Se tudo estiver ok e o erro continuar, mostrar a mensagem de erro inteira e o comando que falhou.
 
 ## 3. Perguntar (caixa de pergunta, com a opção recomendada primeiro)
-- **Pasta dos vídeos:** onde ficam os vídeos de trabalho e as entregas. O padrão é `Filmes/PPGVET` no Mac e `Vídeos/PPGVET` no Windows. Lá dentro, o kit cria `chamadas/`, `aulas-curriculares/`, `conferir-aula/`, `cortes-live/`, `edicoes/`, `musicas/` e `downloads/`. Se a configuração já tiver uma pasta, mostrar qual é e oferecer "manter".
+- **Pasta dos vídeos:** onde ficam os vídeos de trabalho e as entregas. O padrão é `Filmes/PPGVET` no Mac e `Vídeos/PPGVET` no Windows. Lá dentro, o kit cria `chamadas/`, `aulas-curriculares/`, `conferir-aula/`, `cortes-live/`, `treinamentos/`, `edicoes/`, `musicas/` e `downloads/`. Se a configuração já tiver uma pasta, mostrar qual é e oferecer "manter".
 
 Avisar que o essencial baixa ~1 GB (quase tudo é o modelo do whisper) e leva uns 10 a 20 min.
 

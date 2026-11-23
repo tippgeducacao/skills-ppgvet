@@ -8,6 +8,7 @@ Um pacote só, o **ppgvet**, com as skills de vídeo e de foto da equipe, no pad
 |---|---|---|
 | `/ppgvet:chamada` | chamada de professor ou depoimento de aluno para o Instagram (9:16, legenda, logo, arte de CTA, música) | "monta a chamada 2 da Paola", "monta o depoimento do João" |
 | `/ppgvet:aula-curricular` | aulas do Meet editadas em lote (abertura, cortes, moldura da pós, card do professor) e, no fim, a tabela de onde subir cada uma na Panda | cole as tarefas das aulas |
+| `/ppgvet:treinamento-academy` | treinamento para o PPGVET Academy: intro PPGVET, erros cortados e a moldura do Academy (tela grande com a câmera ao lado, ou só a câmera centralizada) | "edita esse treinamento pro Academy" + arquivo ou link |
 | `/ppgvet:conferir-aula` | confere aulas que alguém editou, sem assistir: intro, moldura, cartela, cortes, erros de fala | "confere as aulas da pasta entrada" |
 | `/ppgvet:cortes-live` | live (arquivo ou link) vira 7 ou 8 posts 9:16, com o professor em foco e slide e quem pergunta como apoio; também a aula completa com abertura, sem as partes da live | "tira os cortes dessa live" + link |
 | `/ppgvet:editar-video` | edição livre e Reels de fala com textos animados (HyperFrames, com o Studio no navegador), legenda, cor, música, compressão | "edita esse vídeo para Reels" |

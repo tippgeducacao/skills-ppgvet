@@ -100,6 +100,27 @@ def pontos(bruto, trechos):
     return res
 
 
+def no_video(cortes, intervalos):
+    """intervalos do bruto levados para o tempo do vídeo montado (trechos emendados)"""
+    out, o = [], 0.0
+    for a, b in cortes:
+        out += [(o + max(x, a) - a, o + min(y, b) - a) for x, y in intervalos if y > a and x < b]
+        o += b - a
+    return out
+
+
+def expr(intervalos):
+    """expressão de enable do ffmpeg: verdadeira dentro dos intervalos"""
+    return "+".join(f"between(t,{a:.2f},{b:.2f})" for a, b in intervalos) or "0"
+
+
+def filtro_moldura(k, nome):
+    """moldura PNG da entrada k com o azul transparente, como [nome]. Só recorta o azul até y=960: as caixas
+    vão até 944 e, abaixo, o azul da logo PPG (y 984-1022) sumia junto"""
+    return (f"[{k}:v]format=rgba,split[{nome}c][{nome}b];[{nome}c]crop=1920:960:0:0,colorkey=0x0036FF:0.25:0.05[{nome}t];"
+            f"[{nome}b]crop=1920:120:0:960[{nome}x];[{nome}t][{nome}x]vstack[{nome}]")
+
+
 def professor(titulo, nome=None):
     """nome do professor: o do aula.json ou a última parte do título da tarefa, sem o "Prof."/"Profa." """
     nome = nome or titulo.split("|")[-1]
@@ -150,14 +171,8 @@ def main(arq_json, so_pontos=False):
         fc.append(f"[{ab + k}:a]aresample=48000,aformat=channel_layouts=stereo,afade=t=in:d=0.03,afade=t=out:st={d - 0.03:.3f}:d=0.03[a{k}]")
     fc.append("".join(f"[v{k}][a{k}]" for k in range(n)) + f"concat=n={n}:v=1:a=1[va][aa]")
     # moldura e card só quando o professor compartilha a tela (câmera em tela cheia fica sem moldura)
-    liga, o = [], 0.0
-    for a, b in cortes:
-        liga += [f"between(t,{o + max(x, a) - a:.2f},{o + min(y, b) - a:.2f})" for x, y in compart if y > a and x < b]
-        o += b - a
-    quando = f":enable='{'+'.join(liga)}'" if liga else ":enable=0"
-    # recorta o azul só até y=960: as caixas vão até 944 e, abaixo, o azul da logo PPG (y 984-1022) sumia junto
-    fc.append(f"[{km}:v]format=rgba,split[mc][mb];[mc]crop=1920:960:0:0,colorkey=0x0036FF:0.25:0.05[mt];"
-              f"[mb]crop=1920:120:0:960[mbx];[mt][mbx]vstack[m]")
+    quando = f":enable='{expr(no_video(cortes, compart))}'"
+    fc.append(filtro_moldura(km, "m"))
     fc.append(f"[va][m]overlay=0:0{quando}[vm];[vm][{kc}:v]overlay={CAM_X + (CAM_W - CARD_W) // 2}:{CARD_BASE - card_h}{quando},format=yuv420p[vaula]")
     fc.append("[aa]loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000[aaula]")
     if abertura:
@@ -180,4 +195,6 @@ if __name__ == "__main__":
     assert professor("03/11 | Extensão Rural - Parte II | Prof. Gabriela Tonial Knappmann Bittencourt") == "Gabriela Tonial Knappmann Bittencourt"
     assert professor("x | Profa. Ana Lima") == "Ana Lima" and professor("x | Prof Rui") == "Rui"
     assert professor("x | y", "Paola Martinello") == "Paola Martinello"
+    assert no_video([(10, 20), (30, 50)], [(15, 35)]) == [(5, 10), (10, 15)]
+    assert expr([]) == "0" and expr([(1, 2.5)]) == "between(t,1.00,2.50)"
     print("ok") if sys.argv[1:] == ["--teste"] else main(sys.argv[1], "--pontos" in sys.argv)
