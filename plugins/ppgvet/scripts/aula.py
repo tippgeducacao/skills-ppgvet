@@ -181,10 +181,12 @@ def main(arq_json, so_pontos=False):
     else:
         fc.append("[vaula]null[v];[aaula]anull[a]")
     os.makedirs(os.path.dirname(saida), exist_ok=True)
+    parcial = saida[:-4] + ".parcial.mp4"
     # rápido, qualidade constante e teto de 2 Mbps (o que o usuário usa no CapCut)
     baixo([FF(), "-v", "error", "-nostats", *ent, "-filter_complex", ";".join(fc), "-map", "[v]", "-map", "[a]",
                     "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-maxrate", "2000k", "-bufsize", "4000k",
-                    "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", saida], check=True)
+                    "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", parcial], check=True)
+    os.replace(parcial, saida)  # render que falha não deixa arquivo quebrado com o nome final
     shutil.rmtree(tmp, ignore_errors=True)
     print("pronto:", saida)
     print("título na Panda:", r["titulo"])
