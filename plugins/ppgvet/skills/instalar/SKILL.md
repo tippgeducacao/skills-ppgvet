@@ -1,6 +1,6 @@
 ---
 name: instalar
-description: Prepara o computador (Mac ou Windows) para as skills da PPGVET com o kit completo, e confere o que falta quando algo dá erro. Instala ffmpeg completo, whisper com o modelo em português, Python do pacote (rembg, yt-dlp), Real-ESRGAN, GFPGAN (só no Mac), limpeza de voz (DeepFilterNet), Node.js, Playwright e os plugins HyperFrames e animate. Pergunta só onde guardar os vídeos. Use na primeira vez, quando uma skill disser para rodar o instalar, quando der erro de programa ou arquivo não encontrado, quando perguntarem "está tudo instalado?" ou quando a pessoa pedir para trocar a pasta dos vídeos.
+description: Prepara o computador (Mac ou Windows) para as skills da PPGVET com o kit completo, e confere o que falta quando algo dá erro. Instala ffmpeg completo, whisper com o modelo em português, Python do pacote (rembg, yt-dlp), Real-ESRGAN, limpeza de voz (DeepFilterNet), Node.js, Playwright e os plugins HyperFrames e animate. Pergunta só onde guardar os vídeos. Use na primeira vez, quando uma skill disser para rodar o instalar, quando der erro de programa ou arquivo não encontrado, quando perguntarem "está tudo instalado?" ou quando a pessoa pedir para trocar a pasta dos vídeos.
 ---
 
 # Instalar e conferir
@@ -29,7 +29,7 @@ Se tudo estiver ok e o erro continuar, mostrar a mensagem de erro inteira e o co
 ## 3. Perguntar (caixa de pergunta, com a opção recomendada primeiro)
 - **Pasta dos vídeos:** onde ficam os vídeos de trabalho e as entregas. O padrão é `Filmes/PPGVET` no Mac e `Vídeos/PPGVET` no Windows. Lá dentro, o kit cria `chamadas/`, `aulas-curriculares/`, `conferir-aula/`, `cortes-live/`, `edicoes/`, `musicas/` e `downloads/`. Se a configuração já tiver uma pasta, mostrar qual é e oferecer "manter".
 
-Avisar que o kit completo baixa ~4 GB (modelo do whisper, limpeza de voz, GFPGAN, navegadores) e pode levar de 20 a 40 min.
+Avisar que o kit baixa ~2,5 GB (modelo do whisper, Python do pacote, limpeza de voz, navegadores) e pode levar de 20 a 40 min. O GFPGAN (melhorar rosto, ~1,6 GB) fica fora: a `editar-foto` instala com `--rosto` na primeira vez que alguém pedir. No conferir, ele aparece como `fora`, que não é falta.
 
 ## 4. Instalar (em segundo plano)
 `mkdir -p ~/.ppgvet && PYS "${CLAUDE_PLUGIN_ROOT}/scripts/instalar.py" --trabalho "<pasta>" > ~/.ppgvet/instalar.log 2>&1`

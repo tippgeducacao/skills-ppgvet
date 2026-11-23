@@ -2,8 +2,9 @@
 """Prepara o computador para o pacote ppgvet (Mac e Windows) com o kit completo e grava ~/.ppgvet/video.json.
 uso: instalar.py --conferir            só mostra o que está ok e o que falta (não muda nada)
      instalar.py [--trabalho <pasta>]  instala o que falta (padrão da pasta: Filmes/PPGVET no Mac, Vídeos/PPGVET no Windows)
+     instalar.py --rosto               instala só o GFPGAN (melhorar rosto, só no Mac, ~1,6 GB), quando alguém pedir
 Kit: ffmpeg completo, whisper + modelo, Python do pacote (Pillow, numpy, rembg, yt-dlp), Real-ESRGAN,
-GFPGAN (só Mac), limpeza de voz (DeepFilterNet), Node.js, plugins HyperFrames e animate (com Playwright).
+limpeza de voz (DeepFilterNet), Node.js, plugins HyperFrames e animate (com Playwright). O GFPGAN fica fora (raro e pesado).
 Usa só a biblioteca padrão do Python: roda antes de existir o ambiente do pacote."""
 import glob, json, os, re, shutil, subprocess, sys, urllib.request, zipfile
 from pathlib import Path
@@ -223,10 +224,10 @@ def conferir():
         ("peças padrão do pacote (intro, molduras, vinhetas, fontes)", not falta),
         ("pasta de trabalho " + (f"({cfg['trabalho']})" if cfg.get("trabalho") else "(não escolhida)"), bool(cfg.get("trabalho"))),
     ]
-    if MAC:
-        itens.insert(7, ("GFPGAN (melhorar rosto, só no Mac)", gfpgan_ok()))
     for nome, ok in itens:
         print(("ok    " if ok else "falta ") + nome)
+    if MAC:  # fora do kit: não conta como falta
+        print(("ok    " if gfpgan_ok() else "fora  ") + "GFPGAN (melhorar rosto; só quando pedirem: instalar.py --rosto)")
     if falta:
         print("      faltam no pacote:", ", ".join(falta), "(reinstalar o pacote: /plugin)")
     return all(ok for _, ok in itens)
@@ -284,7 +285,7 @@ def instalar(trabalho):
     CONFIG.write_text(json.dumps(cfg, ensure_ascii=False, indent=1), encoding="utf-8")
     print("  configuração salva em", CONFIG)
 
-    print("5/8 imagem: Real-ESRGAN" + (" e GFPGAN" if MAC else ""))
+    print("5/8 imagem: Real-ESRGAN")
     if not achar_esrgan():
         z = HOME / "realesrgan.zip"
         baixar(ESRGAN_URL, z)
@@ -293,17 +294,6 @@ def instalar(trabalho):
         if not WIN:
             os.chmod(achar_esrgan(), 0o755)  # o zip não guarda a permissão de executar
     cfg["realesrgan"] = barra(achar_esrgan())
-    if MAC and not gfpgan_ok():
-        if not GFP_PY.exists():
-            sh([*garantir_python((3, 11), (3, 13), "3.12"), "-m", "venv", HOME / "gfpgan"], check=True)
-        pip = [GFP_PY, "-m", "pip", "install", "-q"]
-        sh([*pip, "--upgrade", "pip", "setuptools", "wheel", "torch", "torchvision", "opencv-python", "numpy"], check=True)
-        sh([*pip, "--no-build-isolation", "basicsr==1.4.2", "facexlib", "gfpgan"], check=True)  # basicsr importa o torch ao instalar
-        consertar_basicsr()
-        if not GFP_MODELO.exists():
-            baixar(GFP_URL, GFP_MODELO)
-    if MAC:
-        cfg["gfpgan"] = barra(GFP_PY)
     CONFIG.write_text(json.dumps(cfg, ensure_ascii=False, indent=1), encoding="utf-8")
 
     print("6/8 limpeza de voz (DeepFilterNet, ~1 GB)")
@@ -340,6 +330,26 @@ def instalar(trabalho):
     return conferir()
 
 
+def instalar_rosto():
+    if not MAC:
+        sys.exit("O GFPGAN só roda no Mac. No Windows, use 'ampliar' para melhorar a imagem.")
+    if not gfpgan_ok():
+        if not GFP_PY.exists():
+            sh([*garantir_python((3, 11), (3, 13), "3.12"), "-m", "venv", HOME / "gfpgan"], check=True)
+        pip = [GFP_PY, "-m", "pip", "install", "-q"]
+        sh([*pip, "--upgrade", "pip", "setuptools", "wheel", "torch", "torchvision", "opencv-python", "numpy"], check=True)
+        sh([*pip, "--no-build-isolation", "basicsr==1.4.2", "facexlib", "gfpgan"], check=True)  # basicsr importa o torch ao instalar
+        consertar_basicsr()
+        if not GFP_MODELO.exists():
+            baixar(GFP_URL, GFP_MODELO)
+    cfg = ler_config()
+    cfg["gfpgan"] = barra(GFP_PY)
+    CONFIG.write_text(json.dumps(cfg, ensure_ascii=False, indent=1), encoding="utf-8")
+    ok = gfpgan_ok()
+    print(("ok    " if ok else "falta ") + "GFPGAN (melhorar rosto)")
+    return ok
+
+
 def consertar_basicsr():
     """basicsr 1.4.2 importa torchvision.transforms.functional_tensor, que o torchvision novo não tem mais"""
     for f in glob.glob(str(HOME / "gfpgan" / "lib" / "python3*" / "site-packages" / "basicsr" / "data" / "degradations.py")):
@@ -365,6 +375,8 @@ if __name__ == "__main__":
     a = sys.argv[1:]
     if a == ["--teste"]:
         teste()
+    elif a == ["--rosto"]:
+        sys.exit(0 if instalar_rosto() else 1)
     elif "--conferir" in a:
         sys.exit(0 if conferir() else 1)
     else:

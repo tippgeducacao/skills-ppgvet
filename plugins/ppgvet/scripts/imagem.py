@@ -22,7 +22,7 @@ def comando(acao, entrada, saida, extra):
         return [str(rembg), "i", *(["-m", "birefnet-portrait"] if "--pessoa" in extra else []), entrada, saida]
     if acao == "rosto":
         if not (HOME / "gfpgan").exists():
-            sys.exit("O GFPGAN só existe no Mac (instalar). No Windows, use 'ampliar' para melhorar a imagem.")
+            sys.exit("Falta o GFPGAN (fora do kit). No Mac: instalar.py --rosto (~1,6 GB). No Windows não existe: use 'ampliar'.")
         return [c("gfpgan"), os.path.join(os.path.dirname(os.path.abspath(__file__)), "rosto.py"), entrada, saida]
     sys.exit(__doc__)
 
