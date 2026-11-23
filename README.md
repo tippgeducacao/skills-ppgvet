@@ -12,7 +12,7 @@ Um pacote só, o **ppgvet**, com as skills de vídeo e de foto da equipe, no pad
 | `/ppgvet:cortes-live` | live (arquivo ou link) vira 7 ou 8 posts 9:16, com o professor em foco e slide e quem pergunta como apoio; também a aula completa com abertura, sem as partes da live | "tira os cortes dessa live" + link |
 | `/ppgvet:editar-video` | edição livre e Reels de fala com textos animados (HyperFrames, com o Studio no navegador), legenda, cor, música, compressão | "edita esse vídeo para Reels" |
 | `/ppgvet:baixar-video` | baixar vídeo do YouTube, TikTok, Facebook, Reddit, Twitch, X, Instagram e outros ~1.700 sites | "baixa esse vídeo" + link |
-| `/ppgvet:editar-foto` | foto como um fotógrafo: retoque de luz, cor, pele, nitidez e horizonte, recorte no tamanho de uso, ampliar, tirar o fundo, melhorar rosto borrado (este só no Mac) | "deixa essa foto profissional", "tira o fundo" |
+| `/ppgvet:editar-foto` | foto como um fotógrafo: retoque de luz, cor, pele, nitidez e horizonte, recorte no tamanho de uso, ampliar, tirar o fundo | "deixa essa foto profissional", "tira o fundo" |
 | `/ppgvet:instalar` | prepara o computador (uma vez) e diz o que falta quando algo dá erro | "instala o kit", "está tudo instalado?" |
 
 Não precisa digitar o comando: pedir com as próprias palavras basta. Em todas, o Claude mostra o plano, espera o ok, faz tudo, confere com nota e no fim mostra o resultado para aprovar ou pedir ajuste.
@@ -48,7 +48,6 @@ Depois: `/plugin` → **Marketplaces** → **ppgvet** → ligar auto-update; fec
 | voz (DeepFilterNet) | limpar ruído da voz | ~0,4 GB |
 | motion (Node.js, Playwright, HyperFrames, animate) | textos animados nos Reels e animações de motion design | ~0,6 GB |
 | foto (Real-ESRGAN, rembg) | ampliar imagem, tirar fundo | ~0,7 GB |
-| rosto (GFPGAN, só no Mac) | melhorar rosto borrado | ~1,6 GB |
 
 No Mac, se faltar o Homebrew, o Claude pede para você colar no Terminal o comando do site https://brew.sh, porque esse comando pede a senha do Mac.
 

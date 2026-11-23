@@ -25,8 +25,8 @@ _C = None
 
 
 PARTES = {"voz": "limpeza de voz, ~0,4 GB", "motion": "HyperFrames e animate, ~0,6 GB",
-          "foto": "ampliar e tirar fundo, ~0,7 GB", "rosto": "GFPGAN, só no Mac, ~1,6 GB"}
-PARTE_DA_CHAVE = {"realesrgan": "foto", "gfpgan": "rosto"}
+          "foto": "ampliar e tirar fundo, ~0,7 GB"}
+PARTE_DA_CHAVE = {"realesrgan": "foto"}
 
 
 def falta_parte(parte):

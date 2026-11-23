@@ -1,6 +1,6 @@
 ---
 name: instalar
-description: Prepara o computador (Mac ou Windows) para as skills da PPGVET com o kit essencial (ffmpeg completo, whisper com o modelo em português e Python do pacote com yt-dlp) e confere o que falta quando algo dá erro. As partes pesadas (voz, motion com HyperFrames e animate, foto, rosto) ficam para quando uma skill precisar. Pergunta só onde guardar os vídeos. Use na primeira vez, quando uma skill disser para rodar o instalar, quando der erro de programa ou arquivo não encontrado, quando perguntarem "está tudo instalado?" ou quando a pessoa pedir para trocar a pasta dos vídeos.
+description: Prepara o computador (Mac ou Windows) para as skills da PPGVET com o kit essencial (ffmpeg completo, whisper com o modelo em português e Python do pacote com yt-dlp) e confere o que falta quando algo dá erro. As partes pesadas (voz, motion com HyperFrames e animate, foto) ficam para quando uma skill precisar. Pergunta só onde guardar os vídeos. Use na primeira vez, quando uma skill disser para rodar o instalar, quando der erro de programa ou arquivo não encontrado, quando perguntarem "está tudo instalado?" ou quando a pessoa pedir para trocar a pasta dos vídeos.
 ---
 
 # Instalar e conferir
@@ -21,7 +21,7 @@ Se a pessoa só quis saber o que falta, ou veio por causa de um erro, explicar c
 | falta | o que fazer |
 |---|---|
 | configuração, ffmpeg, whisper, modelo ou Python do pacote | seguir para o passo 3 (instalar) |
-| `fora` (voz, motion, foto, rosto) | não é falta: parte sob demanda (passo 6) |
+| `fora` (voz, motion, foto) | não é falta: parte sob demanda (passo 6) |
 | peças padrão do pacote | o pacote veio incompleto: em `/plugin`, desinstalar e instalar de novo o `ppgvet@ppgvet` |
 | pasta de trabalho | passo 3, escolhendo a pasta |
 
@@ -52,6 +52,5 @@ Quando um comando disser "Falta a parte 'X' do kit" (ou a pessoa pedir), avisar 
 | `--voz` | DeepFilterNet | ~0,4 GB | limpar ruído da voz |
 | `--motion` | Node.js, Playwright, plugins HyperFrames e animate | ~0,6 GB | Reels com texto animado, animação de motion design |
 | `--foto` | Real-ESRGAN e rembg | ~0,7 GB | `editar-foto`: ampliar e tirar fundo |
-| `--rosto` | GFPGAN (só Mac) | ~1,6 GB | `editar-foto`: melhorar rosto |
 
 Os plugins do `--motion` (públicos, sem conta): o script instala sozinho se o comando `claude` existir. Se não existir, mostra os comandos `/plugin` para a pessoa digitar. Depois, `/reload-plugins`.

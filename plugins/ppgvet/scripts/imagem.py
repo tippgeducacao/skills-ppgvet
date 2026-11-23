@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Tratar imagem para vídeo (Mac e Windows). Sempre gera arquivo novo; o original não muda.
 uso: imagem.py ampliar <entrada> <saida.png> [2|3|4] [--arte]   Real-ESRGAN (--arte: ilustração ou desenho)
-     imagem.py fundo   <entrada> <saida.png> [--pessoa]         rembg, tira o fundo (--pessoa: modelo de retrato)
-     imagem.py rosto   <entrada> <saida.png>                    GFPGAN v1.4, melhora rosto borrado (só no Mac)"""
+     imagem.py fundo   <entrada> <saida.png> [--pessoa]         rembg, tira o fundo (--pessoa: modelo de retrato)"""
 import os, subprocess, sys
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import EXE, HOME, MAC, c, falta_parte  # noqa: E402
+from comum import EXE, c, falta_parte  # noqa: E402
 
 
 def comando(acao, entrada, saida, extra):
@@ -22,12 +21,6 @@ def comando(acao, entrada, saida, extra):
         if not rembg.exists():
             falta_parte("foto")
         return [str(rembg), "i", *(["-m", "birefnet-portrait"] if "--pessoa" in extra else []), entrada, saida]
-    if acao == "rosto":
-        if not MAC:
-            sys.exit("O GFPGAN só roda no Mac. No Windows, use 'ampliar' para melhorar a imagem.")
-        if not (HOME / "gfpgan").exists():
-            falta_parte("rosto")
-        return [c("gfpgan"), os.path.join(os.path.dirname(os.path.abspath(__file__)), "rosto.py"), entrada, saida]
     sys.exit(__doc__)
 
 

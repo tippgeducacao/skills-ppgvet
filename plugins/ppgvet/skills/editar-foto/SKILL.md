@@ -1,6 +1,6 @@
 ---
 name: editar-foto
-description: Edita foto da PPGVET como um fotógrafo profissional - retoque de luz, exposição, balanço de branco, contraste, cor, sombras e realces, pele suave sem "plástico", ruído, nitidez e horizonte torto; enquadramento e recorte no tamanho de uso; ampliar sem borrar (Real-ESRGAN); tirar o fundo (rembg); melhorar rosto borrado (GFPGAN, só no Mac). Para retrato de professor, campo e evento, post de Instagram e produto ou material. Use quando pedirem para editar, melhorar, tratar, retocar ou "deixar profissional" uma foto, corrigir foto escura, amarelada, estourada, granulada ou torta, ampliar, recortar, redimensionar, tirar o fundo ou melhorar um rosto.
+description: Edita foto da PPGVET como um fotógrafo profissional - retoque de luz, exposição, balanço de branco, contraste, cor, sombras e realces, pele suave sem "plástico", ruído, nitidez e horizonte torto; enquadramento e recorte no tamanho de uso; ampliar sem borrar (Real-ESRGAN); tirar o fundo (rembg); rosto borrado (com o ampliar). Para retrato de professor, campo e evento, post de Instagram e produto ou material. Use quando pedirem para editar, melhorar, tratar, retocar ou "deixar profissional" uma foto, corrigir foto escura, amarelada, estourada, granulada ou torta, ampliar, recortar, redimensionar, tirar o fundo ou melhorar um rosto.
 ---
 
 # Editar foto
@@ -9,7 +9,7 @@ O Claude olha a foto, decide o que fazer e explica o porquê; os scripts aplicam
 
 ## Antes de começar
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`. Se `~/.ppgvet/python` não existir, rodar a skill `instalar` primeiro.
-- **Ampliar, tirar fundo e melhorar rosto** são partes do kit sob demanda (`foto`, ~0,7 GB; `rosto`, ~1,6 GB, só Mac). Se o comando disser "Falta a parte 'X' do kit": avisar em uma linha, rodar `"$PY" "$S/instalar.py" --X` em segundo plano e repetir. Antes do `rosto`, tentar só o `ampliar`: muitas vezes basta.
+- **Ampliar e tirar fundo** são a parte `foto` do kit, sob demanda (~0,7 GB). Se o comando disser "Falta a parte 'X' do kit": avisar em uma linha, rodar `"$PY" "$S/instalar.py" --X` em segundo plano e repetir.
 - **Original nunca muda.** Sempre partir do original em alta. A saída é um arquivo novo ao lado, com nome minúsculo-com-hífen (`foto-professor-retocada.jpg`); se já existir, `-v2`. **Menor, mas nunca mais feia.**
 - **Não inventar:** a edição não muda a pessoa, o animal, o lugar nem o produto. Nada de apagar ou acrescentar coisa na cena, nem trocar céu ou fundo (tirar o fundo só quando pedirem).
 - **Fluxo:** plano (para cada foto ou grupo: tipo, o que vai ser feito, recorte e tamanho de uso) e ok; depois todas sem parar; no fim, a revisão com o antes e depois e a nota de cada uma. Muitas fotos parecidas (mesmo evento, mesma luz): mesmos ajustes para todas, para o conjunto ficar igual.
@@ -19,11 +19,10 @@ O Claude olha a foto, decide o que fazer e explica o porquê; os scripts aplicam
 |---|---|
 | "melhora", "deixa profissional", foto escura, amarelada, estourada, granulada, torta | **retoque** (passos 2 e 3) |
 | tamanho de uso (site, card, Instagram, capa) | `recorte` e `largura` no retoque |
-| foto pequena ou pixelada | **ampliar** (passo 4), antes do retoque |
-| rosto borrado (só no Mac) | **melhorar rosto** (passo 4), antes do retoque |
+| foto pequena, pixelada ou rosto borrado | **ampliar** (passo 4), antes do retoque |
 | recortar a pessoa ou o objeto sem o fundo | **tirar fundo** (passo 4), depois do retoque |
 
-Ordem quando junta várias: ampliar ou melhorar rosto → retoque → tirar fundo.
+Ordem quando junta várias: ampliar → retoque → tirar fundo.
 
 ## 2. Retoque: medir e olhar
 `"$PY" "$S/retocar.py" analisar foto.jpg` e abrir a foto. Ler junto:
@@ -53,12 +52,11 @@ Limites para não parecer editada: `saturacao` raramente passa de +15 (usar `vib
 Aplicar: `"$PY" "$S/retocar.py" aplicar foto.jpg foto-retocada.jpg '{"auto_branco": true, "sombras": 25, "pele": 30, "nitidez": 20, "recorte": "3:4"}'`
 (todos os ajustes e faixas: `"$PY" "$S/retocar.py"` sem argumentos). O perfil de cor (ICC) e a orientação da foto são mantidos.
 
-## 4. Ampliar, melhorar rosto, tirar fundo, cortar
+## 4. Ampliar, tirar fundo, cortar
 | tarefa | comando |
 |---|---|
 | ampliar foto | `"$PY" "$S/imagem.py" ampliar in.jpg out.png` (4x; `2` ou `3` no fim se 4x for demais) |
 | ampliar arte ou ilustração | `"$PY" "$S/imagem.py" ampliar in.png out.png --arte` |
-| melhorar rosto (só Mac) | `"$PY" "$S/imagem.py" rosto in.jpg out.png` (devolve 2x). No Windows: usar `ampliar` |
 | tirar fundo | `"$PY" "$S/imagem.py" fundo in.jpg out.png` (pessoa: `--pessoa`, que recorta melhor cabelo e ombro) |
 | cortar num ponto exato | `"$FF" -i in.png -vf "crop=w:h:x:y,scale=W:-1" out.png` (enquadrar pelo rosto numa proporção: `recorte` do retoque) |
 
@@ -67,7 +65,7 @@ Na primeira vez, o `fundo` baixa o modelo de recorte (de ~170 MB a ~1 GB com `--
 ## 5. Conferir, dar nota e entregar
 - Antes e depois lado a lado (mesma altura): `"$FF" -i in.jpg -i out.jpg -filter_complex "[0]scale=-1:700[a];[1]scale=-1:700[b];[a][b]hstack" cmp.jpg` e abrir.
 - Perguntas: a pele está com cor de pele? O branco está branco? O céu tem detalhe? Ficou natural?
-- Rosto do GFPGAN: não ficou "de plástico" nem mudou a pessoa? Se mudou, usar só o `ampliar`.
+- Rosto ampliado: não ficou "de plástico" nem mudou a pessoa? Se mudou, ampliar menos (`2`).
 - Fundo tirado: olhar as bordas (cabelo, dedos) sobre um fundo escuro e um claro.
 - Nota de 0 a 10 em: natural (não parece editada), luz, cor e pele, nitidez, enquadramento. Abaixo de 8: refazer com outra intensidade. Não melhorou: dizer isso e entregar o original.
 - Mostrar o antes e depois para a pessoa com o que foi feito, uma linha por ajuste (exemplo: "sombras +25: o rosto estava no escuro").

@@ -2,12 +2,12 @@
 """Prepara o computador para o pacote ppgvet (Mac e Windows) e grava ~/.ppgvet/video.json.
 uso: instalar.py --conferir            só mostra o que está ok, o que falta e as partes de fora (não muda nada)
      instalar.py [--trabalho <pasta>]  instala o essencial (padrão da pasta: Filmes/PPGVET no Mac, Vídeos/PPGVET no Windows)
-     instalar.py --voz|--motion|--foto|--rosto   instala uma parte sob demanda, quando uma skill precisar
+     instalar.py --voz|--motion|--foto   instala uma parte sob demanda, quando uma skill precisar
 Essencial (o estúdio de edição): ffmpeg completo, whisper + modelo, Python do pacote (Pillow, numpy, OpenCV, yt-dlp).
 Sob demanda: voz (DeepFilterNet), motion (Node.js, Playwright, plugins HyperFrames e animate),
-foto (Real-ESRGAN e rembg), rosto (GFPGAN, só Mac).
+foto (Real-ESRGAN e rembg).
 Usa só a biblioteca padrão do Python: roda antes de existir o ambiente do pacote."""
-import glob, json, os, re, shutil, subprocess, sys, urllib.request, zipfile
+import glob, json, os, shutil, subprocess, sys, urllib.request, zipfile
 from pathlib import Path
 
 WIN, MAC = sys.platform == "win32", sys.platform == "darwin"
@@ -22,9 +22,6 @@ BIN = "Scripts" if WIN else "bin"
 EXE = ".exe" if WIN else ""
 VENV_PY = HOME / "venv" / BIN / f"python{EXE}"
 DF = HOME / "deepfilternet" / BIN / f"deepFilter{EXE}"
-GFP_PY = HOME / "gfpgan" / "bin" / "python"
-GFP_MODELO = HOME / "gfpgan" / "GFPGANv1.4.pth"
-GFP_URL = "https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth"
 # última versão do Real-ESRGAN com programa pronto (ncnn) para Mac e Windows
 ESRGAN_URL = ("https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/"
               f"realesrgan-ncnn-vulkan-20220424-{'windows' if WIN else 'macos'}.zip")
@@ -164,11 +161,6 @@ def rembg_ok():
     return VENV_PY.exists() and VENV_PY.with_name(f"rembg{EXE}").exists()
 
 
-def gfpgan_ok():
-    return GFP_PY.exists() and GFP_MODELO.exists() and subprocess.run(
-        [GFP_PY, "-c", "import gfpgan, cv2"], capture_output=True).returncode == 0
-
-
 def acervo_faltando(a=PACOTE / "acervo"):
     return [p for p in ACERVO_PASTAS if not os.path.isdir(os.path.join(a, p))]
 
@@ -220,8 +212,6 @@ def partes():
          "motion": ("motion: Node.js, Playwright, HyperFrames e animate", "~0,6 GB", motion_ok, instalar_motion),
          "foto": ("foto: Real-ESRGAN (ampliar) e rembg (tirar fundo)", "~0,7 GB",
                   lambda: bool(achar_esrgan()) and rembg_ok(), instalar_foto)}
-    if MAC:
-        p["rosto"] = ("rosto: GFPGAN (melhorar rosto)", "~1,6 GB", gfpgan_ok, instalar_rosto)
     return p
 
 
@@ -365,27 +355,8 @@ def instalar_motion():
     print("  plugins novos valem depois de /reload-plugins (ou de fechar e abrir o Claude Code)")
 
 
-def instalar_rosto():
-    if not MAC:
-        sys.exit("O GFPGAN só roda no Mac. No Windows, use 'ampliar' para melhorar a imagem.")
-    cfg = exigir_essencial()
-    if not gfpgan_ok():
-        if not GFP_PY.exists():
-            sh([*garantir_python((3, 11), (3, 13), "3.12"), "-m", "venv", HOME / "gfpgan"], check=True)
-        pip = [GFP_PY, "-m", "pip", "install", "-q"]
-        sh([*pip, "--upgrade", "pip", "setuptools", "wheel", "torch", "torchvision", "opencv-python", "numpy"], check=True)
-        sh([*pip, "--no-build-isolation", "basicsr==1.4.2", "facexlib", "gfpgan"], check=True)  # basicsr importa o torch ao instalar
-        consertar_basicsr()
-        if not GFP_MODELO.exists():
-            baixar(GFP_URL, GFP_MODELO)
-    cfg["gfpgan"] = barra(GFP_PY)
-    salvar(cfg)
-
-
 def instalar_partes(chaves):
     todas = partes()
-    if not MAC and "rosto" in chaves:
-        sys.exit("O GFPGAN só roda no Mac. No Windows, use 'ampliar' para melhorar a imagem.")
     ok = True
     for k in chaves:
         nome, _, pronto, fazer = todas[k]
@@ -397,25 +368,12 @@ def instalar_partes(chaves):
     return ok
 
 
-def consertar_basicsr():
-    """basicsr 1.4.2 importa torchvision.transforms.functional_tensor, que o torchvision novo não tem mais"""
-    for f in glob.glob(str(HOME / "gfpgan" / "lib" / "python3*" / "site-packages" / "basicsr" / "data" / "degradations.py")):
-        t = Path(f).read_text(encoding="utf-8")
-        Path(f).write_text(consertar_import(t), encoding="utf-8")
-
-
-def consertar_import(t):
-    return re.sub(r"torchvision\.transforms\.functional_tensor\b", "torchvision.transforms.functional", t)
-
-
 def teste():
     assert barra("C:\\Users\\a\\venv") == "C:/Users/a/venv"
     assert acervo_faltando() == [], acervo_faltando()
     assert acervo_faltando(PACOTE / "nao-existe") == ACERVO_PASTAS
-    assert consertar_import("from torchvision.transforms.functional_tensor import rgb_to_grayscale") == \
-        "from torchvision.transforms.functional import rgb_to_grayscale"
     assert versao_py([sys.executable]) == sys.version_info[:2]
-    assert set(partes()) == ({"voz", "motion", "foto", "rosto"} if MAC else {"voz", "motion", "foto"})
+    assert set(partes()) == {"voz", "motion", "foto"}
     assert "rembg" not in " ".join(PIP_PACOTE)
     print("ok")
 
@@ -424,7 +382,7 @@ if __name__ == "__main__":
     a = sys.argv[1:]
     if a == ["--teste"]:
         teste()
-    elif a and all(x.lstrip("-") in ("voz", "motion", "foto", "rosto") for x in a):
+    elif a and all(x.lstrip("-") in ("voz", "motion", "foto") for x in a):
         sys.exit(0 if instalar_partes([x.lstrip("-") for x in a]) else 1)
     elif "--conferir" in a:
         sys.exit(0 if conferir() else 1)
