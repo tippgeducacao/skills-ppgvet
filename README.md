@@ -17,6 +17,7 @@ Um pacote só, o **ppgvet**, com as skills de vídeo e de foto da equipe, no pad
 | `/ppgvet:patrocinador-podcast` | vídeo de boas-vindas a patrocinador de podcast com o mascote: prompts de Nano Banana e Veo para o Google Flow, conferência de cada geração e edição final com cartela e logos | "vídeo de boas-vindas da <empresa> no SuinoCast" |
 | `/ppgvet:aulas-da-semana` | carrossel "Aulas da semana" do Instagram: capa e uma lâmina por aula (pós, dia, horário, professor com foto, tema), com cores e nomes oficiais e conferência medida | "faz o carrossel da semana" + a lista das aulas e a pasta das fotos |
 | `/ppgvet:copy` | texto de marketing: legenda do Instagram, texto das artes, mensagem de WhatsApp e texto de anúncio (proposta para o tráfego), com 2 ou 3 versões para escolher e conferência medida | "legenda do carrossel da live de quinta, pós PS" + os fatos e o link do gerador |
+| `/ppgvet:designer` | arte estática (post, carrossel, story, criativo de professor, anúncio) com referência nas artes da equipe, plano antes e conferência medida (cor, fonte, contraste, área segura, texto) | "post para o feed da pós de Suínos" + a foto e o objetivo |
 | `/ppgvet:editar-foto` | foto como um fotógrafo: retoque de luz, cor, pele, nitidez e horizonte, recorte no tamanho de uso, ampliar, tirar o fundo | "deixa essa foto profissional", "tira o fundo" |
 | `/ppgvet:instalar` | prepara o computador (uma vez) e diz o que falta quando algo dá erro | "instala o kit", "está tudo instalado?" |
 

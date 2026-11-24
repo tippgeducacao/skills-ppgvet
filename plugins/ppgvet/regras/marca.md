@@ -37,6 +37,8 @@ Adaptado do guia de marca da PPGVET para vídeo, arte e texto (o guia é o dono;
 | PPGVET | magenta `#D24BA8` | teal `#00B7AB` | rosa `#E371C0` |
 | PPG | azul `#1670C2` | teal `#00ADA3` | teal `#00ADA3` |
 
+Neutros: fundo claro `#FAF9FB`, texto e caixa escura `#1A1A1A`, branco `#FFFFFF`. A paleta da arte é a soma dos códigos deste arquivo (o `scripts/arte.py` reprova qualquer outro).
+
 Tom de faixa com letra branca pequena: `#B84482` (o magenta oficial com letra branca dá 3,95:1 e reprova; usado na faixa "ESTAMOS AO VIVO" da moldura do Instagram da live).
 
 ## Pós (sigla, nome e moldura da aula curricular)

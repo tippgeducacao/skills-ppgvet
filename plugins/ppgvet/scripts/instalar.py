@@ -164,7 +164,9 @@ def venv_ok():
 
 
 def rembg_ok():
-    return VENV_PY.exists() and VENV_PY.with_name(f"rembg{EXE}").exists()
+    """o programa existe e abre (uma dependência faltando, como a scipy, quebra o rembg sem sumir com ele)"""
+    return (VENV_PY.exists() and VENV_PY.with_name(f"rembg{EXE}").exists()
+            and subprocess.run([VENV_PY, "-c", "import rembg"], capture_output=True).returncode == 0)
 
 
 def acervo_faltando(a=PACOTE / "acervo"):
