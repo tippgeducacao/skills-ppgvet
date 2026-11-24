@@ -10,7 +10,7 @@ O Claude olha a foto, decide o que fazer e explica o porquê; os scripts aplicam
 ## Antes de começar
 - Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills).
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`. Se `~/.ppgvet/python` não existir, rodar a skill `instalar` primeiro.
-- **Ampliar e tirar fundo** são a parte `foto` do kit, sob demanda (~0,7 GB). Se o comando disser "Falta a parte 'X' do kit": avisar em uma linha, rodar `"$PY" "$S/instalar.py" --X` em segundo plano e repetir.
+- **Ampliar, tirar fundo e `luz_pessoa`** são a parte `foto` do kit, sob demanda (~0,7 GB e ~1 GB de modelos na 1ª vez). Se o comando disser "Falta a parte 'X' do kit": avisar em uma linha, rodar `"$PY" "$S/instalar.py" --X` em segundo plano e repetir.
 - **Original nunca muda.** Sempre partir do original em alta. A saída é um arquivo novo ao lado, com nome minúsculo-com-hífen (`foto-professor-retocada.jpg`); se já existir, `-v2`. **Menor, mas nunca mais feia.**
 - **Não inventar:** a edição não muda a pessoa, o animal, o lugar nem o produto. Nada de apagar ou acrescentar coisa na cena, nem trocar céu ou fundo (tirar o fundo só quando pedirem).
 - **Fluxo:** plano (para cada foto ou grupo: tipo, o que vai ser feito, recorte e tamanho de uso) e ok; depois todas sem parar; no fim, a revisão com o antes e depois e a nota de cada uma. Muitas fotos parecidas (mesmo evento, mesma luz): mesmos ajustes para todas, para o conjunto ficar igual.
@@ -26,7 +26,7 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 |---|---|
 | "melhora", "deixa profissional", foto escura, amarelada, estourada, granulada, torta | **retoque** (passos 2 e 3) |
 | tamanho de uso (site, card, Instagram, capa) | `recorte` e `largura` no retoque |
-| foto pequena, pixelada ou rosto borrado | **ampliar** (passo 4), antes do retoque |
+| foto pequena, pixelada ou rosto borrado | **pedir a foto original** (arquivo da câmera, não o do WhatsApp, que reduz). Só sem original: **ampliar** (passo 4), antes do retoque, avisando que fica abaixo do ideal |
 | recortar a pessoa ou o objeto sem o fundo | **tirar fundo** (passo 4), depois do retoque |
 
 Ordem quando junta várias: ampliar → retoque → tirar fundo.
@@ -38,7 +38,7 @@ Ordem quando junta várias: ampliar → retoque → tirar fundo.
 |---|---|---|
 | `brilho_medio` | < 45 escura; > 60 clara (45 a 60 é o normal) | `exposicao` ±0,2 a 0,7 |
 | `estourado_%` | > 2 (céu, parede, jaleco branco) | `realces` -20 a -50 |
-| `preto_%` > 5 ou rosto com `brilho` < 40 | sombra fechada, contraluz | `sombras` +20 a +50 |
+| `preto_%` > 5 ou rosto com `brilho` < 40 | sombra fechada, contraluz | `sombras` +20 a +50; só a pessoa no escuro com fundo bom (contraluz): `luz_pessoa` +30 a +60 |
 | `dominante_b` | > 8 amarelada (lâmpada, galpão); < -4 azulada | `auto_branco` e `temperatura` para o resto |
 | `dominante_a` | > 4 magenta; < -4 esverdeada (luz fria, folhagem) | `matiz` |
 | `contraste` | < 15 chapada (dia nublado); > 28 dura (sol a pino) | `contraste` ±10 a 25, `clareza` |
@@ -62,7 +62,7 @@ Aplicar: `"$PY" "$S/retocar.py" aplicar foto.jpg foto-retocada.jpg '{"auto_branc
 ## 4. Ampliar, tirar fundo, cortar
 | tarefa | comando |
 |---|---|
-| ampliar foto | `"$PY" "$S/imagem.py" ampliar in.jpg out.png` (4x; `2` ou `3` no fim se 4x for demais) |
+| ampliar foto | `"$PY" "$S/imagem.py" ampliar in.jpg out.png` (4x com o modelo 4xNomosWebPhoto, o mais natural em rosto e em foto comprimida; `2` ou `3` no fim se 4x for demais; ~45 s por foto pequena). Último recurso: o detalhe que falta é "adivinhado" |
 | ampliar arte ou ilustração | `"$PY" "$S/imagem.py" ampliar in.png out.png --arte` |
 | tirar fundo | `"$PY" "$S/imagem.py" fundo in.jpg out.png` (pessoa: `--pessoa`, que recorta melhor cabelo e ombro e limpa o halo do fundo antigo) |
 | cortar num ponto exato | `"$FF" -i in.png -vf "crop=w:h:x:y,scale=W:-1" out.png` (enquadrar pelo rosto numa proporção: `recorte` do retoque) |

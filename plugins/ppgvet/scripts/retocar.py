@@ -4,7 +4,7 @@ uso: retocar.py analisar <foto>                          luz, cor, contraste, ni
      retocar.py aplicar <foto> <saida> '<ajustes json>'   aplica (arquivo .json ou o texto do json)
      retocar.py --teste
 Ajustes (todos opcionais; 0 ou ausente = não mexe):
-  auto_branco true      balanço de branco automático (suave)
+  auto_branco true      balanço de branco automático (suave), medido só nos pontos quase neutros (pasto não puxa magenta)
   temperatura -100..100 negativo esfria, positivo esquenta     matiz -100..100  negativo verde, positivo magenta
   exposicao  -2..2 (EV)                                        contraste -100..100
   realces    -100..100  negativo recupera céu e parede estourados
@@ -13,7 +13,9 @@ Ajustes (todos opcionais; 0 ou ausente = não mexe):
   saturacao  -100..100                                         pele 0..100  suaviza pele só nos rostos
   ruido      0..100     tira granulado (foto de celular à noite) nitidez 0..100
   girar      graus      endireita (positivo = anti-horário)    recorte "3:4" "4:5" "1:1" "16:9" "9:16"  (enquadra pelo rosto)
-  largura    px         largura final"""
+  largura    px         largura final
+  luz_pessoa -100..100  abre (+) ou fecha (-) a sombra só da pessoa, pela máscara do recorte (contraluz); parte foto do kit
+A foto é convertida para sRGB ao abrir (iPhone grava em P3) e sai em sRGB: a mesma cor em todo celular e no Instagram."""
 import json, os, sys
 from pathlib import Path
 import numpy as np
@@ -24,22 +26,29 @@ try:  # foto HEIC do iPhone abre como qualquer outra (pillow-heif, no essencial 
     register_heif_opener()
 except ImportError:
     pass
-from PIL import Image, ImageOps
+from PIL import Image, ImageCms, ImageOps
 
 MODELO_ROSTO = Path(__file__).resolve().parents[1] / "modelos" / "face_detection_yunet_2023mar.onnx"
 
 
+SRGB = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB"))
+
+
 def abrir(arq):
-    im = ImageOps.exif_transpose(Image.open(arq))  # foto de celular vem deitada sem isso
-    icc = im.info.get("icc_profile")  # perfil de cor: sem ele a foto do iPhone (P3) sai lavada
-    return np.asarray(im.convert("RGB"), dtype=np.float32) / 255, icc
+    """foto em sRGB (float 0..1) e se ela tinha perfil de cor"""
+    im = ImageOps.exif_transpose(Image.open(arq)).convert("RGB")  # foto de celular vem deitada sem isso
+    icc = im.info.get("icc_profile")
+    if icc:  # perfil do arquivo (P3 do iPhone, Adobe RGB) -> sRGB, senão a cor muda de um aparelho para outro
+        im = ImageCms.profileToProfile(im, ImageCms.ImageCmsProfile(__import__("io").BytesIO(icc)), SRGB,
+                                       renderingIntent=ImageCms.Intent.PERCEPTUAL, outputMode="RGB")
+    return np.asarray(im, dtype=np.float32) / 255, icc
 
 
 def salvar(rgb, saida, icc, largura=None):
     im = Image.fromarray((np.clip(rgb, 0, 1) * 255 + 0.5).astype(np.uint8))
     if largura and largura < im.width:
         im = im.resize((int(largura), round(im.height * largura / im.width)), Image.LANCZOS)
-    kw = {"icc_profile": icc} if icc else {}
+    kw = {"icc_profile": SRGB.tobytes()}  # sai sempre em sRGB, com o perfil gravado
     if saida.lower().endswith((".jpg", ".jpeg")):
         kw.update(quality=92, subsampling=0)
     im.save(saida, **kw)
@@ -87,6 +96,24 @@ def analisar(arq):
     return info
 
 
+def neutros(rgb):
+    """pontos quase sem cor (cinza, branco, parede), nem estourados nem pretos: é neles que se mede o branco"""
+    lab = cv2.cvtColor(rgb, cv2.COLOR_RGB2LAB)
+    return (np.hypot(lab[..., 1], lab[..., 2]) < 18) & (lab[..., 0] > 15) & (lab[..., 0] < 95)
+
+
+def mascara_pessoa(rgb):
+    """máscara suave da pessoa (BiRefNet retrato, MIT); 0..1"""
+    try:
+        from rembg import new_session, remove
+    except ImportError:
+        sys.exit("Falta a parte 'foto' do kit (luz_pessoa usa o recorte): rode instalar.py --foto e depois este comando de novo")
+    m = remove(Image.fromarray((rgb * 255).astype(np.uint8)), session=new_session("birefnet-portrait"), only_mask=True)
+    m = np.asarray(m, np.float32) / 255
+    k = max(3, (min(m.shape) // 150) * 2 + 1)
+    return cv2.GaussianBlur(m, (k, k), 0)[..., None]
+
+
 def mascara_pele(rgb, caixas):
     """pele só dentro dos rostos (um pouco maiores), com borda suave"""
     h, w = rgb.shape[:2]
@@ -130,7 +157,8 @@ def aplicar(entrada, saida, a):
         rgb = cv2.warpAffine(rgb, M, (w, h), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REFLECT)
     caixas = rostos(rgb) if (a.get("recorte") or g("pele")) else []
     if a.get("auto_branco"):
-        medias = rgb.reshape(-1, 3).mean(0)
+        n = neutros(rgb)
+        medias = rgb[n].mean(0) if n.mean() > 0.02 else rgb.reshape(-1, 3).mean(0)  # sem neutros: a foto inteira
         ganho = medias.mean() / np.maximum(medias, 1e-4)
         rgb = rgb * (1 + (ganho - 1) * 0.6)  # 60%: corrige o tom sem deixar a foto sem vida
     if g("temperatura") or g("matiz"):
@@ -143,6 +171,12 @@ def aplicar(entrada, saida, a):
         L = luz(rgb)[..., None]
         s, r = g("sombras") / 100 * 0.5, g("realces") / 100 * 0.5
         rgb = rgb + s * (1 - L) ** 2 * np.where(s > 0, 1 - rgb, rgb) + r * L ** 2 * np.where(r > 0, 1 - rgb, rgb)
+    if g("luz_pessoa"):
+        m = mascara_pessoa(rgb)
+        # curva de meio-tom na luminosidade: preto continua preto e branco continua branco (sem lavar), cor igual
+        L = np.maximum(luz(rgb)[..., None], 1e-4)
+        ajuste = np.clip(rgb * np.minimum(L ** (2 ** (-g("luz_pessoa") / 100)) / L, 3), 0, 1)
+        rgb = rgb * (1 - m) + ajuste * m
     if g("contraste"):
         rgb = 0.5 + (rgb - 0.5) * (1 + g("contraste") / 100 * 0.6)
     rgb = np.clip(rgb, 0, 1).astype(np.float32)
@@ -194,6 +228,16 @@ def teste():
                                           "nitidez": 40, "ruido": 20, "realces": -30, "sombras": 30, "girar": 3})
     c = np.asarray(Image.open(f"{d}/c.png"))
     assert c.shape == (300, 400, 3) and c.mean() > np.asarray(Image.open(f"{d}/a.png")).mean()
+    # pasto: muito verde e um objeto branco levemente quente; o branco não pode virar magenta
+    pasto = np.zeros((300, 400, 3), np.float32); pasto[:] = (0.25, 0.5, 0.15); pasto[100:200, 150:250] = (0.9, 0.88, 0.82)
+    Image.fromarray((pasto * 255).astype(np.uint8)).save(f"{d}/p.png")
+    aplicar(f"{d}/p.png", f"{d}/p2.png", {"auto_branco": True})
+    cv = cv2.cvtColor(np.asarray(Image.open(f"{d}/p2.png"), np.float32) / 255, cv2.COLOR_RGB2LAB)
+    assert abs(cv[150, 200, 1]) < 3 and cv[20, 20, 1] < -20, cv[150, 200]  # branco neutro; pasto continua verde
+    p3 = ImageCms.createProfile("sRGB")  # foto "P3": aqui só confere que sai com perfil sRGB
+    Image.fromarray((pasto * 255).astype(np.uint8)).save(f"{d}/i.jpg", icc_profile=ImageCms.ImageCmsProfile(p3).tobytes())
+    aplicar(f"{d}/i.jpg", f"{d}/i2.jpg", {})
+    assert Image.open(f"{d}/i2.jpg").info.get("icc_profile") == SRGB.tobytes()
     aplicar(f"{d}/a.png", f"{d}/r.png", {"recorte": "4:5"})
     w, h = Image.open(f"{d}/r.png").size
     assert abs(w / h - 0.8) < 0.01, (w, h)

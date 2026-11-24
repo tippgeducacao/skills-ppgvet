@@ -33,6 +33,7 @@ _C = None
 
 PARTES = {"voz": "limpeza de voz, ~30 MB", "motion": "HyperFrames e animate, ~0,6 GB",
           "foto": "ampliar e tirar fundo, ~0,7 GB e ~1 GB de modelo na 1ª vez"}
+AMPLIAR = HOME / "modelos" / "4xNomosWebPhoto_esrgan.onnx"  # OpenModelDB, CC-BY 4.0 (Phhofm): o mais natural em foto real
 HF = "hyperframes@0.9.90"  # versão fixa: sai versão nova quase todo dia; subir de propósito, depois de testar um render
 PARTE_DA_CHAVE = {"realesrgan": "foto"}
 

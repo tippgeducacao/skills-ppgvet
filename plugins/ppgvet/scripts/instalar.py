@@ -31,6 +31,7 @@ DF_URL = "https://github.com/Rikorose/DeepFilterNet/releases/download/v0.5.6/dee
 ESRGAN_URL = ("https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/"
               f"realesrgan-ncnn-vulkan-20220424-{'windows' if WIN else 'macos'}.zip")
 PIP_PACOTE = ["pillow", "pillow-heif", "numpy", "opencv-python-headless", "yt-dlp"]
+AMPLIAR_URL = "https://github.com/Phhofm/models/releases/download/4xNomosWebPhoto_esrgan/4xNomosWebPhoto_esrgan_fp32_opset17.onnx"
 PIP_FOTO = ["rembg[cpu,cli]"]  # sozinho puxa ~600 MB (onnxruntime, scipy, gradio): fica na parte foto
 PLUGINS = {"hyperframes": "https://github.com/heygen-com/hyperframes",  # https: não precisa de chave SSH
            "animate": "https://github.com/cth9191/animate"}
@@ -216,7 +217,8 @@ def partes():
     p = {"voz": ("limpeza de voz (DeepFilterNet)", "~30 MB", DF.exists, instalar_voz),
          "motion": ("motion: Node.js, Playwright, HyperFrames e animate", "~0,6 GB", motion_ok, instalar_motion),
          "foto": ("foto: Real-ESRGAN (ampliar) e rembg (tirar fundo)", "~0,7 GB e ~1 GB de modelo na 1ª vez",
-                  lambda: bool(achar_esrgan()) and rembg_ok(), instalar_foto)}
+                  lambda: bool(achar_esrgan()) and rembg_ok() and (HOME / "modelos" / AMPLIAR_URL.rsplit("/", 1)[1].replace("_fp32_opset17", "")).exists(),
+                  instalar_foto)}
     return p
 
 
@@ -333,6 +335,10 @@ def instalar_foto():
     salvar(cfg)
     if not rembg_ok():
         sh([VENV_PY, "-m", "pip", "install", "-q", *PIP_FOTO], check=True)
+    modelo = HOME / "modelos" / AMPLIAR_URL.rsplit("/", 1)[1].replace("_fp32_opset17", "")
+    if not modelo.exists():  # ampliar foto: 4xNomosWebPhoto (OpenModelDB, CC-BY 4.0, Phhofm), ~67 MB
+        modelo.parent.mkdir(exist_ok=True)
+        baixar(AMPLIAR_URL, modelo)
 
 
 def instalar_motion():

@@ -1,20 +1,52 @@
 #!/usr/bin/env python3
 """Tratar imagem para vídeo (Mac e Windows). Sempre gera arquivo novo; o original não muda.
-uso: imagem.py ampliar <entrada> <saida.png> [2|3|4] [--arte]   Real-ESRGAN (--arte: ilustração ou desenho)
+uso: imagem.py ampliar <entrada> <saida.png> [2|3|4] [--arte]   foto: 4xNomosWebPhoto (ONNX); --arte: Real-ESRGAN anime
      imagem.py fundo   <entrada> <saida.png> [--pessoa]         rembg, tira o fundo (--pessoa: modelo de retrato)
-Foto HEIC do iPhone entra direto. Ampliar sem placa de vídeo com Vulkan (Windows): cai para Lanczos até 2x, com aviso."""
+Foto HEIC do iPhone entra direto. Ampliar é último recurso: antes, pedir a foto original em alta.
+--arte sem placa de vídeo com Vulkan (Windows): cai para Lanczos até 2x, com aviso."""
 import os, subprocess, sys, tempfile
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import EXE, c, falta_parte  # noqa: E402
+from comum import AMPLIAR, EXE, c, falta_parte  # noqa: E402
+
+PEDACO, BORDA = 192, 16  # a foto é ampliada em pedaços de 192 px (memória baixa), com 16 px de sobra contra emenda
+
+
+def ampliar_foto(entrada, saida, escala):
+    """4x com o NomosWebPhoto, pedaço por pedaço; escala 2 ou 3: reduz o 4x com Lanczos"""
+    try:
+        import onnxruntime as ort
+    except ImportError:
+        falta_parte("foto")
+    if not AMPLIAR.exists():
+        falta_parte("foto")
+    import numpy as np
+    from PIL import Image, ImageOps
+    im = ImageOps.exif_transpose(Image.open(entrada)).convert("RGB")
+    x = np.asarray(im, np.float32) / 255
+    h, w = x.shape[:2]
+    s = ort.InferenceSession(str(AMPLIAR), providers=["CPUExecutionProvider"])
+    nome = s.get_inputs()[0].name
+    y = np.zeros((h * 4, w * 4, 3), np.float32)
+    for y0 in range(0, h, PEDACO):
+        for x0 in range(0, w, PEDACO):
+            a0, b0 = max(0, y0 - BORDA), max(0, x0 - BORDA)
+            a1, b1 = min(h, y0 + PEDACO + BORDA), min(w, x0 + PEDACO + BORDA)
+            o = s.run(None, {nome: x[a0:a1, b0:b1].transpose(2, 0, 1)[None]})[0][0].transpose(1, 2, 0)
+            ya, xa = 4 * (y0 - a0), 4 * (x0 - b0)
+            ph, pw = 4 * (min(h, y0 + PEDACO) - y0), 4 * (min(w, x0 + PEDACO) - x0)
+            y[4 * y0:4 * y0 + ph, 4 * x0:4 * x0 + pw] = o[ya:ya + ph, xa:xa + pw]
+    out = Image.fromarray((np.clip(y, 0, 1) * 255 + .5).astype(np.uint8))
+    if escala != 4:
+        out = out.resize((w * escala, h * escala), Image.LANCZOS)
+    out.save(saida)
 
 
 def comando(acao, entrada, saida, extra):
     if acao == "ampliar":
         esr = c("realesrgan")
         escala = next((x for x in extra if x in ("2", "3", "4")), "4")
-        modelo = "realesrgan-x4plus-anime" if "--arte" in extra else "realesrgan-x4plus"
-        return [esr, "-i", entrada, "-o", saida, "-n", modelo, "-s", escala, "-m", str(Path(esr).parent / "models")]
+        return [esr, "-i", entrada, "-o", saida, "-n", "realesrgan-x4plus-anime", "-s", escala, "-m", str(Path(esr).parent / "models")]
     if acao == "fundo":
         rembg = Path(sys.executable).with_name(f"rembg{EXE}")  # roda com o Python do pacote, onde o rembg está
         if not rembg.exists():
@@ -44,6 +76,10 @@ def main(acao, entrada, saida, extra):
             png = os.path.join(t, "entrada.png")
             ImageOps.exif_transpose(Image.open(entrada)).save(png)
             entrada = png
+        if acao == "ampliar" and "--arte" not in extra:
+            ampliar_foto(entrada, saida, int(next((x for x in extra if x in ("2", "3", "4")), "4")))
+            print(saida)
+            return
         p = subprocess.run(comando(acao, entrada, saida, extra), capture_output=True, text=True)
         if p.returncode and acao == "ampliar":
             if "vulkan" in (p.stderr + p.stdout).lower() or not os.path.exists(saida):
