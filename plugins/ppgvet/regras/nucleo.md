@@ -36,7 +36,7 @@ O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
 3. **Conferir e dar nota** a cada entrega: nota de 0 a 10 em cada critério da skill, mais acabamento geral, conferido contra o `antislop-midia.md`. Abaixo de 8: corrigir sozinho e conferir de novo. O que vale para todo vídeo:
    - folha de quadros durante todo o tempo de cada gráfico (nada cobre nem encosta no rosto);
    - começo e fim transcritos de novo;
-   - `"$PY" "$S/checar.py" entrega.mp4 [--srt legenda.srt] [--instagram] [--lufs <alvo da skill>]`: volume (voz -16 LUFS; a skill diz se o alvo é outro), pico, os dois canais, cor, primeiro quadro, legenda e formato. FALHA barra a entrega: corrigir e rodar de novo. AVISO: olhar e decidir (tela preta prevista no fade é normal).
+   - `"$PY" "$S/checar.py" entrega.mp4 [--srt legenda.srt] [--instagram] [--lufs <alvo da skill>] [--rosto <y do texto mais alto>]`: volume (voz -16 LUFS; a skill diz se o alvo é outro), pico, os dois canais, cor, primeiro quadro, legenda, formato e queixo acima dos textos (Reels do `hf.py`: `--rosto 915`). FALHA barra a entrega: corrigir e rodar de novo. AVISO: olhar e decidir (tela preta prevista no fade é normal).
 4. **Revisão no fim:** tudo pronto de uma vez (folha de quadros, nota de cada vídeo em uma linha e o que foi feito) para a pessoa aprovar ou pedir ajuste. Ajuste vira versão nova (`-v2`).
 5. **Limpar depois da aprovação:** apagar só o que a própria skill criou de intermediário (cada skill lista): `tmp/` e `hf/` dos Reels, `posts/.tmp-post/` dos cortes, transcrições de trabalho, folhas de quadros e prévias. **Nunca** o original, a entrega, a legenda usada no vídeo nem os roteiros (`.json`), que servem para refazer.
 

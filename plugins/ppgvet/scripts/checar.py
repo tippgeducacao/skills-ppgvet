@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Testes que barram a entrega (regras/nucleo.md, passo 3). Só mede o arquivo final; não muda nada.
-uso: checar.py <video.mp4> [--srt legenda.srt] [--lufs -16] [--car 25] [--instagram]
+uso: checar.py <video.mp4> [--srt legenda.srt] [--lufs -16] [--car 25] [--instagram] [--rosto <y>]
      checar.py --teste
 Uma linha por teste (PASSA, AVISO ou FALHA); sai com código 1 se algum FALHA.
 --lufs: alvo do volume da skill (padrão -16; chamada -14). --car: caracteres por linha da legenda
-(padrão 25 no vertical, 42 no horizontal). --instagram: confere o formato de Reels e Stories (video.md)."""
+(padrão 25 no vertical, 42 no horizontal). --instagram: confere o formato de Reels e Stories (video.md).
+--rosto <y>: o queixo nunca desce até o texto mais alto da peça (y em pixels; Reels do hf.py: 915, topo da legenda);
+com --srt, só conta quando a legenda está na tela."""
 import json, os, re, struct, subprocess, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from comum import FF, FFPROBE, baixo  # noqa: E402
@@ -70,6 +72,29 @@ def checar_legenda(blocos, car):
     return achados
 
 
+def queixo(faces, alt):
+    """parte de baixo do maior rosto, em pixels da altura alt; None sem rosto"""
+    return max(((y + h) * alt for x, y, w, h in faces), default=None)
+
+
+def rosto_baixo(video, limite, alt):
+    """tempos (a cada 1 s) em que o queixo passa do limite. YuNet a 540 de largura, como o retocar.py."""
+    import cv2, numpy as np
+    from retocar import MODELO_ROSTO
+    w, h = 540, round(540 * alt / 1080)
+    raw = baixo([FF(), "-v", "error", "-i", video, "-vf", f"fps=1,scale={w}:{h}", "-f", "rawvideo", "-pix_fmt", "bgr24", "-"],
+                capture_output=True).stdout
+    det = cv2.FaceDetectorYN.create(str(MODELO_ROSTO), "", (w, h), 0.7)
+    ruins = []
+    for i in range(len(raw) // (w * h * 3)):
+        q = np.frombuffer(raw, np.uint8, w * h * 3, i * w * h * 3).reshape(h, w, 3)
+        _, f = det.detect(q)
+        y = queixo([(a / w, b / h, c / w, d / h) for a, b, c, d in (f[:, :4] if f is not None else [])], alt)
+        if y is not None and y > limite:
+            ruins.append(i)
+    return ruins
+
+
 def checar_formato(v, a, fmt, arquivo):
     """formato de Reels e Stories do video.md"""
     r = []
@@ -95,7 +120,7 @@ def checar_formato(v, a, fmt, arquivo):
     return r or [("PASSA", "formato Instagram")]
 
 
-def checar(video, srt=None, lufs=-16.0, car=None, instagram=False):
+def checar(video, srt=None, lufs=-16.0, car=None, instagram=False, rosto=None):
     info = json.loads(subprocess.run([FFPROBE(), "-v", "error", "-show_streams", "-show_format", "-of", "json", video],
                                      capture_output=True, text=True, check=True).stdout)
     v = next(s for s in info["streams"] if s["codec_type"] == "video")
@@ -128,6 +153,13 @@ def checar(video, srt=None, lufs=-16.0, car=None, instagram=False):
         r += achados or [("PASSA", "legenda")]
     if instagram:
         r += checar_formato(v, a, info["format"], video)
+    if rosto:
+        ruins = rosto_baixo(video, rosto, v["height"])
+        if srt:  # com a legenda, só conta quando há texto na tela
+            leg = ler_srt(open(srt, encoding="utf-8").read())
+            ruins = [s for s in ruins if any(a - 0.5 <= s <= b + 0.5 for a, b, _ in leg)]
+        r.append(("FALHA" if len(ruins) > 1 else "AVISO", f"rosto desce até a faixa dos textos (y {rosto}) em {', '.join(f'{t}s' for t in ruins[:8])}"
+                  + (" …" if len(ruins) > 8 else "") + ": subir o enquadramento") if ruins else ("PASSA", f"rosto acima de y {rosto}"))
     return r
 
 
@@ -150,6 +182,7 @@ def teste():
         assert moov_antes(f"{d}/rapido.mp4") and not moov_antes(f"{d}/lento.mp4")
     v = {"width": 1080, "height": 1920, "r_frame_rate": "30/1", "avg_frame_rate": "30/1", "codec_name": "h264", "bit_rate": "8000000"}
     assert checar_formato(v, {"codec_name": "aac", "sample_rate": "48000"}, {"duration": "30", "size": "20000000"}, f"{__file__}")[0][0] == "FALHA"  # sem faststart
+    assert queixo([(0.4, 0.2, 0.2, 0.25)], 1920) == 0.45 * 1920 and queixo([], 1920) is None
     print("ok")
 
 
@@ -161,7 +194,7 @@ if __name__ == "__main__":
     if not a or not os.path.exists(a[0]):
         sys.exit(__doc__)
     op = lambda k, f=str: f(a[a.index(k) + 1]) if k in a else None
-    res = checar(a[0], op("--srt"), op("--lufs", float) or -16.0, op("--car", int), "--instagram" in a)
+    res = checar(a[0], op("--srt"), op("--lufs", float) or -16.0, op("--car", int), "--instagram" in a, op("--rosto", int))
     for nivel, texto in res:
         print(f"{nivel:5} {texto}")
     sys.exit(1 if any(n == "FALHA" for n, _ in res) else 0)

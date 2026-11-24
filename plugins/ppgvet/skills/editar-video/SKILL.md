@@ -72,6 +72,6 @@ Comandos:
 
 O que o `hf.py` desenha, na identidade da marca e com Montserrat, nas faixas do padrão Instagram (`video.md`):
 - **Caixinha de pergunta** no estilo do Instagram: entra com pop, o ícone da marca vem depois e a pergunta entra palavra por palavra.
-- **Cartões:** barra colorida, o cartão abre da esquerda e o texto entra palavra por palavra. Em Reels, só cartão de uma linha (`linhas`, sem `itens`), porque a lista com check não agradou. O corte termina na frase forte, sem muleta ("e é comprovado").
+- **Cartões:** barra colorida e o cartão abre da esquerda. O título entra de 4 jeitos, que o `hf.py` alterna sozinho sem repetir o do cartão anterior: `palavras` (uma a uma, com desfoque), `wipe` (revela com borda de luz), `bate` (letra grande que assenta) e `odometro` (o número conta até o valor; escolhido sozinho quando o cartão tem número de até 4 dígitos, como "*30* dias"). Para fixar um, `"entrada": "bate"` no destaque. Em Reels, só cartão de uma linha (`linhas`, sem `itens`), porque a lista com check não agradou. O corte termina na frase forte, sem muleta ("e é comprovado").
 - **Legenda simples:** o grupo entra inteiro, branco com sombra.
 - **Logo** da marca embaixo, o vídeo todo.

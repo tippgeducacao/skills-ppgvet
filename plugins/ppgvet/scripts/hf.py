@@ -23,6 +23,28 @@ LEG_Y = 915           # topo da legenda: no peito, logo abaixo do queixo
 CARD_Y = 1035         # topo dos cartões: abaixo da legenda, acima do logo (1470)
 PERG_Y = 1010         # topo da caixinha (avatar incluso)
 ROW = 44              # altura de cada item da lista
+ENTRADAS = ("palavras", "wipe", "bate")  # rodízio do título do cartão; "odometro" quando o cartão tem número
+
+
+def numero(tok):
+    """palavra que é só número (até 4 dígitos, com % ou + no fim): vira odômetro"""
+    m = re.fullmatch(r"\*?(\d{1,4})[%+]?\*?", tok)
+    return int(m.group(1)) if m else None
+
+
+def escolher_entradas(destaques):
+    """entrada de cada cartão: a do roteiro ou a próxima do rodízio, nunca a mesma do cartão anterior
+    (regras/antislop-midia.md); cartão com número ganha o odômetro"""
+    out, ant, k = [], None, 0
+    for c in destaques:
+        e = c.get("entrada")
+        if not e and ant != "odometro" and any(numero(x) is not None for x in " ".join(c["linhas"]).split()):
+            e = "odometro"
+        while not e or e == ant and "entrada" not in c:
+            e, k = ENTRADAS[k % len(ENTRADAS)], k + 1
+        out.append(e)
+        ant = e
+    return out
 
 
 def marcar(txt):
@@ -102,11 +124,16 @@ def pergunta(texto, ate):
     return comp("pergunta", corpo, css, js, ate)
 
 
-def cartao(i, c, d_total, itens_rel):
-    """Cartão branco com barra magenta; palavras entram uma a uma; lista com check que se desenha."""
+def cartao(i, c, d_total, itens_rel, entrada="palavras"):
+    """Cartão branco com barra na cor da marca; o título entra pela `entrada` (palavras, wipe, bate, odometro);
+    lista com check que se desenha."""
     cid = f"cartao{i}"
     linhas = " ".join(c["linhas"])
     itens = c.get("itens", [])
+    alvo = next((numero(x) for x in linhas.split() if numero(x) is not None), None)
+    titulo = palavras_html(linhas)
+    if entrada == "odometro" and alvo is not None:  # o número conta de 0 até ele
+        titulo = re.sub(r'>(\d{1,4})(?=[%+]?</span>)', r'><span class="n">\1</span>', titulo, count=1)
     css = f"""
     .cd-wrap {{ position: absolute; left: 70px; top: {CARD_Y}px; width: 940px;
                 filter: drop-shadow(0 22px 40px rgba(0,0,0,.34)) drop-shadow(0 4px 10px rgba(0,0,0,.16)); }}
@@ -115,6 +142,9 @@ def cartao(i, c, d_total, itens_rel):
                border-radius: 30px 0 0 30px; transform-origin: 50% 0; }}
     .cd-t {{ color: #1A1A1A; font-weight: 750; font-size: 46px; line-height: 1.16; letter-spacing: -.5px; }}
     .cd-t .w {{ display: inline-block; position: relative; }}
+    .cd-t {{ position: relative; }}
+    .cd-luz {{ position: absolute; top: -8px; bottom: -8px; width: 6px; left: 0; border-radius: 3px; opacity: 0;
+               background: #fff; box-shadow: 0 0 14px 4px {M["acao"]}, 0 0 4px 2px {M["acao"]}; }}
     .cd-t .hl {{ color: {M["cor"]}; }}
     .cd-it {{ display: flex; align-items: center; gap: 22px; height: {ROW}px; margin-top: 6px; }}
     .cd-it:first-of-type {{ margin-top: 12px; }}
@@ -131,7 +161,7 @@ def cartao(i, c, d_total, itens_rel):
     corpo = f"""    <div id="{cid}-wrap" class="cd-wrap">
       <div id="{cid}-cd" class="cd">
         <div id="{cid}-bar" class="cd-bar"></div>
-        <div id="{cid}-t" class="cd-t">{palavras_html(linhas)}</div>{it_html}
+        <div id="{cid}-t" class="cd-t"><div id="{cid}-tt">{titulo}</div><div id="{cid}-luz" class="cd-luz"></div></div>{it_html}
       </div>
     </div>"""
     n = len(itens)
@@ -141,9 +171,7 @@ def cartao(i, c, d_total, itens_rel):
               {{ clipPath: "{inset(0)}", duration: .55, ease: "expo.out" }}, 0);
     tl.fromTo("#{cid}-bar", {{ scaleY: 0 }}, {{ scaleY: 1, duration: .4, ease: "expo.out" }}, 0);
     tl.fromTo("#{cid}-wrap", {{ y: 26 }}, {{ y: 0, duration: .6, ease: "expo.out" }}, 0);
-    tl.fromTo("#{cid}-t .w", {{ opacity: 0, filter: "blur(6px)" }},
-              {{ opacity: 1, filter: "blur(0px)", duration: .16, ease: "power2.out", stagger: .06 }}, .18);
-"""
+{entrada_js(cid, entrada, alvo)}"""
     if "*" in linhas:
         js += f"""
     tl.fromTo("#{cid}-t .hl", {{ color: "#1A1A1A" }}, {{ color: "{M["cor"]}", duration: .3, ease: "power2.out" }}, .55);"""
@@ -157,6 +185,25 @@ def cartao(i, c, d_total, itens_rel):
     js += f"""
     tl.to("#{cid}-wrap", {{ opacity: 0, y: -10, filter: "blur(8px)", duration: .26, ease: "power3.in" }}, {d_total - 0.27:.3f});"""
     return comp(cid, corpo, css, js, d_total)
+
+
+def entrada_js(cid, entrada, alvo):
+    """como o título do cartão entra (curvas e durações: regras/oficio/motion.md)"""
+    w = f"#{cid}-t .w"
+    if entrada == "bate":  # letra que bate: grande e desfocada, assenta no tamanho
+        return f"""    tl.fromTo("{w}", {{ opacity: 0, scale: 1.7, filter: "blur(10px)", transformOrigin: "50% 60%" }},
+              {{ opacity: 1, scale: 1, filter: "blur(0px)", duration: .34, ease: "expo.out", stagger: .07 }}, .18);"""
+    if entrada == "wipe":  # o texto se revela da esquerda, com uma borda de luz na cor de ação
+        return f"""    tl.fromTo("#{cid}-tt", {{ clipPath: "inset(0px 100% 0px 0px)" }},
+              {{ clipPath: "inset(0px 0% 0px 0px)", duration: .7, ease: "expo.out" }}, .18);
+    tl.fromTo("#{cid}-luz", {{ left: "0%", opacity: 1 }}, {{ left: "100%", duration: .7, ease: "expo.out" }}, .18);
+    tl.to("#{cid}-luz", {{ opacity: 0, duration: .25, ease: "power2.out" }}, .62);"""
+    js = f"""    tl.fromTo("{w}", {{ opacity: 0, filter: "blur(6px)" }},
+              {{ opacity: 1, filter: "blur(0px)", duration: .16, ease: "power2.out", stagger: .06 }}, .18);"""
+    if entrada == "odometro" and alvo is not None:
+        js += f"""
+    tl.fromTo("#{cid}-t .n", {{ innerText: 0 }}, {{ innerText: {alvo}, snap: {{ innerText: 1 }}, duration: .9, ease: "expo.out" }}, .22);"""
+    return js
 
 
 def legenda(grupos, d_total):
@@ -220,10 +267,11 @@ def main(rot):
         pd = (f(p["ate"]) - p0) if "de" in p else p.get("ate", 3.4)
         open(f"{hf}/compositions/pergunta.html", "w", encoding="utf-8").write(pergunta(p["texto"], pd))
         hosts.append(("pergunta", p0, pd, "graphics", 3))
+    entradas = escolher_entradas(r.get("destaques", []))
     for i, c in enumerate(r.get("destaques", [])):
         de, ate = f(c["de"]), f(c["ate"])
         rel = [f(t) - de for t in c.get("itens_em", [])]
-        open(f"{hf}/compositions/cartao{i}.html", "w", encoding="utf-8").write(cartao(i, c, ate - de, rel))
+        open(f"{hf}/compositions/cartao{i}.html", "w", encoding="utf-8").write(cartao(i, c, ate - de, rel, entradas[i]))
         hosts.append((f"cartao{i}", de, ate - de, "graphics", 4 + i))
     open(f"{hf}/compositions/legenda.html", "w", encoding="utf-8").write(legenda(ler_srt(f"{pasta}/legenda.srt", D), D))
     hosts.append(("legenda", 0, D, "captions", 20))
@@ -250,5 +298,18 @@ def main(rot):
     print("projeto:", hf, f"{D}s")
 
 
+def teste():
+    assert numero("30") == 30 and numero("*90%*") == 90 and numero("+3") is None and numero("3.000") is None
+    cs = [{"linhas": ["sem número"]}, {"linhas": ["outro"]}, {"linhas": ["*30* dias"]}, {"linhas": ["mais 12"]},
+          {"linhas": ["fim"]}, {"linhas": ["x"], "entrada": "bate"}]
+    e = escolher_entradas(cs)
+    assert e == ["palavras", "wipe", "odometro", "bate", "palavras", "bate"], e
+    assert all(a != b for a, b in zip(e[:-2], e[1:-1]))                # o rodízio nunca repete seguido
+    h = cartao(0, {"linhas": ["*30* dias"]}, 3.0, [], "odometro")
+    assert '<span class="n">30</span>' in h and "innerText: 30" in h
+    assert "clipPath" in cartao(1, {"linhas": ["oi"]}, 3.0, [], "wipe") and "scale: 1.7" in cartao(2, {"linhas": ["oi"]}, 3.0, [], "bate")
+    print("ok")
+
+
 if __name__ == "__main__":
-    main(sys.argv[1])
+    teste() if sys.argv[1:] == ["--teste"] else main(sys.argv[1])
