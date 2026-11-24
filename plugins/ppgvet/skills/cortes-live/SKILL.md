@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Cortes de live → posts
 
-**O plano desta skill:** link ou arquivo da live, tema, se faz a aula completa e o nome da pós dos posts. Depois do ok, tudo sem parar: baixar, transcrever, escolher os cortes, cortar, aula completa e todos os posts. A pessoa revisa os cortes, os títulos e os posts juntos no fim (seção 3).
+**O plano desta skill:** link ou arquivo da live, tema, se faz a aula completa o nome da pós dos posts e a pergunta da legenda do post (`nucleo.md`, passo 1). Depois do ok, tudo sem parar: baixar, transcrever, escolher os cortes, cortar, aula completa e todos os posts. A pessoa revisa os cortes, os títulos e os posts juntos no fim (seção 3).
 
 ## Antes de começar
 - Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills), `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças), `${CLAUDE_PLUGIN_ROOT}/regras/video.md` (técnica, motion e Instagram), `${CLAUDE_PLUGIN_ROOT}/regras/bancos-e-referencias.md` (referência, inserções, música e sons).

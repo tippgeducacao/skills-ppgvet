@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Depoimento de aluno usa este mesmo fluxo: no lugar do professor, o aluno; a pasta fica `chamadas/depoimentos/<ALUNO>/`.
 
-**O plano desta skill:** para cada chamada do lote, a tomada escolhida, o tema, a arte de CTA e a música. Depois do ok, monta todas e entrega a revisão com a folha e a nota de cada uma. **Limpar depois da aprovação:** as folhas de quadros.
+**O plano desta skill:** para cada chamada do lote, a tomada escolhida, o tema, a arte de CTA, a música e a pergunta da legenda do post (`nucleo.md`, passo 1). Depois do ok, monta todas e entrega a revisão com a folha e a nota de cada uma. **Limpar depois da aprovação:** as folhas de quadros.
 
 ## Antes de começar
 - Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills), `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças), `${CLAUDE_PLUGIN_ROOT}/regras/video.md` (técnica, motion e Instagram), `${CLAUDE_PLUGIN_ROOT}/regras/bancos-e-referencias.md` (referência, inserções, música e sons).

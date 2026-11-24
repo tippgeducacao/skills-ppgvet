@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Confere um texto de marketing antes de entregar (regras em regras/oficio/copy.md).
-uso: checar_texto.py <arquivo.txt> --tipo legenda|arte|whatsapp|anuncio [--titulo "<título do anúncio>"]
+uso: checar_texto.py <arquivo.txt> --tipo legenda|arte|whatsapp|anuncio|roteiro|email|pauta [--titulo "<título do anúncio ou assunto do e-mail>"]
      checar_texto.py --teste
 FALHA barra a entrega (corrigir e rodar de novo); AVISO é para olhar e decidir. Sai 1 se houver FALHA."""
 import re, sys
 
-LIMITES = {"legenda": 2200, "whatsapp": 600, "anuncio": 600, "arte": 400}  # legenda: limite do Instagram; os outros, da casa
+LIMITES = {"legenda": 2200, "whatsapp": 600, "anuncio": 600, "arte": 400,  # legenda: limite do Instagram; os outros, da casa
+           "roteiro": 1000, "email": 2000, "pauta": 8000}  # roteiro: ~150 palavras, 60 s de fala
 VISIVEL = 125  # a legenda e o texto principal do anúncio mostram ~125 caracteres antes do "mais"
 
 FALHAS = [  # (regex, por quê)
@@ -100,6 +101,11 @@ def checar(texto, tipo, titulo=""):
         avisos.append("mais de um link no WhatsApp: uma ação só")
     if tipo == "anuncio" and titulo and len(titulo) > 40:
         avisos.append(f"título do anúncio com {len(titulo)} caracteres: a Meta recomenda até 40")
+    if tipo == "email":
+        if re.match(r"(?i)\s*(re|fwd?|enc|res)\s*:", titulo):
+            falhas.append(f'assunto "{titulo}": "Re:" ou "Fwd:" falso engana quem lê (regras do Gmail)')
+        if not re.search(r"(?i)descadastr|parar de receber|cancelar (a )?inscri|sair da lista", texto):
+            avisos.append("sem link de descadastro no corpo: conferir se a ferramenta de envio põe (regras do Gmail)")
     return falhas, avisos
 
 
@@ -137,6 +143,11 @@ def teste():
     assert any("sigla" in x for x in a), a
     _, a = checar("\n".join(["linha"] * 6), "whatsapp")
     assert any("linhas" in x for x in a), a
+    f, a = checar("Olá, Ana. As inscrições abriram.", "email", "Re: sua inscrição")
+    assert any("Re:" in x for x in f) and any("descadastro" in x for x in a), (f, a)
+    f, a = checar("Olá, Ana. As inscrições abriram.\nPara parar de receber, clique aqui.", "email", "Inscrições abertas até sexta")
+    assert not f and not a, (f, a)
+    assert any("caracteres" in x for x in checar("fala " * 250, "roteiro")[1])
     print("ok")
 
 

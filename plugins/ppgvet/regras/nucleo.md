@@ -60,13 +60,13 @@ Exemplo: um Reels de pós é o `editar-video` montando, a `copy` escrevendo perg
 - **Doc oficial:** ferramenta, formato de rede social ou plataforma segue a documentação oficial, conferida na hora quando o detalhe pode ter mudado (limite, formato, licença). Dizer qual doc foi usada.
 
 ## PC e tokens
+O princípio está no `sempre.md`; aqui, o como.
 - **PC:** todo render e transcrição dos scripts roda com prioridade baixa (`nice` no Mac, "abaixo do normal" no Windows): com o computador livre, usa a CPU toda e vai rápido; com a pessoa usando, cede a vez e nada trava. Comando pesado rodado direto, fora dos scripts (`npx "$HF" render`), vai com `nice -n 10` na frente no Mac. Não usar `taskpolicy -b` (prende nos núcleos econômicos e deixa lento mesmo com a máquina livre). O que demora vai em segundo plano. Um whisper por vez (ele já usa todos os núcleos); dá para renderizar um vídeo enquanto transcreve o próximo. Nunca vários renders pesados ao mesmo tempo.
 - **Tokens** (quase tudo roda no computador, então quase nada precisa passar pela conversa):
   - comando sem progresso na saída (os scripts já saem em silêncio; ffmpeg com `-v error -nostats`, yt-dlp com `--quiet --no-warnings`, pip com `-q`). Saída longa: só o fim (`| tail -5`);
-  - vídeo se olha por folha de quadros (`"$PY" "$S/folha.py" video.mp4 folha.jpg [a cada N s]`), nunca quadro a quadro;
-  - transcrição, log e texto grande se buscam com `grep` ou se leem por trecho; inteiros só quando ler a fala é a tarefa (escolher cortes, conferir aula);
-  - não reler arquivo já lido nem colar log ou JSON grande na resposta;
-  - resposta curta: o que foi feito, onde está, a nota e o que precisa de decisão.
+  - folha de quadros: `"$PY" "$S/folha.py" video.mp4 folha.jpg [a cada N s]`;
+  - transcrição inteira só quando ler a fala é a tarefa (escolher cortes, conferir aula); o resto com `grep` ou por trecho;
+  - não reler arquivo já lido nem colar log ou JSON grande na resposta; a resposta leva a nota.
 
 ## Conteúdo
 - **Grafia:** na dúvida sobre um nome (doença, toxina, fármaco, raça, técnica, pessoa, marca, software), **pesquisar a grafia certa** em fonte confiável antes de escrever. Nunca chutar o que o whisper ouviu (exemplo: "NASCE" era NASEM).
