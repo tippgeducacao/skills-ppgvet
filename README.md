@@ -83,4 +83,3 @@ Tudo numa ida só; a pessoa só fecha e abre o Claude Code no fim.
 - **Skill nova:** criar `plugins/ppgvet/skills/<nome>/SKILL.md`; chega sozinha para todo mundo.
 - **Ferramenta nova:** se toda skill usa, vai no essencial (`instalar()` em `scripts/instalar.py`; quem já instalou roda de novo). Se é de poucas, vira parte sob demanda: entra em `partes()` do `instalar.py` e em `PARTES` do `comum.py`, e o script que usa chama `falta_parte("<parte>")` quando faltar.
 - **Peças no repositório:** só as gerais da marca, em `acervo/`. O detector de rosto (YuNet, licença MIT) fica em `modelos/`. Música, som e efeito não entram: as licenças (Pixabay, Mixkit) não permitem redistribuir o arquivo solto.
-- **Referência de aula aprovada** por alguém (`<conferir>/referencias/<SIGLA>.jpg`): pôr em `acervo/aulas-referencia/` e publicar.

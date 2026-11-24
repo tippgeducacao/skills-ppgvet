@@ -15,15 +15,15 @@ Cópia, para o vídeo, do guia de marca da PPGVET (21/11/2026). Se o guia mudar,
 | ícone PPG | `logos/ppg/icone-ppg.png` (fundo escuro: `-branco`) | ícone da caixinha em vídeo PPG |
 | podcasts | `logos/podcasts/<suinocast, oaviario, maisrumen, petfood>/`: `logo-<podcast>.png`, `logo-<podcast>-mono.png`, `icone-<podcast>.png` (e as variações `-branco`, `-vazado`, `-balao`) | vídeo, corte ou chamada de episódio do podcast |
 | encerramento PPGVET | `logos-animadas/encerramento-ppgvet-vertical.mp4` (1080x1920, 6 s, "Mais que uma formação, uma transformação!") | fim de vídeo vertical PPGVET. Com música, o som da logo sai |
-| encerramento PPG | `logos-animadas/encerramento-ppg-vertical.mp4` (1080x1920, 6 s) | fim de vídeo vertical PPG |
+| encerramento PPG (logo 3D PPG) | `logos-animadas/encerramento-ppg-vertical.mp4` (1080x1920, 6 s) | fim de vídeo vertical PPG |
 | logo 3D PPGVET | `logos-animadas/logo-ppgvet-horizontal.mp4` (1920x1080, 15 s, mudo) | abertura e fim de vídeo horizontal |
 | abertura de aula | `intro/PPGVET.mov` (10,7 s, com slogan) | toda aula curricular, mesmo de pós da PPG |
 | molduras das pós | `molduras-aula/<AVES, BOVINOS, PADRÃO, PETFOOD, QUALIDADE, SUÍNOS>.png` | aula curricular (qual moldura de cada pós: tabela abaixo) |
+| moldura do post de corte | `molduras/moldura-post-corte-ppgvet.png` e `-ppg.png` (1080x1920: avatar, nome e @ do Instagram; o `post.py` escreve pós e título por cima) | posts da `cortes-live` (`"marca"` no `post.json`) |
 | moldura de intro de aula | `molduras/moldura-aula-ppgvet-ppg-16x9.png` (o vídeo entra no retângulo azul x 241..1678, y 134..944) | intro de aula com as duas marcas; treinamento do Academy só com câmera |
 | moldura do Academy com tela | `molduras-aula/PADRÃO.png` (tela grande à esquerda, câmera à direita) | treinamento do Academy com tela compartilhada |
 | card do professor | `card-professor/card-sem-nome.png` | base do card gerado na hora na aula curricular |
 | fontes | `fontes/`: Montserrat (legenda, títulos, Reels), Lexend Exa e Artegra Sans (card do professor) | os scripts já usam |
-| referências de aula | `aulas-referencia/<SIGLA>.jpg` (vazia por enquanto; entra quando uma aula da pós for aprovada) | intro e moldura aprovadas de cada pós (`conferir-aula`) |
 
 | marca | principal | ação | destaque na legenda |
 |---|---|---|---|

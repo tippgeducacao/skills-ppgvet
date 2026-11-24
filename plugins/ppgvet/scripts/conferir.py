@@ -124,16 +124,13 @@ def folha(video, tempos, destino, colunas=4):
     return g
 
 
-REFS_PACOTE = acervo("aulas-referencia")  # as que quem cuida do pacote publicou: valem para todos
-
-
 def refs_local():
     return os.path.join(pasta("conferir"), "referencias")  # as aprovadas por esta pessoa (o pacote é só leitura)
 
 
 def ref_de(sigla):
-    """a referência da pessoa vale primeiro; senão, a do pacote"""
-    return next((r for r in (os.path.join(d, f"{sigla.upper()}.jpg") for d in (refs_local(), REFS_PACOTE)) if os.path.exists(r)), None)
+    r = os.path.join(refs_local(), f"{sigla.upper()}.jpg")
+    return r if os.path.exists(r) else None
 
 
 def linha(video):

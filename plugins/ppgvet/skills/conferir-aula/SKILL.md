@@ -23,7 +23,7 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 
 ## 0. O que saber antes
 - **Edição (pós):** perguntar se não estiver claro. "Pós-graduações com a edição genérica" = `GENERICA`. Pós com edição própria = a sigla dela (`marca.md`). Não adivinhar pelo tema.
-- **Referência:** imagem com a intro e a moldura de uma aula aprovada da pós (`<SIGLA>.jpg`). Vale primeiro a da pessoa (`<conferir>/referencias/`) e, se não houver, a que vem no pacote (`acervo/aulas-referencia/`). A primeira aula aprovada de cada pós vira a referência (passo 4).
+- **Referência:** imagem com a intro e a moldura de uma aula aprovada da pós (`<SIGLA>.jpg`). Fica em `<conferir>/referencias/` de cada pessoa; sem ela, a conferência segue sem a linha de cima. A primeira aula aprovada de cada pós vira a referência (passo 4).
 - **Ficha da aula** (nome, currículo, títulos): não precisa. Se a pessoa mandar, usar para conferir o nome e o card do professor.
 
 ## 1. Pré-conferência (em segundo plano)
@@ -82,7 +82,7 @@ Separar o que é erro certo do que é "ouvir"/"conferir". Aula sem nada: "sem er
 
 ## 4. Guardar a referência
 Quando a pessoa aprovar uma aula de pós que ainda não tem referência (ou pedir para trocar):
-`"$PY" "$S/conferir.py" --salvar-ref <SIGLA> "<aula aprovada>.mp4"`. Ela fica em `<conferir>/referencias/` e vale para esta pessoa na hora. Para valer para todos, a pessoa manda a imagem para quem cuida do pacote, que põe em `acervo/aulas-referencia/` e publica.
+`"$PY" "$S/conferir.py" --salvar-ref <SIGLA> "<aula aprovada>.mp4"`. Ela fica em `<conferir>/referencias/` e vale na hora.
 
 ## Aprendizado
 Depois que a pessoa checar, o que **não** era erro e o que passou batido vira ajuste no pacote. Anotar com um exemplo real em `<conferir>/aprendizado.md` e avisar quem cuida do pacote. O que já se sabe:

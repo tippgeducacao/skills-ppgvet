@@ -86,7 +86,8 @@ As aulas de abertura são lives com este roteiro: vinheta → fala do diretor �
    ```
    - `titulo`: até 3 linhas de no máximo ~18 letras.
    - `pos`: o nome do curso em 2 linhas (nomes em `marca.md`). **Perguntar ou copiar de um post anterior do mesmo curso**, nunca inventar.
-   - `encerramento` (opcional): o fim padrão é a vinheta da PPGVET. O cartão de perfil do post também é da PPGVET; live de pós da marca PPG: perguntar no plano como fechar (`"encerramento": "acervo:logos-animadas/encerramento-ppg-vertical.mp4"` ou uma arte de CTA em imagem).
+   - `marca` (opcional): `ppgvet` (padrão) ou `ppg` (pós da marca PPG, `marca.md`). Escolhe a moldura fixa do post (`acervo/molduras/moldura-post-corte-<marca>.png`: avatar, nome e @), a cor do título e a vinheta do fim.
+   - `encerramento` (opcional): troca a vinheta da marca por outro vídeo ou por uma arte de CTA em imagem.
    - `cameras`: o que aparece na caixa grande do post, em trechos (`de` = segundos do post, cada trecho vai até o `de` do próximo; o primeiro começa em 0). `recorte` = área no vídeo (x, y, largura, altura).
      - **O professor é o foco:** a maior parte do post é a câmera dele, falando algo interessante. No layout padrão da moldura: `[952,192,264,264]`.
      - **Slide** (no layout padrão, `[60,115,872,490]`): só como apoio, em trecho curto (de 3 a 8 s), quando o professor aponta ou explica algo que está nele ("olha esse gráfico", "nesse dado aqui"). Depois volta para o professor.

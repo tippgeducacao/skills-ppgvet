@@ -9,8 +9,9 @@ from comum import baixo, FF, WHISPER, MODELO, acervo, caminho, dur, filtro_camin
 
 BOLD = acervo("fontes", "montserrat-bold.ttf")
 VAR = acervo("fontes", "montserrat-variavel.ttf")  # tem a Regular
-LOGO = acervo("logos", "ppgvet", "logo-ppgvet.png")
-FIM = acervo("logos-animadas", "encerramento-ppgvet-vertical.mp4")
+MOLDURA = acervo("molduras", "moldura-post-corte-{}.png")  # ppgvet ou ppg
+FIM = acervo("logos-animadas", "encerramento-{}-vertical.mp4")
+COR_TITULO = {"ppgvet": "#965594", "ppg": "#1670C2"}
 W, H, FPS = 1080, 1920, 30
 CAM = (42, 831, 996)  # x, y e largura da câmera do professor no post
 
@@ -21,39 +22,17 @@ def lufs(f, dur):
     return float(re.findall(r"I:\s+(-?[\d.]+) LUFS", out)[-1])
 
 
-def cartao(titulo, pos, saida):
-    im = Image.new("RGB", (W, H), "white")
+def cartao(titulo, pos, saida, marca="ppgvet"):
+    """moldura fixa da marca (avatar, nome, @) + pós e título do post"""
+    im = Image.open(MOLDURA.format(marca)).convert("RGB")
     d = ImageDraw.Draw(im)
-    # avatar: aro em degradê (laranja -> rosa -> roxo) com o logo dentro
-    cx, cy, r, aro = 202, 296, 95, 9
-    grad = Image.new("RGB", (2 * r, 2 * r))
-    stops = [(0, (250, 126, 30)), (0.5, (214, 41, 118)), (1, (154, 46, 186))]
-    for y in range(2 * r):
-        for x in range(2 * r):
-            t = min(max((x + (2 * r - y)) / (4 * r), 0), 1)  # de baixo-esquerda para cima-direita
-            (a, ca), (b, cb) = (stops[0], stops[1]) if t < 0.5 else (stops[1], stops[2])
-            k = (t - a) / (b - a)
-            grad.putpixel((x, y), tuple(int(ca[i] + (cb[i] - ca[i]) * k) for i in range(3)))
-    m = Image.new("L", (8 * r, 8 * r))
-    ImageDraw.Draw(m).ellipse((0, 0, 8 * r - 1, 8 * r - 1), fill=255)
-    ImageDraw.Draw(m).ellipse((4 * aro, 4 * aro, 8 * r - 1 - 4 * aro, 8 * r - 1 - 4 * aro), fill=0)  # furo no centro (borda igual)
-    im.paste(grad, (cx - r, cy - r), m.resize((2 * r, 2 * r), Image.LANCZOS))
-    logo = Image.open(LOGO).convert("RGBA")
-    logo = logo.resize((142, round(logo.height * 142 / logo.width)), Image.LANCZOS)
-    im.paste(logo, (cx - 71, cy - logo.height // 2), logo)
-
-    reg = lambda s: (f := ImageFont.truetype(VAR, s), f.set_variation_by_name("Regular"), f)[2]
-    nome = ImageFont.truetype(BOLD, 46)
-    d.text((366, 196), "PPGVET - Educação", font=nome, fill="black")
-    bx = 366 + d.textlength("PPGVET - Educação", font=nome) + 40
-    d.ellipse((bx - 22, 202, bx + 22, 246), fill="#3897f0")  # selo de verificado
-    d.line([(bx - 10, 224), (bx - 3, 232), (bx + 11, 216)], fill="white", width=5, joint="curve")
-    d.text((366, 258), "@ppgvet_oficial", font=reg(30), fill="#282828")
+    reg = ImageFont.truetype(VAR, 30)
+    reg.set_variation_by_name("Regular")
     for i, l in enumerate(pos):
-        d.text((366, 316 + 37 * i), l, font=reg(30), fill="#282828")
+        d.text((366, 316 + 37 * i), l, font=reg, fill="#282828")
     tit = ImageFont.truetype(BOLD, 80)
     for i, l in enumerate(titulo):
-        d.text((W / 2, 501 + 81 * i), l, font=tit, fill="#965594", anchor="ma")
+        d.text((W / 2, 501 + 81 * i), l, font=tit, fill=COR_TITULO[marca], anchor="ma")
     im.save(saida)
 
 
@@ -146,9 +125,11 @@ def main(post_json, so_legenda=False):
         return
 
     musica, saida = p(r["musica"]), p(r["saida"])
-    enc = p(r["encerramento"]) if "encerramento" in r else FIM  # arte de CTA (imagem) ou vídeo no lugar da vinheta
+    marca = r.get("marca", "ppgvet")
+    assert marca in COR_TITULO, f"marca é ppgvet ou ppg, não {marca}"
+    enc = p(r["encerramento"]) if "encerramento" in r else FIM.format(marca)  # arte de CTA (imagem) ou vídeo no lugar da vinheta
     enc_img = enc.lower().endswith((".jpg", ".jpeg", ".png", ".webp"))
-    for f in (corte, musica, enc, LOGO):
+    for f in (corte, musica, enc, MOLDURA.format(marca)):
         assert os.path.exists(f), f"não encontrei: {f}"
     assert not os.path.exists(saida), f"saída já existe, use um nome -vN: {saida}"
     assert len(r["titulo"]) <= 3 and len(r["pos"]) <= 2, "título até 3 linhas, pós até 2"
@@ -158,7 +139,7 @@ def main(post_json, so_legenda=False):
     total = fala + d_fim
     assert dur(musica) >= total, "música mais curta que o vídeo: escolha outra (nunca em loop)"
     png, ass = os.path.join(tmp, "cartao.png"), os.path.join(tmp, "legenda.ass")
-    cartao(r["titulo"], r["pos"], png)
+    cartao(r["titulo"], r["pos"], png, marca)
     assert legenda_ass(srt_arq, ini, fim, r.get("correcoes", {}), ass), "legenda vazia: confira inicio/fim"
 
     cx, cy, cw = CAM
