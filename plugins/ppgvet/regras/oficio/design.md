@@ -26,7 +26,7 @@ Lido quando a peça tem arte, cartão ou carrossel, no nível padrão e no capri
 | carrossel | todos os itens na proporção do primeiro | 1º = gancho, último = CTA, mesmo grid em todos |
 | stories e Reels | 1080x1920 | margens no `video.md` |
 
-## O que os nossos perfis ensinam (estudo de 24/11/2026: 100 posts e as artes do Carlos e da Kelrin)
+## O que os nossos perfis ensinam (estudo de 24/11/2026: 100 posts e as artes dos designers da casa)
 - **Foto e vídeo real vencem:** Reels de campo alcançaram 34 a 50 mil (mediana 2,9 mil); carrossel só com fotos da turma, 28,8 mil. O pior: arte só de texto com foto de banco. Pessoa e lugar de verdade sempre que houver.
 - **Molde da casa:** fundo claro `#FAF9FB` (grade leve), logo no topo ao centro, margem de ~10%, até 3 níveis de texto em Montserrat (título Black em caixa alta, apoio Bold, detalhe), bloco "PÓS-GRADUAÇÃO │ nome" (`acervo/titulos-pos`), professor em cartão ou recortado com titulação certa (só Dr./Dra., Me./Ma.).
 - **Cor:** só os códigos do `marca.md` (as artes antigas derivaram: magenta `#B8569A`/`#CE5A9B`, teal `#00A19C`, azul PPG `#005EF2`; não copiar). Teal e magenta de acento: letra branca sobre o teal `#00B7AB` dá 2,6:1 e sobre o magenta 3,95:1, reprovado para letra pequena; texto em cima vai na caixa escura `#1A1A1A`.

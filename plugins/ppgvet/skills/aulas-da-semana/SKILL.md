@@ -13,7 +13,7 @@ description: Arte de Instagram (imagem, não vídeo) - o carrossel "Aulas da sem
 Se a pessoa chamou sem a lista (ou é a primeira vez), explicar em poucas linhas:
 - **A lista da semana**, colada, uma aula por linha: pós, data, horário, professor (com a titulação, se tiver: Dr., Dra., Me., Ma.) e o tema.
 - **As fotos dos professores**: a pasta onde estão (nome-sobrenome.jpg) ou os arquivos. Sem foto, a lâmina não sai: nunca foto de banco nem gerada.
-- Exemplo: *"faz o carrossel da semana"* + `CBEA | 23/11 | 19h | Dra. Rosangela Poletto | Cultura, socialização e humanização`.
+- Exemplo: *"faz o carrossel da semana"* + `CBEA | 23/11 | 19h | Dra. Ana Souza | Bem-estar na criação`.
 
 ## O molde (o da equipe, com as regras da marca)
 | lâmina | o que tem |

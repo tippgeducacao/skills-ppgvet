@@ -3,7 +3,7 @@
 uso: aulas_semana.py semana.json [--fotos <pasta das fotos dos professores>]
      aulas_semana.py --teste
 semana.json: {"ano": 2026, "aulas": [{"pos": "CBEA" (ou ["RNGB","NGB","GPL"] em módulo comum), "data": "23/11",
-  "hora": "19h", "professor": "Dra. Rosangela Poletto", "tema": "Cultura, socialização e humanização",
+  "hora": "19h", "professor": "Dra. Ana Souza", "tema": "Bem-estar na criação",
   "foto": "<arquivo>" (opcional: sem ela, procura pelo nome em --fotos)}]}
 Confere antes de gerar (sigla, dia da semana pela data, titulação, foto, grafia do nome pela foto) e depois mede
 (texto que não cabe ou encosta, contraste). Uma pasta por marca: PPGVET e PPG nunca no mesmo carrossel."""
@@ -56,7 +56,7 @@ def slug(s):
 
 
 def titulo_e_nome(prof):
-    """'Dra. Rosangela Poletto' -> ('Dra.', 'Rosangela Poletto'); erro para titulação fora do padrão"""
+    """'Dra. Ana Souza' -> ('Dra.', 'Ana Souza'); erro para titulação fora do padrão"""
     prof = " ".join(prof.split())
     m = re.match(r"^(Dra?|Ma?|Me|Prof[aª]?|Esp|PhD)\.?\s+(.+)$", prof, re.I)
     if not m:
@@ -287,7 +287,7 @@ def teste():
     assert letra_sobre("#00BEA0") == ESCURO and letra_sobre("#026E66") == "#FFFFFF"
     assert max(contraste(c, "#DA4C00") for c in ("#FFFFFF", ESCURO)) < 4.5  # laranja da PC: vai com letra grande
     assert contraste("#FFFFFF", "#D24BA8") < 4.5 < contraste("#FFFFFF", ESCURO)
-    assert titulo_e_nome("Dra. Rosangela Poletto") == ("Dra.", "Rosangela Poletto")
+    assert titulo_e_nome("Dra. Ana Souza") == ("Dra.", "Ana Souza")
     assert titulo_e_nome("Prof. João Silva") == ("Prof.", "João Silva") and titulo_e_nome("Ana Souza") == ("Prof.", "Ana Souza")
     for ruim in ("PhD João Silva", "Esp. Ana Souza"):
         try:
@@ -298,12 +298,12 @@ def teste():
     with tempfile.TemporaryDirectory() as t:
         from PIL import Image
         Image.new("RGB", (600, 800), "#888").save(f"{t}/ana-maria-souza.jpg")
-        Image.new("RGB", (600, 800), "#888").save(f"{t}/bruno-poletto.jpg")
+        Image.new("RGB", (600, 800), "#888").save(f"{t}/bruno-lima.jpg")
         assert achar_foto("Ana Souza", t)[0].name == "ana-maria-souza.jpg"
-        assert "grafia" in achar_foto("Bruno Polleto", t)[1]
+        assert "grafia" in achar_foto("Bruno Limma", t)[1]
         d = {"ano": 2026, "aulas": [
             {"pos": "PC", "data": "23/11", "hora": "19h", "professor": "Ana Souza", "tema": "Tema curto de teste"},
-            {"pos": ["RNGB", "NGB", "GPL"], "data": "24/11", "hora": "19h30", "professor": "Me. Bruno Poletto", "tema": "Outro tema"},
+            {"pos": ["RNGB", "NGB", "GPL"], "data": "24/11", "hora": "19h30", "professor": "Me. Bruno Lima", "tema": "Outro tema"},
             {"pos": "GCC", "data": "25/11", "hora": "20:00", "professor": "Ana Souza", "tema": "Tema da PPG"}]}
         pm, erros, avisos = preparar(d, t)
         assert not erros and set(pm) == {"PPGVET", "PPG"}, (erros, pm.keys())  # PPG vai em carrossel próprio
