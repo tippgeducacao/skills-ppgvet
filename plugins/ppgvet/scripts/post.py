@@ -73,10 +73,19 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     return len(linhas)
 
 
+def zoom_suave(z):
+    """zoom no centro em fração de pixel: z = expressão do zoom com T (segundos) e quadros a FPS.
+    Nunca zoompan: ele arredonda a posição para o pixel inteiro e o movimento treme (anda para trás)."""
+    z = z.replace("T", f"(in/{FPS})")
+    m = f"(1-1/({z}))/2"
+    return (f"perspective=x0='W*{m}':y0='H*{m}':x1='W-W*{m}':y1='H*{m}':"
+            f"x2='W*{m}':y2='H-H*{m}':x3='W-W*{m}':y3='H-H*{m}':interpolation=cubic:eval=frame")
+
+
 def soco(a):
-    """zoom rápido + volta (transição de entrada/saída do apoio) no instante a"""
-    return (f"+between(it,{a - 0.18:.3f},{a:.3f})*1.8*pow((it-{a - 0.18:.3f})/0.18,2)"
-            f"+between(it,{a:.3f},{a + 0.35:.3f})*0.8*pow(1-(it-{a:.3f})/0.35,3)")
+    """zoom rápido + volta (transição de entrada/saída do apoio) no instante a; T = tempo em segundos"""
+    return (f"+between(T,{a - 0.18:.3f},{a:.3f})*1.8*pow((T-{a - 0.18:.3f})/0.18,2)"
+            f"+between(T,{a:.3f},{a + 0.35:.3f})*0.8*pow(1-(T-{a:.3f})/0.35,3)")
 
 
 def trechos_camera(cameras, fala):
@@ -159,14 +168,14 @@ def main(post_json, so_legenda=False):
         ent += (["-loop", "1", "-framerate", str(FPS)] if imagem else []) + ["-t", f"{ate - de:.3f}", "-i", arq]
         k = 2 + i
         fc += [f"[{k}:v]scale={2 * W}:{2 * H}:force_original_aspect_ratio=increase,crop={2 * W}:{2 * H},"
-               f"zoompan=z='1+0.08*on/({ate - de:.2f}*{FPS})':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps={FPS},"
+               f"fps={FPS},{zoom_suave(f'1+0.08*T/{ate - de:.3f}')},scale={W}:{H}:flags=lanczos,"
                f"setpts=PTS-STARTPTS+{de}/TB,format=yuv420p[ap{i}]",
                f"[c{i}][ap{i}]overlay=0:0:enable='between(t,{de},{ate})':eof_action=pass[c{i + 1}]"]
         zoom += soco(de) + soco(ate)
         borrao += "".join(f",gblur=sigma=2:sigmaV=40:enable='between(t,{t - 0.108:.3f},{t + 0.175:.3f})'" for t in (de, ate))
     ult = f"c{len(r.get('apoio', []))}"
     if borrao:
-        fc.append(f"[{ult}]zoompan=z='{zoom}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s={W}x{H}:fps={FPS}{borrao}[z]")
+        fc.append(f"[{ult}]{zoom_suave(zoom)}{borrao}[z]")
         ult = "z"
     k_fim, k_mus = len(r.get("apoio", [])) + 2, len(r.get("apoio", [])) + 3
     SOBE = 0.45  # arte entra subindo por cima dos últimos SOBE s da fala
@@ -196,7 +205,24 @@ def main(post_json, so_legenda=False):
     print("pronto:", saida)
 
 
+def suave_ok():
+    """renderiza um zoom de 3 s num ponto e confere que ele nunca anda para trás nem dá salto (o zoompan falhava aqui)"""
+    import tempfile, numpy as np
+    with tempfile.TemporaryDirectory() as d:
+        Image.new("L", (W, H)).save(f"{d}/p.png")
+        im = Image.open(f"{d}/p.png"); ImageDraw.Draw(im).ellipse((834, 954, 846, 966), fill=255); im.save(f"{d}/p.png")
+        cru = baixo([FF(), "-v", "error", "-loop", "1", "-framerate", str(FPS), "-t", "3", "-i", f"{d}/p.png", "-vf",
+                     zoom_suave("1+0.08*T/3" + soco(1.5)) + ",format=gray", "-f", "rawvideo", "-"], capture_output=True).stdout
+    q = np.frombuffer(cru, np.uint8).reshape(-1, H, W)
+    assert len(q) == 3 * FPS, len(q)
+    q = q[:int(1.5 * FPS) - 6, 900:1020, 700:1050].astype(float)  # antes do soco: só aproxima, devagar
+    v = np.diff((q * np.arange(q.shape[2])).sum((1, 2)) / q.sum((1, 2)))
+    # o zoompan andava de -0,12 a 0,77 px por quadro; aqui ~0,27 constante (folga de 0,15 para a interpolação)
+    assert (v > 0).all() and np.abs(np.diff(v)).max() < 0.15, (v.min(), np.abs(np.diff(v)).max())
+
+
 def teste():
+    suave_ok()
     t = trechos_camera([{"de": 20, "recorte": [60, 115, 872, 490]}, {"de": 0, "recorte": [952, 192, 264, 264]},
                         {"de": 31.5, "recorte": [952, 192, 264, 264]}], 50)
     assert [(a, b) for a, b, _ in t] == [(0, 20), (20, 31.5), (31.5, 50)], t
