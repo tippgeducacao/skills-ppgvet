@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Testes que barram a entrega (regras/nucleo.md, passo 3). Só mede o arquivo final; não muda nada.
-uso: checar.py <video.mp4> [--srt legenda.srt] [--lufs -16] [--car 25] [--instagram] [--rosto <y>]
+uso: checar.py <video ou áudio> [--srt legenda.srt] [--lufs -16] [--car 25] [--instagram] [--rosto <y>]
      checar.py --teste
 Uma linha por teste (PASSA, AVISO ou FALHA); sai com código 1 se algum FALHA.
 --lufs: alvo do volume da skill (padrão -16; chamada -14). --car: caracteres por linha da legenda
@@ -125,11 +125,13 @@ def checar_formato(v, a, fmt, arquivo):
 def checar(video, srt=None, lufs=-16.0, car=None, instagram=False, rosto=None):
     info = json.loads(subprocess.run([FFPROBE(), "-v", "error", "-show_streams", "-show_format", "-of", "json", video],
                                      capture_output=True, text=True, check=True).stdout)
-    v = next(s for s in info["streams"] if s["codec_type"] == "video")
+    v = next((s for s in info["streams"] if s["codec_type"] == "video"
+              and not s.get("disposition", {}).get("attached_pic")), None)  # capa embutida no mp3 não é vídeo
     a = next((s for s in info["streams"] if s["codec_type"] == "audio"), None)
     r = []
-    cor = [v.get(k) for k in ("color_space", "color_primaries", "color_transfer")]
-    r.append(("PASSA", "cor BT.709") if cor == ["bt709"] * 3 else ("FALHA", f"cor {cor} (etiquetar BT.709, video.md)"))
+    if v:
+        cor = [v.get(k) for k in ("color_space", "color_primaries", "color_transfer")]
+        r.append(("PASSA", "cor BT.709") if cor == ["bt709"] * 3 else ("FALHA", f"cor {cor} (etiquetar BT.709, video.md)"))
     if a:
         i, p = ler_volume(ffmpeg_log(video, "ebur128=peak=true"))
         r.append(("PASSA" if abs(i - lufs) <= TOL_LUFS else "FALHA", f"volume {i:.1f} LUFS (alvo {lufs:g} ±{TOL_LUFS})"))
@@ -141,6 +143,8 @@ def checar(video, srt=None, lufs=-16.0, car=None, instagram=False, rosto=None):
             r.append(("FALHA" if dif > CANAIS_DB else "PASSA", f"canais {med[0]:.1f} e {med[1]:.1f} dB (diferença até {CANAIS_DB:g})"))
     else:
         r.append(("AVISO", "sem áudio"))
+    if v is None:  # arquivo só de áudio: o resto confere imagem
+        return r
     log = ffmpeg_log(video, "blackdetect=d=0.1:pix_th=0.10,freezedetect=n=-60dB:d=2", audio=False)
     pretos = [float(x) for x in re.findall(r"black_start:(\d+\.?\d*)", log)]
     congelados = [float(x) for x in re.findall(r"freeze_start: (\d+\.?\d*)", log)]
@@ -182,6 +186,9 @@ def teste():
         open(f"{d}/rapido.mp4", "wb").write(ftyp + moov + mdat)
         open(f"{d}/lento.mp4", "wb").write(ftyp + mdat + moov)
         assert moov_antes(f"{d}/rapido.mp4") and not moov_antes(f"{d}/lento.mp4")
+        subprocess.run([FF(), "-v", "error", "-y", "-f", "lavfi", "-i", "sine=d=4", "-ac", "2", f"{d}/som.mp3"], check=True)
+        so_audio = checar(f"{d}/som.mp3")
+        assert any("volume" in t for _, t in so_audio) and not any("quadro" in t or "cor" in t for _, t in so_audio), so_audio
     v = {"width": 1080, "height": 1920, "r_frame_rate": "30/1", "avg_frame_rate": "30/1", "codec_name": "h264", "bit_rate": "8000000"}
     assert checar_formato(v, {"codec_name": "aac", "sample_rate": "48000"}, {"duration": "30", "size": "20000000"}, f"{__file__}")[0][0] == "FALHA"  # sem faststart
     assert queixo([(0.4, 0.2, 0.2, 0.25)], 1920) == 0.45 * 1920 and queixo([], 1920) is None

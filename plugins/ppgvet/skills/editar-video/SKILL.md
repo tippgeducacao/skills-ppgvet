@@ -13,7 +13,7 @@ disable-model-invocation: true
 
 ## O que preciso de você
 Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
-- **O vídeo** (arquivo ou link) e **o que quer**: Reels de fala, corte, legenda, compressão…
+- **O vídeo ou o áudio** (arquivo ou link) e **o que quer**: Reels de fala, corte, legenda, compressão, limpar o som…
 - **Onde vai** (Instagram, site, WhatsApp) e, se tiver, **uma referência** do estilo (link).
 - Para Reels com textos animados: o que destacar, se já souber (senão o Claude propõe no plano).
 - Exemplo de pedido: *"edita esse vídeo do Rafael pra Reels, no estilo dessa referência"* + arquivo e link.
@@ -27,6 +27,14 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 4. **Editar** todos, um atrás do outro, sem parar.
 5. **Conferir e dar nota** de 0 a 10 (lista em `nucleo.md` mais ritmo, leitura, marca e acabamento); abaixo de 8, corrigir.
 6. **Revisão no fim:** folha de quadros e nota de cada vídeo; para os Reels, o link do Studio para ajuste fino. Limpar depois da aprovação: `tmp/`, `hf/` e as prévias (ficam o original, o `roteiro.json`, a `legenda.srt` e a entrega).
+
+## Só áudio (podcast, locução, áudio de WhatsApp)
+Mesmo fluxo (ver, plano, fazer, conferir), sem imagem. Regras de som: `oficio/som.md`.
+- **Ruído** (zumbido, ar-condicionado, sala): `"$PY" "$S/limpar_voz.py" <entrada> <limpo.wav>` (parte `voz` do kit, sob demanda). Ouvir antes e depois num trecho com `ouvir.py`: voz metálica ou cortada = voltar ao original.
+- **Cortar:** transcrever e achar os blocos como nos passos 2 e 3; juntar na fronteira da palavra, com fade de 30 ms.
+- **Volume:** -16 LUFS e pico até -1,5 dBTP (a Apple Podcasts pede -16 ±1 e pico até -1): `"$FF" -i <limpo.wav> -af loudnorm=I=-16:TP=-1.5:LRA=11 -ar 48000 <saida>`.
+- **Entrega** no formato que veio, ou MP3 de 128 kbps (voz) a 48 kHz; nome `<assunto>-<tema>-vN.mp3`.
+- **Conferir:** `"$PY" "$S/checar.py" <saida>` (volume, pico e canais). FALHA barra a entrega.
 
 ## Vídeo vertical de fala com motion (Reels)
 Pessoa falando para a câmera, com caixinha de pergunta, cartões de destaque, legenda, logo, música e vinheta. Usa o HyperFrames (parte `motion` do kit, sob demanda: `nucleo.md`, "Ambiente").
