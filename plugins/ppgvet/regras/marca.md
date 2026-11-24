@@ -26,6 +26,7 @@ Cópia, para o vídeo, do guia de marca da PPGVET (21/11/2026). Se o guia mudar,
 | card do professor | `card-professor/card-sem-nome.png` | base do card gerado na hora na aula curricular |
 | títulos das pós | `titulos-pos/titulo-pos-<sigla>.png` (cinza e magenta, 4x) e `-branco.png`; gerados por `scripts/live_titulos.py` | live, arte, qualquer peça com o nome da pós |
 | peças da live | `live/`: `titulos-overlay/titulo-live-<sigla>.png` (vMix, topo), `moldura-insta.html` (modelo) e `moldura-insta-exemplo.png`, `qr-live.html`, `molduras-vmix/` (uma pessoa, duas pessoas, slides) | skill `live-vmix` |
+| efeitos sonoros | `sons/<interface, transicao, impacto, foley>/<nome>.wav`; origem e licença em `sons/ORIGEM.md` | qualquer vídeo com sound design (`regras/oficio/som.md`) |
 | mascotes dos podcasts | `mascotes/<suinocast, oaviario, maisrumen, petfood>/mascote-<podcast>-<pose>.webp` | skill `patrocinador-podcast` |
 | fontes | `fontes/`: Montserrat (legenda, títulos, Reels), Lexend Exa e Artegra Sans (card do professor) | os scripts já usam |
 

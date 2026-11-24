@@ -64,7 +64,7 @@ São automáticas, desde que o auto-update esteja ligado. Depois de cada mudanç
 | configuração de cada pessoa, Python do pacote, modelo do whisper | `~/.ppgvet/` no computador de cada um |
 | vídeos de trabalho, entregas, músicas baixadas (`musicas/`), downloads e referências de aula aprovadas | a pasta escolhida no kit (padrão: `Filmes/PPGVET` no Mac, `Vídeos/PPGVET` no Windows) |
 
-O card com o nome do professor é gerado na hora, a partir do card sem nome. Música, som e efeito não vêm no pacote: cada pessoa baixa quando precisa (onde e como: `regras/bancos-e-referencias.md`).
+O card com o nome do professor é gerado na hora, a partir do card sem nome. Efeitos sonoros básicos vêm no pacote (`acervo/sons/`, só gerados por nós ou CC0; origem em `sons/ORIGEM.md`). Música e outros efeitos não: cada pessoa baixa quando precisa (onde e como: `regras/bancos-e-referencias.md`).
 
 ## Problemas
 - Uma skill deu erro de programa ou de arquivo não encontrado: pedir *"confere a instalação"*.
@@ -84,4 +84,4 @@ Tudo numa ida só; a pessoa só fecha e abre o Claude Code no fim.
 - **Organização:** tudo em `plugins/ppgvet/`. As regras ficam em `regras/`, um assunto por arquivo: `nucleo.md` (vale para todas: ambiente, arquivo e versões, como trabalhar, perguntas, IA, PC e tokens, grafia), `video.md` (corte, cor, áudio, motion, padrão Instagram), `bancos-e-referencias.md` (referência, inserções, música e sons) e `marca.md` (marcas, peças, siglas e molduras). Cada skill traz só o próprio passo a passo e lê só os arquivos de que precisa. Regra nova que vale para todas: entra no `nucleo.md`; de um assunto, no arquivo dele.
 - **Skill nova:** criar `plugins/ppgvet/skills/<nome>/SKILL.md`; chega sozinha para todo mundo.
 - **Ferramenta nova:** se toda skill usa, vai no essencial (`instalar()` em `scripts/instalar.py`; quem já instalou roda de novo). Se é de poucas, vira parte sob demanda: entra em `partes()` do `instalar.py` e em `PARTES` do `comum.py`, e o script que usa chama `falta_parte("<parte>")` quando faltar.
-- **Peças no repositório:** só as gerais da marca, em `acervo/`. O detector de rosto (YuNet, licença MIT) fica em `modelos/`. Música, som e efeito não entram: as licenças (Pixabay, Mixkit) não permitem redistribuir o arquivo solto.
+- **Peças no repositório:** só as gerais da marca, em `acervo/`. O detector de rosto (YuNet, licença MIT) fica em `modelos/`. Som só se for gerado por `scripts/sons.py` ou CC0 de verdade, com a linha em `acervo/sons/ORIGEM.md`. Música e sons de Pixabay, Mixkit e afins não entram: as licenças não permitem redistribuir o arquivo solto.

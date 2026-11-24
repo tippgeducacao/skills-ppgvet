@@ -58,10 +58,11 @@ Não usar:
 **Depois de baixar:** salvar em `musicas/` com nome minúsculo-com-hífen (`corporativa-inspiradora.mp3`) e criar ao lado um `<nome>.mp3.origem.txt` com o link da página da faixa e a licença. Os scripts usam esse arquivo para escrever o `creditos.txt`.
 
 ## Sons e efeitos visuais
-Só quando a pessoa pedir ou o nível pedir (`nucleo.md`). Como usar: `oficio/som.md`. Onde baixar, com `.origem.txt`, nesta ordem:
-1. Drive de insumos.
-2. **Kenney** (https://kenney.nl/assets, pacotes Interface Sounds, Impact Sounds, UI Audio, Digital Audio): tudo CC0.
-3. **Freesound** (https://freesound.org), filtrado em "Creative Commons 0", baixado pela pessoa logada; CC BY só com crédito, e nunca CC BY-NC.
-4. Pixabay (https://pixabay.com/sound-effects/) e Mixkit (https://mixkit.co/free-sound-effects/).
+Só quando a pessoa pedir ou o nível pedir (`nucleo.md`). Como usar: `oficio/som.md`; para o pico cair no quadro do gesto, `"$PY" "$S/sons.py" pico <som>` dá em quantos ms o som "bate". Onde procurar, nesta ordem:
+1. **Acervo do pacote** (`acervo/sons/`): interface (clique, pop, bolha, blip, notificação, sucesso, erro, ding, brilho, tique-taque, glitch), transição (whoosh curto e longo, swipe, reverse, riser de 2 e 4 s), impacto (impacto grave, bass drop, baque, vidro tilintando, saco caindo) e foley (teclado, tecla, obturador, folha virando, clique duplo de mouse, aplausos). Origem e licença: `acervo/sons/ORIGEM.md`.
+2. Drive de insumos.
+3. **Kenney** (https://kenney.nl/assets, pacotes Interface Sounds, Impact Sounds, UI Audio, Digital Audio): tudo CC0.
+4. **Freesound** (https://freesound.org), filtrado em "Creative Commons 0": a página do som a pessoa abre; o Claude acha sons CC0 pela API do Openverse (`api.openverse.org/v1/audio/?license=cc0`) e baixa a prévia. CC BY só com crédito, e nunca CC BY-NC.
+5. Pixabay (https://pixabay.com/sound-effects/) e Mixkit (https://mixkit.co/free-sound-effects/).
 
 Não usar BBC Sound Effects: a licença é só para uso pessoal, educacional ou de pesquisa. Efeito visual sobre fundo preto: misturar com `blend=all_mode=screen` no ffmpeg ou `mix-blend-mode: screen` no HyperFrames. Som de efeito vai baixo, abaixo da voz.

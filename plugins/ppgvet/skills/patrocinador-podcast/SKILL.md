@@ -89,7 +89,7 @@ Encode e som (cena = (INTRO + nº de quadros)/24; T = cena + 3,6; as logos entra
  -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -c:a aac -b:a 192k -movflags +faststart <saida-vN.mp4>
 "$PY" "$S/checar.py" <saida-vN.mp4> --lufs -14 --instagram
 ```
-- Som do Veo nunca entra (ambiente estranho). Música fixa na cena e sobe na cartela (`video.md`). Queda: whoosh com pico no pouso + o impacto do produto (vidro, saco de grãos). Na cartela, um pop nas logos. Nada mais. Onde achar os sons: regra de sons do `bancos-e-referencias.md`; como sincronizar: `oficio/som.md`.
+- Som do Veo nunca entra (ambiente estranho). Música fixa na cena e sobe na cartela (`video.md`). Queda: whoosh com pico no pouso (`$A/sons/transicao/whoosh-longo.wav`; o pico dá `"$PY" "$S/sons.py" pico <som>`) + o impacto do produto (vidro, saco de grãos: gravação real, regra de sons do `bancos-e-referencias.md`). Na cartela, um pop nas logos (`$A/sons/interface/pop.wav`). Nada mais. Como sincronizar: `oficio/som.md`.
 - Cada vídeo com identidade própria: não repetir a trilha do vídeo anterior (ver o roteiro dele); música pela regra do `bancos-e-referencias.md`. Anotar trilha e efeitos no roteiro.
 
 Entregar a versão e esperar a pessoa conferir.
