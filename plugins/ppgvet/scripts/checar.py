@@ -73,8 +73,10 @@ def checar_legenda(blocos, car):
 
 
 def queixo(faces, alt):
-    """parte de baixo do maior rosto, em pixels da altura alt; None sem rosto"""
-    return max(((y + h) * alt for x, y, w, h in faces), default=None)
+    """parte de baixo do maior rosto, em pixels da altura alt; None sem rosto.
+    Rosto com menos de 10% da largura é plateia ao fundo (legenda por cima não incomoda) e não conta."""
+    y = max(((w, y + h) for x, y, w, h in faces if w >= 0.10), default=(0, None))[1]
+    return None if y is None else y * alt
 
 
 def rosto_baixo(video, limite, alt):
@@ -183,6 +185,7 @@ def teste():
     v = {"width": 1080, "height": 1920, "r_frame_rate": "30/1", "avg_frame_rate": "30/1", "codec_name": "h264", "bit_rate": "8000000"}
     assert checar_formato(v, {"codec_name": "aac", "sample_rate": "48000"}, {"duration": "30", "size": "20000000"}, f"{__file__}")[0][0] == "FALHA"  # sem faststart
     assert queixo([(0.4, 0.2, 0.2, 0.25)], 1920) == 0.45 * 1920 and queixo([], 1920) is None
+    assert queixo([(0.4, 0.2, 0.2, 0.25), (0.1, 0.7, 0.12, 0.1)], 1920) == 0.45 * 1920 and queixo([(0, 0.8, 0.05, 0.06)], 1920) is None  # vale o maior; plateia ao fundo não conta
     print("ok")
 
 
