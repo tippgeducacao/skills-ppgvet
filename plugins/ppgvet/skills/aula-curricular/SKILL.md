@@ -26,14 +26,14 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 Como a tarefa chega e o que tirar de cada linha:
 ```
 Inserir abertura animada: PPGVET
-Nomear aula como: 03/11 | Extensão Rural - Parte II | Prof. Gabriela Tonial Knappmann Bittencourt
+Nomear aula como: 03/11 | Extensão Rural - Parte II | Prof. Ana Maria Souza Lima
 Anexar a aula editada na plataforma PANDA VÍDEO no seguinte caminho: PPGVET > SANIDADE AVÍCOLA > 2026 > 10.OUTUBRO
 ```
 - **Abertura:** aula curricular **sempre** leva a abertura PPGVET (`"abertura": "PPGVET"`), mesmo quando a tarefa não traz a linha "Inserir abertura animada" e mesmo em pós da marca PPG.
 - **Bruto:** a gravação do Meet com a data da aula no nome (`2026_11_03` = 03/11), o arquivo "… - Recording.mp4". O nome da sala nem sempre é o da disciplina (Extensão Rural estava na sala "Sanidade Avícola e Produção e Gestão Avícola"): achar pela data e pela pós do caminho da Panda. Quando houver duas salas parecidas, tirar um quadro de cada e ler o nome do professor na câmera. Sem como decidir: perguntar no plano.
 - **Pós → sigla:** pelo nome da pós no caminho da Panda e a tabela de `marca.md`. A moldura sai da sigla. Sigla sem moldura: perguntar no plano.
 - **Card do professor:** é gerado na hora, a cada aula, a partir do card sem nome que vem no pacote (`acervo/card-professor/card-sem-nome.png`). Nenhum card com nome fica guardado.
-  - O nome vem da tarefa (a parte depois do último "|", sem o "Prof."). Se o nome inteiro não couber, o script usa só o primeiro e o último ("Gabriela Bittencourt").
+  - O nome vem da tarefa (a parte depois do último "|", sem o "Prof."). Se o nome inteiro não couber, o script usa só o primeiro e o último ("Ana Lima").
   - O gênero é deduzido pelo nome e vai no `aula.json` como `"genero": "professora"` ou `"genero": "professor"` (o card escreve "Professora/Professor do Grupo PPG Educação"). Se o nome não deixar claro, perguntar no plano.
   - O `--pontos` (passo 3) gera o `card-conferir.png` ao lado do `aula.json`, para o Claude conferir o nome e o gênero antes de montar.
 - **Panda:** a pessoa sobe à mão (não há chave de API para todos). Guardar, para cada aula, o destino que a tarefa diz ou o **link da pasta** da Panda, se a pessoa mandar (`https://dashboard.pandavideo.com.br/#/folders/<id>`). O caminho escrito na tarefa costuma vir errado: avisar se o mês do caminho não bater com a data da aula (exemplo: aula de 03/11 com "10.OUTUBRO" quando a pasta certa é "11.NOVEMBRO").
@@ -50,13 +50,13 @@ Com várias aulas, transcrever a próxima enquanto a anterior renderiza.
   - Sem intervalo, é um trecho só.
   - Exemplo: o trecho 1 vai até "…então a gente está indo para o bom caminho." (1:28:55), logo antes de "Vamos só ver que horas são", e o trecho 2 começa em "Bom, então a gente também falou bastante sobre comunicação" (1:42:37).
 - **Fim:** ler os últimos ~20 min. A aula vai até a **última fala**: perguntas, agradecimento e "vou encerrando a gravação" ficam. Só o silêncio e o resto vazio saem.
-- **Pausa da avaliação:** quando o monitor para a aula para a avaliação e o professor espera em silêncio, cortar igual ao intervalo: vira um trecho a mais. Exemplo: o trecho vai até "…Eduardo? Tranquilo? Então tá." (2:41:57) e o próximo começa em "Então, a partir de agora, a gente vai falar um pouco sobre a IN3" (2:45:08).
+- **Pausa da avaliação:** quando o monitor para a aula para a avaliação e o professor espera em silêncio, cortar igual ao intervalo: vira um trecho a mais. Exemplo: o trecho vai até "…Pedro? Tranquilo? Então tá." (2:41:57) e o próximo começa em "Então, a partir de agora, a gente vai falar um pouco sobre a IN3" (2:45:08).
 - **Meio:** fora isso, não cortar mais nada.
 
 ## 3. aula.json e conferir
 ```json
 {"bruto": "Aula Curricular _ ... - Recording.mp4",
- "titulo": "03/11 | Extensão Rural - Parte II | Prof. Gabriela Tonial Knappmann Bittencourt",
+ "titulo": "03/11 | Extensão Rural - Parte II | Prof. Ana Maria Souza Lima",
  "sigla": "SA", "genero": "professora", "abertura": "PPGVET",
  "panda": "https://dashboard.pandavideo.com.br/#/folders/<id>  (ou o caminho da tarefa)",
  "trechos": [

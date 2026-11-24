@@ -11,7 +11,7 @@ BOLD = acervo("fontes", "montserrat-bold.ttf")
 VAR = acervo("fontes", "montserrat-variavel.ttf")  # tem a Regular
 MOLDURA = acervo("molduras", "moldura-post-corte-{}.png")  # ppgvet ou ppg
 FIM = acervo("logos-animadas", "encerramento-{}-vertical.mp4")
-COR_TITULO = {"ppgvet": "#965594", "ppg": "#1670C2"}
+COR_TITULO = {"ppgvet": "#D24BA8", "ppg": "#1670C2"}  # cores principais do marca.md (título grande: passa 3:1)
 W, H, FPS = 1080, 1920, 30
 CAM = (42, 831, 996)  # x, y e largura da câmera do professor no post
 

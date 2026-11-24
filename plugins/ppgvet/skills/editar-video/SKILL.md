@@ -29,7 +29,7 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 6. **Revisão no fim:** folha de quadros e nota de cada vídeo; para os Reels, o link do Studio para ajuste fino. Limpar depois da aprovação: `tmp/`, `hf/` e as prévias (ficam o original, o `roteiro.json`, a `legenda.srt` e a entrega).
 
 ## Vídeo vertical de fala com motion (Reels)
-Pessoa falando para a câmera, com caixinha de pergunta, cartões de destaque, legenda, logo, música e vinheta. Usa o HyperFrames (parte `motion` do kit, instalada na primeira vez: regra em `bancos-e-referencias.md`, "Ambiente").
+Pessoa falando para a câmera, com caixinha de pergunta, cartões de destaque, legenda, logo, música e vinheta. Usa o HyperFrames (parte `motion` do kit, sob demanda: `nucleo.md`, "Ambiente").
 
 Roteiro `roteiro.json` (tempos em segundos do **original**):
 ```json

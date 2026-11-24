@@ -16,7 +16,7 @@ POS = {  # sigla: (linhas, sub) — "|" quebra a linha
     'pc': ('Postura|Comercial', ''),
     'ps': ('Produção|de Suínos', ''),
     'cbea': ('Comportamento|e Bem-Estar Animal', ''),
-    'cmmv': ('Cannabis|Medicinal|Veterinária', ''),
+    'cmmv': ('Cannabis Medicinal|na Medicina|Veterinária', ''),
     'qsaoa': ('Qualidade e|Segurança de Alimentos|de Origem Animal', ''),
     'suz': ('Saúde Única|e Zoonoses', ''),
     'gpera': ('Gestão de Pessoas|e Extensão Rural|na Agroindústria', ''),
@@ -102,6 +102,11 @@ def nome(s):
 if __name__ == '__main__':
     if sys.argv[1:] == ['--teste']:
         assert nome('PS') == 'Produção de Suínos' and len(POS) == 19
+        import re  # os nomes daqui têm que ser os do regras/marca.md (já divergiu uma vez: CMMV)
+        md = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'regras', 'marca.md'), encoding='utf-8').read()
+        oficial = {s.lower(): n.strip() for s, n in re.findall(r'^\| ([A-Z]+) \| ([^|]+) \| (?:PPGVET|PPG) \|', md, re.M)}
+        junto = lambda s: ' '.join(x.replace('|', ' ') for x in POS[s] if x)
+        assert {s: junto(s) for s in POS} == oficial, [(s, junto(s), oficial.get(s)) for s in POS if junto(s) != oficial.get(s)]
         for s in POS:
             cabe(acervo('live', 'titulos-overlay', f'titulo-live-{s}.png'))
         print('ok')

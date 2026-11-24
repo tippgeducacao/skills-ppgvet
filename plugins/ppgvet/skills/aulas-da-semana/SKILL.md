@@ -11,7 +11,7 @@ description: Arte de Instagram (imagem, não vídeo) - o carrossel "Aulas da sem
 
 ## O que preciso de você
 Se a pessoa chamou sem a lista (ou é a primeira vez), explicar em poucas linhas:
-- **A lista da semana**, colada, uma aula por linha: pós, data, horário, professor e o tema. Titulação só Dr./Dra. ou Me./Ma. comprovada (currículo, Lattes); sem comprovação, só o nome, nunca "Prof."
+- **A lista da semana**, colada, uma aula por linha: pós, data, horário, professor e o tema. Titulação: regra do `oficio/copy.md` (sem comprovação, só o nome).
 - **As fotos dos professores**: a pasta onde estão (nome-sobrenome.jpg) ou os arquivos. Sem foto, a lâmina não sai: nunca foto de banco nem gerada.
 - Exemplo: *"faz o carrossel da semana"* + `CBEA | 23/11 | 19h | Dra. Ana Souza | Bem-estar na criação`.
 
@@ -22,9 +22,9 @@ Se a pessoa chamou sem a lista (ou é a primeira vez), explicar em poucas linhas
 | uma por aula | logo, "PÓS-GRADUAÇÃO" na cor da marca, tarja com o nome oficial da pós na cor oficial dela, foto do professor em cartão, caixa escura com o dia (sai da data) e o horário, titulação (só se comprovada) e nome, "AULA:" e o tema, "ARRASTA PARA O LADO" |
 
 - 1080x1350 (4:5): vale pelo app e pelo agendador do sistema.
-- Uma pasta por marca: aula de pós da PPG sai num carrossel da PPG, com a logo e o azul da PPG (nunca misturadas).
+- Uma pasta por marca: aula de pós da PPG sai num carrossel da PPG, com a logo e o azul da PPG (`marca.md`).
 - Módulo comum a várias pós: `"pos": ["RNGB", "GPL"]`; a tarja junta os nomes na cor da marca.
-- Só Montserrat, só as cores do `marca.md`, ícones Lucide. Letra sobre a tarja: branca ou escura, a de mais contraste; se nenhuma der 4,5:1, a tarja do carrossel todo vai em letra grande (o script decide).
+- Só Montserrat, só as cores do `marca.md`, ícones Lucide. Letra sobre a tarja: regra do `marca.md` (o script mede; se nenhuma cor de letra der 4,5:1, a tarja do carrossel todo vai em letra grande).
 
 ## Passo a passo
 1. **Montar a lista** em `<artes>/trabalho/semana-<dd-mm>.json` (formato no começo de `"$S/aulas_semana.py"`): sigla certa pela tabela do `marca.md` (nome de pós que não bate com nenhuma: perguntar no plano), data `dd/mm`, horário como veio, professor como veio.

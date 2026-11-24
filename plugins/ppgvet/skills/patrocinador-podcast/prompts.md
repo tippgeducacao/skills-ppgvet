@@ -7,7 +7,7 @@ Por que os moldes são assim ([doc do Google para imagem](https://aistudio.googl
 - Para manter o mascote igual, mandar até 5 imagens dele (corpo e closes) e dizer o que cada imagem é.
 - Uma mudança por edição, sempre com "mantenha todo o resto igual".
 - A IA nunca escreve marca, rótulo ou texto: logo e texto entram na edição, no computador.
-- Toda imagem e vídeo do Google sai com marca d'água invisível (SynthID). Gerar só mascote, produto e cenário fictício, nunca pessoa que pareça aluno, professor ou equipe (`regras/nucleo.md`).
+- Toda imagem e vídeo do Google sai com marca d'água invisível (SynthID). Gerar só mascote, produto e cenário fictício, nunca pessoa (`regras/nucleo.md`).
 
 ## 1. Cenário · Nano Banana Pro · 9:16 · x2
 Anexar: nada (cena anexada prende o ângulo da câmera). Para ter opções, mandar 2 ou 3 cenários
@@ -92,4 +92,4 @@ a white hen standing upright like a person, with a red comb and wattles, a yello
 Aceno da galinha: "waves one open wing: the wing rises beside his head and the white feathers spread and wave gently, never like a hand or a glove".
 
 **+Rúmen e PetFood**: escrever o bloco na 1ª vez, a partir do mascote (o que termina cada membro,
-patches, capacete), e guardar aqui.
+patches, capacete) no `roteiro.md` do trabalho e mandar para quem cuida do pacote incluir aqui.

@@ -16,9 +16,10 @@ O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
 | revisão | nota e folha de quadros | + 2 rodadas | + 3 rodadas, quadro cheio em cada corte |
 
 ## Ambiente
+- O shell não guarda variável de um comando para o outro: definir `PY`, `S` (e `FF`, `A` quando usar) no começo de **cada** comando.
 - `PY=$(cat ~/.ppgvet/python)`, `S=<pasta scripts do pacote>` (a skill mostra o caminho) e `FF=$("$PY" "$S/comum.py" --ff)`, o ffmpeg completo (tem zscale, legenda e texto; o `ffprobe` fica na mesma pasta). Se `~/.ppgvet/python` não existir, rodar a skill `instalar` primeiro.
 - **Parte do kit sob demanda:** o kit instala só o essencial (ffmpeg, whisper, Python do pacote). Se um comando disser "Falta a parte 'X' do kit", avisar em uma linha o que vai baixar e quanto pesa, rodar `"$PY" "$S/instalar.py" --X` em segundo plano e repetir o comando. Sem pedir ok de novo. Se já der para saber no plano (Reels com motion, limpar voz), pôr o download no plano. Depois de `--motion`, rodar `/reload-plugins` para as skills `hyperframes` e `animate` aparecerem.
-- Pastas desta pessoa: `"$PY" "$S/comum.py" --pastas` (chamadas, aulas, conferir, cortes, edicoes, musicas, downloads, artes).
+- Pastas desta pessoa: `"$PY" "$S/comum.py" --pastas` (a lista completa sai dele).
 - Nos roteiros: `acervo:<caminho>` é uma peça do pacote (`acervo:logos-animadas/encerramento-ppgvet-vertical.mp4`) e `musicas:<arquivo>` é uma música da pasta `musicas/` da pessoa.
 
 ## Arquivo e versões
@@ -42,7 +43,7 @@ O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
 
 - **Não inventar visual, texto, marca nem nome de pessoa:** perguntar no plano. Nome do curso, arte de CTA e grafia de nome vêm da pessoa ou de fonte confiável.
 - **Perguntas** em caixas de opção (AskUserQuestion): até 4 por vez, a recomendada primeiro, cada uma compreensível sozinha. Texto que só a pessoa escreve (título, CTA, nome): opção "manter como está" e o texto vem no "Other".
-- **IA generativa** (imagem, vídeo, voz, som): só em último caso, com aprovação da pessoa, e nunca fingindo aluno, professor ou sede.
+- **IA generativa e banco** (dono desta regra): IA (imagem, vídeo, voz, som) só em último caso, com aprovação da pessoa; nem IA nem banco fingindo aluno, professor ou sede.
 - **Doc oficial:** ferramenta, formato de rede social ou plataforma segue a documentação oficial, conferida na hora quando o detalhe pode ter mudado (limite, formato, licença). Dizer qual doc foi usada.
 
 ## PC e tokens

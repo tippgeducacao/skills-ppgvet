@@ -5,7 +5,7 @@ uso: checar_texto.py <arquivo.txt> --tipo legenda|arte|whatsapp|anuncio [--titul
 FALHA barra a entrega (corrigir e rodar de novo); AVISO é para olhar e decidir. Sai 1 se houver FALHA."""
 import re, sys
 
-LIMITES = {"legenda": 2200, "whatsapp": 1000, "anuncio": 600, "arte": 400}  # legenda: limite do Instagram; os outros, da casa
+LIMITES = {"legenda": 2200, "whatsapp": 600, "anuncio": 600, "arte": 400}  # legenda: limite do Instagram; os outros, da casa
 VISIVEL = 125  # a legenda e o texto principal do anúncio mostram ~125 caracteres antes do "mais"
 
 FALHAS = [  # (regex, por quê)
@@ -38,12 +38,15 @@ def numeros_da_marca(texto):
     return ruins
 
 
+SIGLAS = ("RNGB", "NGB", "CMCB", "GPL", "SA", "PC", "PS", "CBEA", "CMMV", "QSAOA", "SUZ", "GPERA", "PPT", "MIFV", "GIA",
+          "GCC", "CRCV", "GPDCA", "MVPA")  # as do regras/marca.md (o teste confere)
 COMENTE_OK = {}  # palavra -> perfil, só as que têm automação ligada (regras/oficio/copy.md); vazio até confirmar
 
 AVISOS = [
     (r"(?i)\bcomente\s+[\"“']?([A-ZÁÉÍÓÚÂÊÔÃÕÇ]{2,})", "\"Comente X\" só com palavra que tem automação ligada no perfil: confirmar com quem pediu"),
     (r"(?i)\b(estás|connosco|equipa|ecrã|facto|tu\s+(podes|queres|tens|és|vais))\b", "português de Portugal: escrever como no Brasil, com \"você\""),
     (r"(?i)reconhecid[oa] pelo MEC", 'a prova oficial é "Nota máxima (5) no MEC" (marca.md)'),
+    (r"(?i)\b(marque (um|uma|seus?|suas?|o|a) \w+|comente (sim|eu quero|eu)\b|compartilhe com)", "isca de engajamento tira o post da recomendação (Meta): só com algo real por trás (copy.md)"),
     (r"\bNão é [^.!?\n]{1,60}[.!?]\s+É\b", '"Não é X. É Y." soa a texto de IA (a frase de marca "Não é só mais uma pós-graduação" pode)'),
     (r"(?i)\b(nos dias de hoje|no cenário atual|cada vez mais|mergulh\w+|jornada|alavanc\w+|potencializ\w+|desbrav\w+|"
      r"contribuir para a formação|profissionais qualificados|transformador\w*|revolucion\w+|desvend\w+)", "palavra vazia ou de academiquês: trocar por algo concreto"),
@@ -80,12 +83,19 @@ def checar(texto, tipo, titulo=""):
         avisos.append(f"hashtag em {tipo}: só faz sentido na legenda")
     if texto.count("✅") >= 3:
         avisos.append("lista de ✅ em série soa a template")
+    linhas = [l for l in texto.splitlines() if l.strip()]
+    if tipo == "whatsapp" and len(linhas) > 5:
+        avisos.append(f"{len(linhas)} linhas no WhatsApp: acima de 5 o app corta com \"ler mais\"")
+    for s in SIGLAS:
+        if re.search(rf"(?<![#\w]){s}(?!\w)", texto) and not re.search(rf"\({s}\)", texto):
+            avisos.append(f'sigla "{s}" sozinha: escrever o nome da pós por extenso antes (copy.md)')
+            break
     links = re.findall(r"https?://\S+", texto)
     if tipo == "anuncio" and links:
-        avisos.append("link no texto do anúncio: o destino vai no campo do link e o UTM no modelo de parâmetros (utm.md)")
+        avisos.append("link no texto do anúncio: o destino vai no campo do link e o UTM no modelo de parâmetros da plataforma")
     for l in links:
         if re.search(r"(ppgvet\.com\.br|ppgeducacao\.com\.br)", l) and "utm_source=" not in l and tipo != "anuncio":
-            avisos.append(f"{l}: link de site nosso sem UTM; pegar no gerador Links com UTM do sistema (utm.md)")
+            avisos.append(f"{l}: link de site nosso sem UTM; pegar no gerador \"Links com UTM\" do sistema")
     if tipo == "whatsapp" and len(links) > 1:
         avisos.append("mais de um link no WhatsApp: uma ação só")
     if tipo == "anuncio" and titulo and len(titulo) > 40:
@@ -118,6 +128,15 @@ def teste():
     assert len(f) >= 3 and len(a) >= 2, (f, a)
     f, _ = checar("Aula nova #medicinaveterinaria #ppgeducacao", "legenda")
     assert not f, f
+    import os  # as siglas têm que ser as do regras/marca.md
+    md = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "regras", "marca.md"), encoding="utf-8").read()
+    assert set(SIGLAS) == set(re.findall(r"^\| ([A-Z]+) \| [^|]+ \| (?:PPGVET|PPG) \|", md, re.M))
+    _, a = checar("Pós em Postura Comercial (PC) com aula nova. Marque um amigo que precisa ver!", "legenda")
+    assert any("isca" in x for x in a) and not any("sigla" in x for x in a), a
+    _, a = checar("Aula nova da CMCB na quinta", "legenda")
+    assert any("sigla" in x for x in a), a
+    _, a = checar("\n".join(["linha"] * 6), "whatsapp")
+    assert any("linhas" in x for x in a), a
     print("ok")
 
 

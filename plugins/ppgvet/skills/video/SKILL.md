@@ -1,6 +1,6 @@
 ---
 name: video
-description: Edição de vídeo da PPGVET/PPG - chamada de professor ou depoimento de aluno, aula curricular do Meet, treinamento do Academy, conferir aula que alguém editou antes de subir, cortes de live, Reels e edição livre (legenda, cor, música, compressão), baixar vídeo de um link. Use em qualquer pedido de editar, montar, cortar, legendar, conferir ou baixar vídeo ou aula gravada.
+description: Edição de vídeo da PPGVET/PPG - chamada, depoimento, aula curricular, treinamento, conferir aula que alguém editou antes de subir, cortes de live, Reels, edição livre e baixar vídeo de link. Use em qualquer pedido de editar, montar, cortar, pôr legenda no vídeo, conferir ou baixar vídeo ou aula gravada.
 ---
 
 # Vídeo

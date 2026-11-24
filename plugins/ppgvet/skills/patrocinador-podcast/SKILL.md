@@ -1,6 +1,6 @@
 ---
 name: patrocinador-podcast
-description: Vídeo de boas-vindas a patrocinador dos podcasts da PPGVET (SuinoCast, O Aviário, +Rúmen, PetFood) com o mascote e o produto - prompts detalhados para o Google Flow (Nano Banana Pro e Veo 3.1), conferência de cada geração e a edição final com cartela e logos. Use quando pedirem vídeo de patrocinador, boas-vindas a parceiro, prompt de Nano Banana, Veo ou Omni, folha do mascote ou a edição de um vídeo do Flow.
+description: Vídeo de boas-vindas a patrocinador dos podcasts da PPGVET com o mascote e o produto - prompts para o Google Flow, conferência de cada geração e edição final com cartela e logos. Use quando pedirem vídeo de patrocinador, boas-vindas a parceiro, prompt de Nano Banana ou Veo (mascote, cenário, produto), folha do mascote ou editar um vídeo do Flow.
 ---
 
 # Vídeo de patrocinador do podcast (Google Flow + edição)
@@ -16,6 +16,9 @@ Meta: comercial 3D bonito e bem animado, com o menor número de erros e de gera�
 - **Podcast** e **patrocinador**, e o pedido ou roteiro (cenário, ação, clima). Roteiro que vem se segue; não inventar cenário, ideia, texto nem cor.
 - **Logo do patrocinador** em alta e transparente, e **foto oficial do produto** (site da empresa). Nome e logo como a empresa usa.
 - Acesso ao **Google Flow** (a pessoa gera; o Claude não gera nada sem o pedido dela, uma etapa por vez).
+
+## O plano desta skill
+Antes de gerar qualquer coisa: o roteiro em cenas (cenário, ação, câmera, onde entra o logo e o texto), as poses do mascote escolhidas e a ordem das etapas no Flow (imagem, depois vídeo). Esperar o ok; depois uma etapa por vez, conferida antes da próxima.
 
 ## Regras
 - "Animação 3D" = CGI fotorrealista de comercial. A IA nunca escreve marca: logo e texto entram na edição.
@@ -86,7 +89,7 @@ Encode e som (cena = (INTRO + nº de quadros)/24; T = cena + 3,6; as logos entra
 [3:a]adelay=<ms das logos>|<ms>,volume=0.5,aformat=channel_layouts=stereo[logos];
 [mus][logos]amix=inputs=2:normalize=0:duration=first,volume=1.5,alimiter=limit=0.76:attack=3:release=60:level=false[a]" \
  -map "[v]" -map "[a]" -t $T -c:v libx264 -preset slow -crf 20 -maxrate 12M -bufsize 24M -tune film -pix_fmt yuv420p \
- -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -c:a aac -b:a 192k -movflags +faststart <saida-vN.mp4>
+ -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv -c:a aac -b:a 128k -movflags +faststart <saida-vN.mp4>
 "$PY" "$S/checar.py" <saida-vN.mp4> --lufs -14 --instagram
 ```
 - Som do Veo nunca entra (ambiente estranho). Música fixa na cena e sobe na cartela (`video.md`). Queda: whoosh com pico no pouso (`$A/sons/transicao/whoosh-longo.wav`; o pico dá `"$PY" "$S/sons.py" pico <som>`) + o impacto do produto (vidro, saco de grãos: gravação real, regra de sons do `bancos-e-referencias.md`). Na cartela, um pop nas logos (`$A/sons/interface/pop.wav`). Nada mais. Como sincronizar: `oficio/som.md`.

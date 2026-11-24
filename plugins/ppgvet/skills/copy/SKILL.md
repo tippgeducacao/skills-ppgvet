@@ -1,6 +1,6 @@
 ---
 name: copy
-description: Escreve texto de marketing da PPGVET/PPG como um copywriter da casa - legenda do Instagram (post, carrossel, Reels), texto das artes (gancho, lâminas, chamada), mensagem de WhatsApp e texto de anúncio - com 2 ou 3 versões para a pessoa escolher e conferência medida. Use quando pedirem legenda, copy, texto do post, da arte, do WhatsApp ou do anúncio.
+description: Texto de marketing da PPGVET/PPG como um copywriter da casa - a legenda que vai embaixo do post, o texto de uma arte (gancho, lâminas, CTA), mensagem de WhatsApp e anúncio - em 2 ou 3 versões com conferência medida. Use para copy, legenda do post, texto do WhatsApp ou do anúncio. Legenda dentro do vídeo: skill video.
 ---
 
 # Copy (texto de marketing)

@@ -48,7 +48,7 @@ A transição é escolhida pelo sentido (o tempo passou, a seção mudou), nunca
 | tempo mínimo na tela | ~0,3 s por palavra [O BBC] |
 | corte de plano | a legenda não atravessa o corte [O BBC] |
 | quebra de linha | depois de pontuação; não separar artigo do nome, nome do sobrenome, verbo do auxiliar [O Netflix pt-BR] |
-| números | de 1 a 10 por extenso, acima em algarismo [O Netflix pt-BR] |
+| números | de 1 a 10 por extenso, acima em algarismo [O Netflix pt-BR]; com unidade de medida, sempre algarismo ("1 ml", "5 kg") |
 | destaque | 1 palavra por legenda, na cor de destaque da marca; sem emoji |
 
 ## Reels de fala

@@ -1,6 +1,6 @@
 ---
 name: cortes-live
-description: Tira cortes de uma live ou aula gravada da PPGVET (Meet/Zoom com moldura) e transforma cada um num post vertical 9:16 para o Instagram, com cartão de perfil "PPGVET - Educação", título roxo, câmera do professor em foco (slide e quem pergunta como apoio, em trechos), legenda, imagem de apoio opcional, encerramento animado e música calma. Também gera a aula completa de uma live, com a abertura PPGVET e sem as partes da live. Aceita o arquivo ou o link da live. Use quando pedirem cortes de live ou de aula, cortes da aula de abertura, aula completa de uma live, ou posts de trechos de aula. Aula curricular do Meet ("Nomear aula como…"): skill `aula-curricular`.
+description: Tira cortes de uma live ou aula gravada da PPGVET (Meet/Zoom com moldura) e transforma cada um num post vertical 9:16 para o Instagram, com cartão de perfil "PPGVET - Educação", título magenta, câmera do professor em foco (slide e quem pergunta como apoio, em trechos), legenda, imagem de apoio opcional, encerramento animado e música calma. Também gera a aula completa de uma live, com a abertura PPGVET e sem as partes da live. Aceita o arquivo ou o link da live. Use quando pedirem cortes de live ou de aula, cortes da aula de abertura, aula completa de uma live, ou posts de trechos de aula. Aula curricular do Meet ("Nomear aula como…"): skill `aula-curricular`.
 disable-model-invocation: true
 ---
 
@@ -24,7 +24,7 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 ## Pastas
 ```
 cortes-live/<tema>/
-  live-<assunto>.mp4                  gravação inteira (1280x720), nunca mexer
+  live-<assunto>.mp4                  gravação inteira (1280x720: os recortes padrão abaixo são desse tamanho; arquivo maior, medir de novo na folha), nunca mexer
   transcricao-<assunto>.srt   transcricao-<assunto>.leitura.txt
   aula-completa.json   aula-completa-<assunto>.mp4   só a aula, sem a live (passo 1b)
   cortes.json   cortes/corte-<tema>-<titulo>.mp4
@@ -33,7 +33,7 @@ cortes-live/<tema>/
 ```
 `<tema>` é uma palavra curta (micotoxinas, cannabis, comportamento). Na primeira vez, criar a pasta do tema.
 - **A pessoa mandou o link da live** (YouTube, Facebook etc.): baixar direto para a pasta, como na skill `baixar-video`:
-  `"$PY" -m yt_dlp --quiet --no-warnings --print after_move:filepath --ffmpeg-location "$FF" -S "res:1080,ext:mp4" --merge-output-format mp4 -o "<tema>/live-<assunto>.%(ext)s" "<link>"`. Se o site pedir login, usar a sessão do navegador (`--cookies-from-browser chrome`, regra da `baixar-video`).
+  `"$PY" -m yt_dlp --quiet --no-warnings --print after_move:filepath --ffmpeg-location "$FF" -S "res:720,ext:mp4" --merge-output-format mp4 -o "<tema>/live-<assunto>.%(ext)s" "<link>"`. Se o site pedir login, usar a sessão do navegador (`--cookies-from-browser chrome`, regra da `baixar-video`).
 - **Mandou o arquivo:** copiar ou mover para a pasta como `live-<assunto>.mp4`.
 
 ## 0. Transcrever a live (local, o áudio não sai do computador)

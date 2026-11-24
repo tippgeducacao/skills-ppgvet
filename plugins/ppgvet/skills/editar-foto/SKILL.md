@@ -11,7 +11,7 @@ O Claude olha a foto, decide o que fazer e explica o porquê; os scripts aplicam
 - Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills).
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`. Se `~/.ppgvet/python` não existir, rodar a skill `instalar` primeiro.
 - **Ampliar, tirar fundo e `luz_pessoa`** são a parte `foto` do kit, sob demanda (~0,7 GB e ~1 GB de modelos na 1ª vez). Se o comando disser "Falta a parte 'X' do kit": avisar em uma linha, rodar `"$PY" "$S/instalar.py" --X` em segundo plano e repetir.
-- **Original nunca muda.** Sempre partir do original em alta. A saída é um arquivo novo ao lado, com nome minúsculo-com-hífen (`foto-professor-retocada.jpg`); se já existir, `-v2`. **Menor, mas nunca mais feia.**
+- Arquivo e versões pelo `nucleo.md` (ex.: `foto-professor-retocada.jpg`). Nível padrão ou caprichado: ler também `${CLAUDE_PLUGIN_ROOT}/regras/oficio/foto.md`.
 - **Não inventar:** a edição não muda a pessoa, o animal, o lugar nem o produto. Nada de apagar ou acrescentar coisa na cena, nem trocar céu ou fundo (tirar o fundo só quando pedirem).
 - **Fluxo:** plano (para cada foto ou grupo: tipo, o que vai ser feito, recorte e tamanho de uso) e ok; depois todas sem parar; no fim, a revisão com o antes e depois e a nota de cada uma. Muitas fotos parecidas (mesmo evento, mesma luz): mesmos ajustes para todas, para o conjunto ficar igual.
 
@@ -77,4 +77,4 @@ Na primeira vez, o `fundo` baixa o modelo de recorte (~1 GB; um para pessoa, out
 - Nota de 0 a 10 em: natural (não parece editada), luz, cor e pele, nitidez, enquadramento. Abaixo de 8: refazer com outra intensidade. Não melhorou: dizer isso e entregar o original.
 - Mostrar o antes e depois para a pessoa com o que foi feito, uma linha por ajuste (exemplo: "sombras +25: o rosto estava no escuro").
 - Limpar depois da aprovação: as folhas de antes e depois e os arquivos intermediários (ampliada antes do retoque etc.). Ficam o original e a entrega.
-- Imagem de terceiros: sempre do assunto real, nunca genérica fingindo ser aluno, professor ou sede, nada gerado por IA, e com `.origem.txt` ao lado (link e licença).
+- Imagem de terceiros: sempre do assunto real (banco e IA: `nucleo.md`), com `.origem.txt` ao lado (link e licença).

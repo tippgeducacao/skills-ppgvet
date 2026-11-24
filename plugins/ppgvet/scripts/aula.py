@@ -194,9 +194,13 @@ def main(arq_json, so_pontos=False):
 
 if __name__ == "__main__":
     assert MOLDURA["CBEA"] == "PETFOOD" and MOLDURA["SA"] == "AVES" and MOLDURA["GPERA"] == "PADRÃO"
-    assert professor("03/11 | Extensão Rural - Parte II | Prof. Gabriela Tonial Knappmann Bittencourt") == "Gabriela Tonial Knappmann Bittencourt"
+    import re  # a coluna moldura do regras/marca.md tem que bater com esta tabela (dona)
+    md = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "regras", "marca.md"), encoding="utf-8").read()
+    doc = {s: m for s, m in re.findall(r"^\| ([A-Z]+) \| [^|]+ \| (?:PPGVET|PPG) \| ([^|]+?) \|", md, re.M) if m != "perguntar"}
+    assert doc == MOLDURA, set(doc.items()) ^ set(MOLDURA.items())
+    assert professor("03/11 | Extensão Rural - Parte II | Prof. Ana Maria Souza Lima") == "Ana Maria Souza Lima"
     assert professor("x | Profa. Ana Lima") == "Ana Lima" and professor("x | Prof Rui") == "Rui"
-    assert professor("x | y", "Paola Martinello") == "Paola Martinello"
+    assert professor("x | y", "Marina Costa") == "Marina Costa"
     assert no_video([(10, 20), (30, 50)], [(15, 35)]) == [(5, 10), (10, 15)]
     assert expr([]) == "0" and expr([(1, 2.5)]) == "between(t,1.00,2.50)"
     print("ok") if sys.argv[1:] == ["--teste"] else main(sys.argv[1], "--pontos" in sys.argv)

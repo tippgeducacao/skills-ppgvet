@@ -21,7 +21,7 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 - **Os vídeos do celular** do professor (ou do aluno): em `chamadas/<PROFESSOR>/_originais/` ou o link do Drive.
 - **A arte de CTA** da campanha (PNG 1080x1350), na pasta do professor. Sem ela a chamada não fecha: nunca inventar.
 - **O curso e o tema** de cada chamada, e quantas são.
-- Exemplo de pedido: *"monta as chamadas 2 e 3 da Paola, pós de Bovinos; os vídeos e a arte estão na pasta dela"*.
+- Exemplo de pedido: *"monta as chamadas 2 e 3 da Marina, pós de Bovinos; os vídeos e a arte estão na pasta dela"*.
 
 ## O padrão
 - 1080x1920, 30 fps. Fala do professor, sem cortes visíveis.

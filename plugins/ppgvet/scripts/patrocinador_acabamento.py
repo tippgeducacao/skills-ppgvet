@@ -1,7 +1,7 @@
 # Acabamento da cena: brilho suave nas áreas claras, +5% contraste, +8% saturação, leve calor,
 # vinheta e (se algo cai) um tranco amortecido no quadro do pouso.
 # uso: patrocinador_acabamento.py <pasta-quadros f0001.png…> <pasta-saida> <quadro-do-pouso | 9999 se nada cai>
-# (o reflexo correndo pelo vidro saiu: o usuário achou que ficou errado, 31/10/2026)
+# sem reflexo correndo pelo vidro (o usuário reprovou)
 import sys, glob, os, math, numpy as np, cv2
 ent, sai, pouso = sys.argv[1], sys.argv[2], int(sys.argv[3])
 os.makedirs(sai, exist_ok=True)

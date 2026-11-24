@@ -25,10 +25,10 @@ Fluxo de 10 a 15 min (nível caprichado, ou quando pedirem):
 
 ## Inserções (imagem ou vídeo de apoio)
 - Só quando somam. Sem imagem boa, o vídeo sai sem inserção: o ritmo vem do zoom e dos cartões.
-- Sempre do assunto real, nunca genérica fingindo ser aluno, professor ou sede. IA só em último caso, com aprovação (`nucleo.md`). CC0 libera o direito autoral, não o direito de imagem de quem aparece: pessoa reconhecível só em contexto neutro e real.
+- Sempre do assunto real (banco e IA: regra no `nucleo.md`). CC0 libera o direito autoral, não o direito de imagem de quem aparece: pessoa reconhecível só em contexto neutro e real.
 - Sem logo ou embalagem de outra marca à vista (parece patrocínio); se não der para evitar, desfocar.
 - Onde procurar, nesta ordem:
-  1. Drive de insumos da PPGVET: https://drive.google.com/drive/folders/1vg6Wfy3FcLh9WX-qtrpwFund_bTDHy2p
+  1. Drive de insumos da PPGVET (link em "Música", abaixo).
   2. Wikimedia Commons: vídeo com `"$PY" "$S/commons.py" "termo"` (busca só vídeo) e `"$PY" "$S/baixar_commons.py" <pasta> "File:…"` (baixa com a origem); imagem, buscar no site do Commons e baixar com o mesmo `baixar_commons.py`; preferir domínio público ou CC0.
   3. Openverse (`api.openverse.org`, sem chave; filtros `license=cc0,pdm` e `license_type=commercial`).
   4. Pexels ou Pixabay, só pela API e só se a pessoa tiver a chave grátis: uso comercial sem crédito, mas não pode redistribuir o arquivo solto.

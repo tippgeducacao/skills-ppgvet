@@ -9,11 +9,11 @@ Conferido em toda entrega, antes da nota. Cada sinal aparecendo derruba a nota d
 | tudo sempre se mexendo (vidro, partícula, brilho) | em fala de professor, câmera parada e motion só quando a fala pede |
 | neon roxo-azul, vidro fosco, bolhas 3D | só cores do `marca.md`; efeito com motivo |
 | zoom pulsando em toda frase | zoom muda no máximo a cada 5 s |
-| legenda longa, colorida, com emoji | ≤ 25 caracteres por linha no 9:16, 1 destaque, sem emoji |
+| legenda longa, colorida, com emoji | tamanho e destaque da legenda em `oficio/video.md`; sem emoji |
 | whoosh em todo corte, efeito mais alto que a ação | um gesto = um som; teste do mudo |
 | música alta, com vocal ou em loop | regra de música (`bancos-e-referencias.md`) e volume (`video.md`) |
 | corte no meio da palavra, respiração cortada, clique | corte na fronteira da palavra com fade de 30 ms |
-| silêncio absoluto entre as falas | room tone contínuo |
+| silêncio absoluto entre as falas (nível padrão e caprichado) | room tone contínuo |
 | pele de plástico, olho neon, rosto afinado | tirar só o temporário; textura visível em 100% |
 | halo de HDR, nitidez com contorno | nitidez por último, com máscara |
 | pele verde ou magenta, branco amarelado | balanço antes do look; pele na linha de pele |

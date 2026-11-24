@@ -5,4 +5,4 @@ timeout_seconds: 300
 allowed_tools: [Skill, Read, Glob, Grep]
 ---
 
-monta a chamada 2 da Paola, da pós de bovinos
+monta a chamada 2 da Marina, da pós de bovinos

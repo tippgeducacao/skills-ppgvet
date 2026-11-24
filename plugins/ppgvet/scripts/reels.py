@@ -2,7 +2,7 @@
 """Monta um vídeo vertical de fala (Instagram) a partir do roteiro.json da pasta.
 Etapas (cada uma reaproveita o que já existe em tmp/):
   base     corta os blocos de fala da fonte 4K deitada, gira, alterna zoom a cada corte -> tmp/base.mov
-  legenda  transcreve a base (whisper local) -> legenda.srt (corrigir à mão e rodar de novo)
+  legenda  transcreve a base (whisper local) -> legenda-bruta.srt (revisar e salvar como legenda.srt)
   (hf.py   gera o projeto HyperFrames com caixinha, cartões e legenda; render -> tmp/hf.mp4)
   final    fala com motion + vinheta + voz e música (sobe na vinheta) -> saída na pasta dos originais
 uso: reels.py pasta/roteiro.json [base|legenda|final] [--previa]"""
@@ -145,7 +145,20 @@ def etapa_final(r, pasta, tr, previa):
     print("pronto:", saida, f"{total:.1f}s")
 
 
+def teste():
+    r = {"blocos": [[1.0, 2.0], [2.05, 3.0], [5.0, 6.0, "ana"], [5.9, 7.0, "rui"]]}
+    tr = trechos(r, com_quem=True)
+    assert len(tr) == 3 and tr[0][0] == 1.0 - PAD_A and tr[0][1] == 3.0 + PAD_D  # quase encostados: um bloco só
+    assert tr[1][1] == tr[2][0] and tr[1][2] == "ana" and tr[2][2] == "rui"  # pessoas coladas: dividem a folga, sem repetir
+    f, total = mapa([(1, 3), (5, 6)])
+    assert f(0) == 0 and f(2) == 1 and f(4) == 2 and f(5.5) == 2.5 and total == 3
+    assert recorte(1.0, .5, .3, True) == "" and "iw/1.16" in recorte(1.16, .5, .3, True)
+    print("ok")
+
+
 if __name__ == "__main__":
+    if sys.argv[1:] == ["--teste"]:
+        teste(); sys.exit()
     rot = sys.argv[1]; etapa = sys.argv[2] if len(sys.argv) > 2 else "base"
     pasta = os.path.dirname(os.path.abspath(rot))
     r = json.load(open(rot, encoding="utf-8")); r["fonte"] = caminho(pasta, r["fonte"])

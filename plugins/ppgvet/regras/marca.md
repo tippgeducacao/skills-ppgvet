@@ -1,9 +1,11 @@
 # Marca (vídeo, arte e texto)
 
-Cópia do guia de marca da PPGVET para as skills da equipe (21/11/2026; texto em 24/11/2026). Se o guia mudar, este arquivo muda junto.
+Adaptado do guia de marca da PPGVET para vídeo, arte e texto (o guia é o dono; mudou lá, muda aqui). Dono, no pacote, de: marcas e exceções, peças do acervo, cores, pós e as regras de texto da marca; as skills e o `oficio/` só apontam.
 
 ## Duas marcas, nunca misturadas
-- **PPGVET** (veterinária) e **PPG Educação** (gestão e cooperativismo). Vídeo da PPG fecha com a logo da PPG, vídeo da PPGVET com a da PPGVET.
+- **PPGVET** (veterinária) e **PPG Educação** (gestão e cooperativismo). Peça da PPG leva a marca da PPG (logo, azul, encerramento); peça da PPGVET, a da PPGVET. O que é da PPGVET (evento, vaga, podcast) é peça da PPGVET.
+- **Exceções (decisão do usuário):** live (vMix e moldura do Instagram) e chamada saem sempre com a marca PPGVET, também nas pós da PPG; a aula curricular abre com a intro PPGVET e o card diz "Professor(a) do Grupo PPG Educação"; a moldura de intro de aula leva as duas marcas.
+- Sempre "Pós-Graduação", nunca "MBA".
 - Os podcasts (SuinoCast, O Aviário, +Rúmen e PetFood) são da PPGVET. A PPG não tem podcast de veterinária.
 
 ## Peças do pacote (pasta `acervo/`, nos roteiros `acervo:<caminho>`)
@@ -28,12 +30,14 @@ Cópia do guia de marca da PPGVET para as skills da equipe (21/11/2026; texto em
 | peças da live | `live/`: `titulos-overlay/titulo-live-<sigla>.png` (vMix, topo), `moldura-insta.html` (modelo) e `moldura-insta-exemplo.png`, `qr-live.html`, `molduras-vmix/` (uma pessoa, duas pessoas, slides) | skill `live-vmix` |
 | efeitos sonoros | `sons/<interface, transicao, impacto, foley>/<nome>.wav`; origem e licença em `sons/ORIGEM.md` | qualquer vídeo com sound design (`regras/oficio/som.md`) |
 | mascotes dos podcasts | `mascotes/<suinocast, oaviario, maisrumen, petfood>/mascote-<podcast>-<pose>.webp` | skill `patrocinador-podcast` |
-| fontes | `fontes/`: Montserrat (legenda, títulos, Reels), Lexend Exa e Artegra Sans (card do professor) | os scripts já usam |
+| fontes | `fontes/`: Montserrat (tudo), Lexend Exa e Artegra Sans (só o card do professor da aula curricular: exceção à regra "só Montserrat", com licença confirmada pelo usuário) | os scripts já usam |
 
-| marca | principal | ação | destaque na legenda |
+| marca | principal | ação | destaque na legenda (só vídeo) |
 |---|---|---|---|
 | PPGVET | magenta `#D24BA8` | teal `#00B7AB` | rosa `#E371C0` |
 | PPG | azul `#1670C2` | teal `#00ADA3` | teal `#00ADA3` |
+
+Tom de faixa com letra branca pequena: `#B84482` (o magenta oficial com letra branca dá 3,95:1 e reprova; usado na faixa "ESTAMOS AO VIVO" da moldura do Instagram da live).
 
 ## Pós (sigla, nome e moldura da aula curricular)
 | sigla | nome | marca | moldura | cor |
@@ -59,9 +63,9 @@ Cópia do guia de marca da PPGVET para as skills da equipe (21/11/2026; texto em
 | MVPA | Marketing e Vendas na Produção Animal | PPG | perguntar | `#E0287D` |
 
 A coluna moldura é a tabela `MOLDURA` do `scripts/aula.py` (o script é quem manda). Sigla fora dela: perguntar qual moldura usar.
-A cor (código exato, do guia de marca) é detalhe da pós: uma cor de pós por peça, e a cor da marca continua a principal. Texto em cima: branco quando dá 3:1 (letra grande), senão `#1A1A1A`.
+A cor (código exato, do guia de marca) é detalhe da pós: uma cor de pós por peça, e a cor da marca continua a principal. **Letra em cima de qualquer cor** (da pós ou da marca): branca ou `#1A1A1A`, a de mais contraste; letra pequena no celular pede 4,5:1, grande 3:1 (o que é "grande" na peça de 1080 px: `oficio/design.md`). Sem a medida, a cor não leva texto.
 
-## Texto (cópia do guia de marca, 24/11/2026; mudou lá, muda aqui)
+## Texto
 
 ### Público e dor (o foco do texto de cada pós)
 Público: 23 a 45 anos, já formado e trabalhando, que descobriu a lacuna na prática. Dor-mãe: "a graduação não me preparou para o que o mercado cobra hoje". Escrever a dor em cena concreta e mostrar que a pós resolve pela prática.
@@ -83,7 +87,7 @@ Público: 23 a 45 anos, já formado e trabalhando, que descobriu a lacuna na pr�
 | GPL, PPT, MIFV, GIA, GPDCA, MVPA | sem pesquisa de público: perguntar antes de escrever | — |
 
 ### Tom (a vibe, não o visual)
-Fonte: vídeo manifesto da PPGVET. Falamos como líder do mercado: somos os maiores e os melhores, e dizemos isso com o número do lado. O inimigo é o modelo tradicional: professor que fala, aluno que anota, tudo para a prova. A profissão cobra na hora, no curral, na granja, na mesa do cooperado, com alguém esperando a sua resposta. **Slogan oficial: "Nossa bandeira é a prática"** (sempre assim, decisão de 13/11/2026). Vai em lugares fixos (rodapé, quadro "sobre" do blog, `slogan` no schema), nunca repetido no texto para SEO.
+Fonte: vídeo manifesto da PPGVET. Falamos como líder do mercado: somos os maiores e os melhores, e dizemos isso com o número do lado. O inimigo é o modelo tradicional: professor que fala, aluno que anota, tudo para a prova. A profissão cobra na hora, no curral, na granja, na mesa do cooperado, com alguém esperando a sua resposta. **Slogan oficial: "Nossa bandeira é a prática"** (sempre assim). Vai em lugares fixos (rodapé, quadro "sobre" do blog, `slogan` no schema), nunca repetido no texto para SEO.
 
 | | família | cena que resume | o visitante pensa |
 |---|---|---|---|
@@ -94,8 +98,8 @@ Fonte: vídeo manifesto da PPGVET. Falamos como líder do mercado: somos os maio
 **Frases de marca** (usar como estão): Mais que uma formação, uma transformação · Aqui tem prática · Ponto fora da caixa · Professores que vivem o que ensinam · Eles vêm do mercado para a sala de aula · Excelência profissional não é um dom, é repetição com metodologia · A PPGVET não termina quando a aula acaba · Não é só mais uma pós-graduação · Enquanto outras oferecem pós-graduação, nós oferecemos uma transformação (PPGVET) · A decisão que separa quem assiste de quem lidera o mercado (PPG).
 
 **Sempre**: dizer que somos os maiores e os melhores, com o número do lado · urgência de campanha (contador, últimas vagas, turma fechando) · a mão na massa em foto e vídeo · professor com cargo e empresa · a dor numa cena concreta · frase de efeito curta no título, explicação no corpo.
-**Nunca**: cara de faculdade tradicional (beca, capelo, pilha de livro, quadro-negro; exceção: o capelo do carimbo dourado do kit da Escola 3ª edição, 19/11/2026) · academiquês ("contribuir para a formação de profissionais qualificados") · foto de banco fingindo ser aluno, professor ou sede · texto que serviria para qualquer escola (trocou o nome e continua valendo: refazer).
+**Nunca**: cara de faculdade tradicional (beca, capelo, pilha de livro, quadro-negro) · academiquês ("contribuir para a formação de profissionais qualificados") · foto de banco fingindo ser aluno, professor ou sede · texto que serviria para qualquer escola (trocou o nome e continua valendo: refazer).
 
-- **Texto**: português humano, sem travessão, sem cara de IA; nunca inventar número. Provas: Nota máxima (5) no MEC (da ITH) · 12.000+ alunos ativos (sempre assim, nunca "+12.000", "12K+" ou "12 mil+") · 300+ professores · 100+ turmas · 15+ pós-graduações · alunos em todos os estados e em 7 países (usar quando der autoridade) · podcasts entre os 5% mais compartilhados do Spotify (confirmado pelo usuário em 24/11/2026).
+- **Texto**: português humano, sem travessão, sem cara de IA; nunca inventar número. Provas: Nota máxima (5) no MEC (da ITH) · 12.000+ alunos ativos (sempre assim, nunca "+12.000", "12K+" ou "12 mil+") · 300+ professores · 100+ turmas · 15+ pós-graduações · alunos em todos os estados e em 7 países (usar quando der autoridade) · podcasts entre os 5% mais compartilhados do Spotify.
 - **Botões** (rótulo padrão por ação; a copy pode variar, a caixa não: CTA principal em MAIÚSCULAS, secundário normal): Falar com um especialista · Baixar a Ementa Completa · Garantir minha vaga (só matrícula paga) · Liberar meu acesso gratuito · Entrar na comunidade · Ver a pós (ir à página de uma pós) · Ver o curso (curso livre) · Ler o post (blog) · Confirmar presença (evento).
-- **Texto**: frases de marketing, CTAs variados para a mesma ação, superlativo e urgência ficam (não listar como slop). Padroniza-se entre sites: a mesma seção com o mesmo texto na PPGVET, PPG e Escola; botão de envio de formulário "QUERO MAIS INFORMAÇÕES!" (exceção: o formulário da Escola 3ª edição envia com "Receber meu acesso", em caixa normal, 19/11/2026).
+- **Texto**: frases de marketing, CTAs variados para a mesma ação, superlativo e urgência ficam (não listar como slop).

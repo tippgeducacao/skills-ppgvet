@@ -9,7 +9,7 @@ Lido quando a peça tem arte, cartão ou carrossel, no nível padrão e no capri
 | hierarquia | até 3 níveis (título, apoio, detalhe), por tamanho e peso, não por cor [L Bringhurst] |
 | grid | colunas e margens fixas; tudo alinha a alguma coisa [L Müller-Brockmann] |
 | tipografia | Montserrat em 2 ou 3 pesos; texto corrido de 45 a 75 caracteres por linha [L Bringhurst] |
-| contraste | texto 4,5:1; texto grande (≥ 24 px, ou ≥ 18,66 px em negrito) 3:1 [O WCAG 1.4.3] |
+| contraste | texto 4,5:1; texto grande 3:1 [O WCAG 1.4.3]. "Grande" no WCAG é ≥ 24 px (≥ 18,66 px em negrito) **na tela**: na peça de 1080 px vista no celular, isso dá ~52 px em negrito (ou ~64 px normal), linha "Tamanho no celular" abaixo |
 | cor | a cor muda com a vizinha: testar no fundo real, não na amostra [L Albers]. Marca como acento, neutros na maior parte |
 | espaço vazio | dá peso ao que importa; não encher os cantos [L] |
 
@@ -31,14 +31,14 @@ Lido quando a peça tem arte, cartão ou carrossel, no nível padrão e no capri
 - **Molde da casa:** fundo claro `#FAF9FB` (grade leve), logo no topo ao centro, margem de ~10%, até 3 níveis de texto em Montserrat (título Black em caixa alta, apoio Bold, detalhe), bloco "PÓS-GRADUAÇÃO │ nome" (`acervo/titulos-pos`), professor em cartão ou recortado com titulação certa (só Dr./Dra., Me./Ma.).
 - **Cor:** só os códigos do `marca.md` (as artes antigas derivaram: magenta `#B8569A`/`#CE5A9B`, teal `#00A19C`, azul PPG `#005EF2`; não copiar). Teal e magenta de acento: letra branca sobre o teal `#00B7AB` dá 2,6:1 e sobre o magenta 3,95:1, reprovado para letra pequena; texto em cima vai na caixa escura `#1A1A1A`.
 - **Tamanho no celular:** a peça de 1080 px aparece com ~390 pt de largura (×0,36). Letra abaixo de ~52 px em negrito (ou ~64 px normal) é pequena no celular: contraste de 4,5:1.
-- **Texto:** "Pós-Graduação", nunca "MBA"; números da marca iguais em toda peça; data sem crase ("23 a 25"); dia da semana tirado da data; grafia do nome conferida (foto, site). PPG e PPGVET nunca na mesma peça.
+- **Texto:** regras de texto e titulação em `oficio/copy.md`; marcas, exceções e "nunca MBA" no `marca.md`. Na arte: data sem crase ("23 a 25"), dia da semana tirado da data.
 - **Carrossel:** mesmo grid em todas as lâminas; 1ª = gancho ou capa que muda a cada edição (capa igual toda semana não dá novidade), meio = uma ideia por lâmina, última = chamada; "ARRASTA PARA O LADO" no rodapé, no mesmo lugar.
 
 ## O que denuncia cara de IA ou de template
 - Grade de cards iguais (ícone + título + 2 linhas), tudo centralizado e do mesmo tamanho, sem hierarquia.
 - Degradê roxo-azul neon, vidro fosco, bolhas 3D genéricas, brilho e sombra borrada grande.
 - Fontes demais, pesos aleatórios, texto longo em arte de feed.
-- Pessoa de banco, mockup genérico, ícone decorativo sem função.
+- Mockup genérico, ícone decorativo sem função (banco e IA fingindo pessoa ou lugar: `nucleo.md`).
 - Imagem de IA fingindo cena (bicho de camisa, porco astronauta), interface falsa (card de Threads, app Notas), emoji na arte, neon e vidro fosco, 3 famílias de fonte na mesma peça.
 
 Fontes: Müller-Brockmann, *Grid Systems in Graphic Design*; Bringhurst, *The Elements of Typographic Style*; Albers, *Interaction of Color*; [WCAG 1.4.3](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html). Conferido em 24/11/2026.

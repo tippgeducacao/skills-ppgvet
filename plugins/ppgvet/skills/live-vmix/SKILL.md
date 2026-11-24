@@ -18,8 +18,11 @@ Gera tudo o que a live precisa e entrega num zip com os nomes que o projeto do v
 - **Link do certificado** da Even3. Sem ele, o resto sai e o `.txt` avisa que falta.
 - Exemplo: *"live de quinta sobre biosseguridade na granja, pós PS e SA, foto do professor anexa, certificado https://www.even3.com.br/..."*
 
+## O plano desta skill
+Uma tabela: tema (como vai aparecer), pós, slug, foto recebida (e se precisa recortar) e certificado. Esperar o ok; depois as seções 1 a 4 sem parar.
+
 ## 1. Nome curto (slug) da live
-Minúsculo, palavras com hífen, sem acento nem número, a partir do tema ("As principais habilidades do líder de 2027" → `principais-habilidades-do-lider`). Vai na UTM `utm_content`. Se o MCP `supabase-ppgvet` estiver conectado nesta máquina, ver antes se o slug já existe em `mkt_utm_links` (só leitura) e reusar; sem ele, seguir.
+Minúsculo, palavras com hífen, sem acento nem número, a partir do tema ("As principais habilidades do líder de 2027" → `principais-habilidades-do-lider`). Vai na UTM `utm_content`. Se a live já tem link no gerador "Links com UTM" do sistema, reusar o mesmo nome.
 
 ## 2. Moldura do Instagram
 ```
@@ -28,7 +31,7 @@ Minúsculo, palavras com hífen, sem acento nem número, a partir do tema ("As p
 - Recorta o fundo sozinho. Foto já sem fundo: `--sem-recorte`.
 - Duas pós: os dois títulos lado a lado, no tamanho que cabe.
 - Antes de entregar, olhar o PNG. Cabeça grande ou pequena demais: `--largura` (padrão 500 = ombros do modelo). Recorte ruim (cabelo, braço): avisar e pedir outra foto.
-- Fixo no modelo (`acervo/live/moldura-insta.html`; exemplo vazio em `moldura-insta-exemplo.png`): fundo, faixa "ESTAMOS AO VIVO", "LINK NA BIO", janela do vídeo transparente e logo PPGVET em todas as pós, inclusive as da PPG.
+- Fixo no modelo (`acervo/live/moldura-insta.html`; exemplo vazio em `moldura-insta-exemplo.png`): fundo, faixa "ESTAMOS AO VIVO", "LINK NA BIO", janela do vídeo transparente e logo PPGVET em todas as pós, inclusive as da PPG (exceção escrita no `marca.md`).
 
 ## 3. QRs e links
 ```
@@ -50,7 +53,7 @@ Minúsculo, palavras com hífen, sem acento nem número, a partir do tema ("As p
 | `OVERLAYS/TITULO.png` | título da pós no topo (duas pós: lado a lado) |
 | `LINKS IMPORTANTES.txt` | links do chat e do certificado |
 
-Entregar: abrir a pasta e dizer o caminho do zip.
+**Conferir e dar nota** de 0 a 10 antes de entregar: moldura (rosto inteiro, sem cortar cabelo nem ombro, tema sem erro de grafia), QRs (lidos pelo script, link certo de cada pós), título da pós (nome oficial, cabe na moldura "uma pessoa"). Abaixo de 8: corrigir. Entregar: abrir a pasta, dizer o caminho do zip e a nota em uma linha.
 
 ## Títulos das pós (acervo)
 | arquivo | uso |
@@ -59,4 +62,4 @@ Entregar: abrir a pasta e dizer o caminho do zip.
 | `acervo/titulos-pos/titulo-pos-<sigla>-branco.png` | todo branco (moldura do Instagram) |
 | `acervo/live/titulos-overlay/titulo-live-<sigla>.png` | vMix: 1920x1080 transparente, título no topo (~88 px, a ~30 px do topo) |
 
-Desenho: Montserrat, "PÓS GRADUAÇÃO | NOME", quebras de linha iguais às dos criativos, sem "MBA". **Pós nova ou nome mudou:** pôr a sigla e as linhas em `POS` do `scripts/live_titulos.py`, rodar `"$PY" "$S/live_titulos.py" <sigla>` e publicar o pacote (quem cuida do pacote).
+Desenho: Montserrat, "PÓS GRADUAÇÃO | NOME", quebras de linha iguais às dos criativos, sem "MBA" (`marca.md`). **Pós nova ou nome mudou:** pôr a sigla e as linhas em `POS` do `scripts/live_titulos.py`, rodar `"$PY" "$S/live_titulos.py" <sigla>` e publicar o pacote (quem cuida do pacote).
