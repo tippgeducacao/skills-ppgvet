@@ -59,7 +59,7 @@ Não usar:
 
 ## Sons e efeitos visuais
 Só quando a pessoa pedir ou o nível pedir (`nucleo.md`). Como usar: `oficio/som.md`; para o pico cair no quadro do gesto, `"$PY" "$S/sons.py" pico <som>` dá em quantos ms o som "bate". Onde procurar, nesta ordem:
-1. **Acervo do pacote** (`acervo/sons/`): interface (clique, pop, bolha, blip, notificação, sucesso, erro, ding, brilho, tique-taque, glitch), transição (whoosh curto e longo, swipe, reverse, riser de 2 e 4 s), impacto (impacto grave, bass drop, baque, vidro tilintando, saco caindo) e foley (teclado, tecla, obturador, folha virando, clique duplo de mouse, aplausos). Origem e licença: `acervo/sons/ORIGEM.md`.
+1. **Acervo do pacote** (`acervo/sons/`): os 23 mais usados em edição: interface (clique, pop, notificação, sucesso, erro, ding, brilho, tique-taque, glitch), transição (whoosh curto e longo, swipe, reverse, riser), impacto (impacto grave, madeira, vidro tilintando, saco caindo) e foley (teclado, obturador, folha virando, clique duplo de mouse, aplausos). Todos com volume parecido: no mix, cada um entra baixo, abaixo da voz. Origem e licença: `acervo/sons/ORIGEM.md`.
 2. Drive de insumos.
 3. **Kenney** (https://kenney.nl/assets, pacotes Interface Sounds, Impact Sounds, UI Audio, Digital Audio): tudo CC0.
 4. **Freesound** (https://freesound.org), filtrado em "Creative Commons 0": a página do som a pessoa abre; o Claude acha sons CC0 pela API do Openverse (`api.openverse.org/v1/audio/?license=cc0`) e baixa a prévia. CC BY só com crédito, e nunca CC BY-NC.

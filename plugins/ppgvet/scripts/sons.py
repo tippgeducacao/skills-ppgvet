@@ -4,7 +4,8 @@ uso: sons.py gerar              gera os sons sintéticos (nossos, sem licença) 
      sons.py pico <arquivo>     ms do pico do som (para o pico cair no quadro do gesto: regras/oficio/som.md)
      sons.py tratar <entrada> <saida.wav> [--estereo]   arquivo baixado (Kenney, Freesound) no padrão do acervo
      sons.py --teste
-Padrão: WAV 48 kHz 16 bits, mono (estéreo nos que passam de um lado ao outro), sem silêncio no começo, pico em -1 dBFS."""
+Padrão: WAV 48 kHz 16 bits, mono (estéreo nos que passam de um lado ao outro), sem silêncio no começo, pico até -1 dBFS
+e volume médio (50 ms) até -12 dBFS, para todos soarem parecidos."""
 import os, subprocess, sys, wave
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -12,6 +13,7 @@ from comum import FF, acervo  # noqa: E402
 
 SR = 48000
 PICO = 10 ** (-1 / 20)  # -1 dBFS
+VOLUME = 10 ** (-12 / 20)  # teto do volume médio (janela de 50 ms): som longo não fica mais alto que os curtos
 rng = np.random.default_rng(7)  # semente fixa: o mesmo som toda vez
 
 
@@ -63,8 +65,6 @@ def sons():
     """nome: (tipo, sinal). Cada receita é uma linha de síntese simples; o resultado é medido em --teste."""
     s = {}
     t = t_(0.15); s["pop"] = ("interface", np.sin(fase(200 + 700 * np.exp(-50 * t))) * np.exp(-30 * t))
-    t = t_(0.14); s["pop-bolha"] = ("interface", np.sin(fase(300 + 900 * (1 - np.exp(-60 * t)))) * np.exp(-25 * t))
-    t = t_(0.07); s["blip"] = ("interface", np.sin(fase(np.full_like(t, 1250))) * np.minimum(t / 0.002, 1) * np.exp(-60 * t))
     nota = lambda f, d: (np.sin(fase(np.full_like(t_(d), f))) + 0.3 * np.sin(fase(np.full_like(t_(d), 2 * f)))) * np.exp(-14 * t_(d))
     s["notificacao"] = ("interface", np.concatenate([nota(880, 0.13), nota(1320, 0.45)]))
     t = t_(1.6)
@@ -86,10 +86,9 @@ def sons():
     s["whoosh-curto"] = ("transicao", pan(passa_banda(ruido(n, .6), np.interp(np.linspace(0, 1, n), [0, .6, 1], [400, 3000, 800])) * sino(d, .6)))
     d = 0.28; n = int(SR * d)  # filtro estreito varrendo de 700 a 7000 Hz: o movimento é o que soa como swipe
     s["swipe"] = ("transicao", pan(passa_banda(ruido(n, .3), 700 * 10 ** np.linspace(0, 1, n), 4) * sino(d, .75), -.8, .8))
-    for d in (2, 4):
-        n = int(SR * d); u = np.linspace(0, 1, n)
-        r = passa_banda(ruido(n, .5), 300 * (20 ** u), 1.5) + 0.25 * np.sin(fase(200 * (4 ** u)))
-        s[f"riser-{d}s"] = ("transicao", pan(r * u ** 2, -.3, .3))
+    d = 2; n = int(SR * d); u = np.linspace(0, 1, n)
+    r = passa_banda(ruido(n, .5), 300 * (20 ** u), 1.5) + 0.25 * np.sin(fase(200 * (4 ** u)))
+    s["riser"] = ("transicao", pan(r * u ** 2, -.3, .3))
     d = 1.2; n = int(SR * d); tt = t_(d)
     # cauda que fecha de 5000 a 400 Hz, tocada ao contrário: o som cresce e o filtro abre até o fim (sucção)
     s["reverse"] = ("transicao", pan((passa_banda(ruido(n, .7), 400 + 4600 * np.exp(-3 * tt), 1.4) * np.exp(-4 * tt))[::-1], .5, -.2))
@@ -101,20 +100,27 @@ def sons():
     k = int(SR * .12); boom[:k] += passa_banda(ruido(k, .3), np.full(k, 250), .9) * np.exp(-30 * t_(.12)) * 2.0
     k = int(SR * .006); boom[:k] += passa_banda(ruido(k), np.full(k, 3000), .8) * .8
     s["impacto-grave"] = ("impacto", np.tanh(1.6 * boom))
-    tt = t_(1.5)
-    queda = 120 * (1 / 3) ** (tt / 1.5)  # de 120 a 40 Hz; a oitava de cima e a saturação fazem ele aparecer no celular
-    drop = np.sin(fase(queda)) + .5 * np.sin(fase(2 * queda)) + .25 * np.sin(fase(3 * queda))
-    s["bass-drop"] = ("impacto", np.tanh(3 * drop * np.minimum(tt / .01, 1) * np.exp(-1.6 * tt)))
     return s
 
 
 def padrao(x):
-    """sem silêncio no começo, fade de 5 ms no fim, pico em -1 dBFS"""
+    """sem silêncio no começo, fade de 5 ms no fim, pico até -1 dBFS e volume médio até -12 dBFS"""
     m = np.abs(x).max(axis=1) if x.ndim == 2 else np.abs(x)
     x = x[np.argmax(m > m.max() * 10 ** (-60 / 20)):]
     f = np.linspace(1, 0, int(SR * .005))
     x[-len(f):] = (x[-len(f):].T * f).T
-    return x * PICO / np.abs(x).max()
+    def vol(y):
+        m = np.abs(y).max(axis=1) if y.ndim == 2 else np.abs(y)
+        j = min(int(SR * .05), len(m))
+        return m.max(), np.sqrt(np.convolve(m ** 2, np.ones(j) / j, "valid").max())
+    pico, rms = vol(x)
+    base = x = x * min(PICO / pico, VOLUME / max(rms, 1e-9))
+    g = 1.0
+    while vol(x)[1] < VOLUME / 2.5 and g < 4:  # curto demais (click): saturação suave até -20 dBFS ou +12 dB, sem estourar
+        g *= 1.25
+        y = np.tanh(g * base / PICO)  # sempre do som de antes, para não acumular distorção
+        x = y * PICO / np.abs(y).max()
+    return x
 
 
 def salvar(x, caminho):
@@ -143,7 +149,7 @@ def pico_ms(x):
 def teste():
     for nome, (tipo, x) in sons().items():
         y = padrao(x.copy())
-        assert np.isclose(np.abs(y).max(), PICO), nome
+        assert np.abs(y).max() <= PICO + 1e-9, nome
         assert np.abs(y[:10]).max() > 1e-4, f"{nome}: silêncio no começo"
         assert np.isfinite(y).all() and len(y) > SR * .05, nome
     x = np.zeros(SR); x[SR // 2] = 1
