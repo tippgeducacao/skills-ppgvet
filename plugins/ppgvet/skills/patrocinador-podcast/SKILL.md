@@ -1,6 +1,6 @@
 ---
 name: patrocinador-podcast
-description: Vídeo de boas-vindas a patrocinador dos podcasts da PPGVET com o mascote e o produto - prompts para o Google Flow, conferência de cada geração e edição final com cartela e logos. Use quando pedirem vídeo de patrocinador, boas-vindas a parceiro, prompt de Nano Banana ou Veo (mascote, cenário, produto), folha do mascote ou editar um vídeo do Flow.
+description: Vídeo de boas-vindas a patrocinador dos podcasts da PPGVET com o mascote - prompts para o Google Flow, conferência e edição final. Use para vídeo de patrocinador ou parceiro, prompt de Nano Banana ou Veo (mascote, cenário, produto) ou vídeo do Flow.
 ---
 
 # Vídeo de patrocinador do podcast (Google Flow + edição)

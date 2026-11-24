@@ -1,6 +1,6 @@
 ---
 name: live-vmix
-description: Pacote da live no vMix, num zip - moldura do Instagram (foto do professor, tema, pós), QR do cronograma (com UTM) e do certificado, links do chat e título da pós no topo da tela; live de uma ou duas pós. Use quando mandarem foto e tema da live, ou pedirem moldura, QR, links ou título da live.
+description: Pacote da live no vMix num zip - moldura do Instagram, QR do cronograma e do certificado, links do chat e título da pós; live de uma ou duas pós. Use quando mandarem foto e tema da live ou pedirem moldura, QR, links ou título da live.
 ---
 
 # Live no vMix

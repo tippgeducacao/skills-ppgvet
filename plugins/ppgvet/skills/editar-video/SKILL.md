@@ -23,7 +23,7 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 2. **Transcrever local** (o áudio não sai do computador):
    `"$PY" "$S/transcrever.py" X w -- --prompt "Éé... ahn, hum, né, é." -dtw large.v3.turbo -nfa -ml 1 -sow -ojf`
    O prompt faz o whisper escrever os vícios de fala, que sem ele somem. Depois, `"$PY" "$S/blocos.py" a.wav w.json` lista os blocos de fala entre silêncios, com as palavras (o `a.wav` sai de `"$FF" -i X -ar 16000 -ac 1 a.wav`).
-3. **Plano** para a pessoa, em português: para cada vídeo, o que sai, textos na tela, inserções, música e o roteiro do motion. Esperar o ok.
+3. **Plano** para a pessoa, em português: para cada vídeo, o que sai, textos na tela (pergunta e cartões seguem o "texto da arte" do `oficio/copy.md`), inserções (foto tratada antes pela `editar-foto`), música e o roteiro do motion. Esperar o ok.
 4. **Editar** todos, um atrás do outro, sem parar.
 5. **Conferir e dar nota** de 0 a 10 (lista em `nucleo.md` mais ritmo, leitura, marca e acabamento); abaixo de 8, corrigir.
 6. **Revisão no fim:** folha de quadros e nota de cada vídeo; para os Reels, o link do Studio para ajuste fino. Limpar depois da aprovação: `tmp/`, `hf/` e as prévias (ficam o original, o `roteiro.json`, a `legenda.srt` e a entrega).

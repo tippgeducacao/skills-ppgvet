@@ -45,7 +45,7 @@ Ler o `transcricao-x.leitura.txt` inteiro (uma linha por fala, com o tempo), em 
 
 - cada corte tem de 50 a 95 s e uma ideia completa, que se entende sem o resto da aula;
 - a primeira frase prende (dado forte, mito, caso real, erro comum);
-- o título dá curiosidade sem prometer o que a fala não entrega.
+- o título dá curiosidade sem prometer o que a fala não entrega (regras do "texto da arte" em `oficio/copy.md`); imagem de apoio passa antes pela `editar-foto`.
 
 Escrever o `cortes.json` e seguir direto (a pessoa revisa os cortes, os títulos e os posts juntos no fim):
 ```json

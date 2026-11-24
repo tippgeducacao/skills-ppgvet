@@ -1,6 +1,6 @@
 ---
 name: copy
-description: Texto de marketing da PPGVET/PPG como um copywriter da casa - a legenda que vai embaixo do post, o texto de uma arte (gancho, lâminas, CTA), mensagem de WhatsApp e anúncio - em 2 ou 3 versões com conferência medida. Use para copy, legenda do post, texto do WhatsApp ou do anúncio. Legenda dentro do vídeo: skill video.
+description: Texto de marketing da PPGVET/PPG como um copywriter da casa - a legenda que vai embaixo do post, texto da arte, WhatsApp e anúncio, em versões conferidas. Use para copy, legenda do post, WhatsApp ou anúncio. Legenda dentro do vídeo - skill video.
 ---
 
 # Copy (texto de marketing)

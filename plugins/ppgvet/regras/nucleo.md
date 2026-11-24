@@ -46,7 +46,7 @@ Exemplo: um Reels de pós é o `editar-video` montando, a `copy` escrevendo perg
 
 ## Como trabalhar
 0. **Primeira vez ou pedido sem material:** antes do plano, explicar em poucas linhas o que a skill precisa, onde pôr (o caminho real da pasta da pessoa) e um exemplo de pedido, pela seção "O que preciso de você" da skill. Se o material já veio, só perguntar o que faltar, no plano.
-1. **Plano, uma vez:** antes de começar, mostrar o que vai ser feito (cada skill diz o que o plano dela inclui) e perguntar o que falta saber. Esperar o ok.
+1. **Plano, uma vez:** antes de começar, mostrar o que vai ser feito (cada skill diz o que o plano dela inclui) e perguntar o que falta saber. Peça para o Instagram (Reels, cortes, chamada, depoimento, arte): perguntar no plano se quer junto a legenda do post (skill `copy`) e, no vídeo, a capa (`designer`); com o sim, saem na mesma entrega. Esperar o ok.
 2. **Depois do ok, fazer tudo sem parar:** o lote inteiro, um atrás do outro. As dúvidas vão no plano; parar no meio só se surgir uma que a pessoa precisa decidir.
 3. **Conferir e dar nota** a cada entrega: nota de 0 a 10 em cada critério da skill, mais acabamento geral, conferido contra o `antislop-midia.md`. Abaixo de 8: corrigir sozinho e conferir de novo. O que vale para todo vídeo:
    - todo texto que aparece na peça (cartão, pergunta, legenda, título) passa pelo `checar_texto.py` (`--tipo arte`) antes do render;

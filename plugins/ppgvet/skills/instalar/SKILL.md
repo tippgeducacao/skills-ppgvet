@@ -1,6 +1,6 @@
 ---
 name: instalar
-description: Prepara o computador (Mac ou Windows) para as skills da PPGVET - kit essencial e, sob demanda, as partes pesadas - e confere o que falta. Use na primeira vez, quando uma skill pedir, quando der erro de programa ou arquivo não encontrado, ou para trocar a pasta dos vídeos.
+description: Prepara o computador (Mac ou Windows) para as skills da PPGVET e confere o que falta. Use na primeira vez, quando uma skill pedir, quando der erro de programa ou arquivo não encontrado, ou para trocar a pasta dos vídeos.
 ---
 
 # Instalar e conferir

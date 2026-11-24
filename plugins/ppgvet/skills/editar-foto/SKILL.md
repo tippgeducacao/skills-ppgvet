@@ -1,6 +1,6 @@
 ---
 name: editar-foto
-description: Edita foto da PPGVET/PPG como um fotógrafo - luz, cor, pele, ruído, nitidez e horizonte; recorte no tamanho de uso; ampliar sem borrar; tirar o fundo. Use quando pedirem para editar, melhorar, retocar, ampliar, recortar ou tirar o fundo de uma foto (retrato de professor, evento, campo, post).
+description: Edita foto da PPGVET/PPG como um fotógrafo - luz, cor, pele, nitidez, horizonte, recorte no tamanho de uso, ampliar e tirar o fundo. Use quando pedirem para editar, melhorar, retocar, ampliar, recortar ou tirar o fundo de uma foto.
 ---
 
 # Editar foto

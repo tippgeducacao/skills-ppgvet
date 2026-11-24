@@ -1,6 +1,6 @@
 ---
 name: aulas-da-semana
-description: Arte de Instagram (imagem, não vídeo) - o carrossel "Aulas da semana" da PPGVET/PPG, capa e uma lâmina por aula (pós, dia, horário, professor com foto, tema), no molde da equipe, com cores e nomes oficiais e conferência medida. Use quando pedirem o carrossel das aulas da semana ou mandarem a lista das aulas curriculares da semana para o Instagram.
+description: Carrossel "Aulas da semana" do Instagram da PPGVET/PPG (imagem, não vídeo) - capa e uma lâmina por aula, no molde da equipe e com conferência medida. Use quando pedirem o carrossel da semana ou mandarem a lista das aulas curriculares.
 ---
 
 # Aulas da semana (carrossel do Instagram)

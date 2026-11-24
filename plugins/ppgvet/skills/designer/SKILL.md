@@ -1,6 +1,6 @@
 ---
 name: designer
-description: Arte estática da PPGVET/PPG como um designer da casa - post do feed, carrossel, story, criativo de professor, capa, thumbnail, arte de anúncio - com conferência medida. Use quando pedirem arte, post para o feed, carrossel, story, capa ou criativo. Aulas da semana: aulas-da-semana.
+description: Arte estática da PPGVET/PPG como um designer da casa - post do feed, carrossel, story, criativo de professor, capa, thumbnail e anúncio, conferida. Use quando pedirem arte, post para o feed ou criativo. Aulas da semana - aulas-da-semana.
 ---
 
 # Designer (arte estática)
@@ -32,9 +32,4 @@ Se a pessoa chamou sem o material, explicar em poucas linhas:
 5. **Conferir e dar nota** de 0 a 10: hierarquia (o olho vai para o gancho primeiro), leitura no celular (olhar a peça com ~390 px de largura), marca e acabamento (`antislop-midia.md`). Carrossel: as lâminas lado a lado numa folha só (mesmo grid, ritmo). Abaixo de 8: corrigir.
 6. **Entregar** os PNGs (e a folha do carrossel) com a nota em uma linha. Ajuste vira versão nova (`-v2`); o HTML fica para refazer.
 
-| formato | tamanho | área livre (sem texto nem logo) |
-|---|---|---|
-| feed, carrossel | 1080x1350 | 64 px em volta |
-| quadrado | 1080x1080 | 64 px em volta |
-| story | 1080x1920 | 250 px em cima e embaixo |
-| story de anúncio | 1080x1920 | 14% em cima, 35% embaixo, 6% dos lados (Meta) |
+Formatos, tamanhos e área livre: `oficio/design.md`, "Instagram".
