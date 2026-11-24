@@ -1,0 +1,44 @@
+<!doctype html><meta charset="utf-8">
+<!-- Moldura do Instagram da live, 1080x1920. Medidas tiradas da MOLDURA INSTA.png do Drive (LIVE › OVERLAYS).
+     ?foto=<png recortado>&tema=<texto>&pos=<png do título branco>[&pos2=<2ª pós, lado a lado>]&logo=<png PPGVET> -->
+<style>
+@font-face{font-family:M;src:url(../fontes/montserrat-variavel.ttf) format('truetype');font-weight:100 900}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden}
+body{position:relative;font-family:M;color:#fff;
+  background:
+    radial-gradient(2000px 480px at 0 0, rgba(51,5,79,1) 0, rgba(51,5,79,.9) 35%, rgba(51,5,79,.5) 52%, rgba(51,5,79,.18) 72%, rgba(51,5,79,0) 100%),
+    radial-gradient(1150px 330px at 100% 100%, rgba(51,5,79,1) 0, rgba(51,5,79,.9) 35%, rgba(51,5,79,.5) 52%, rgba(51,5,79,.18) 72%, rgba(51,5,79,0) 100%),
+    #000}
+.abs{position:absolute}
+#foto{left:0;right:0;top:0;height:580px;display:flex;justify-content:center;align-items:flex-start;
+  -webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent 98%)}
+#foto img{margin-top:145px;width:var(--largura,500px);height:auto}
+.faixa{left:272px;top:554px;width:538px;height:57px;background:#B84482;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:31px;letter-spacing:.6px;color:#F3F3F3}
+.link{left:0;right:0;top:603px;text-align:center;font-weight:800;font-size:100px;line-height:83px;letter-spacing:-1.5px;color:#EFEFEF}
+#tema{left:80px;right:80px;top:1374px;height:134px;display:flex;align-items:center;justify-content:center;text-align:center;
+  font-weight:700;line-height:1.18;text-transform:uppercase;letter-spacing:-.3px}
+#pos{left:0;right:0;top:1575px;height:127px;display:flex;align-items:center;justify-content:center}
+#pos img{max-height:127px;max-width:830px}
+#pos.duas{gap:44px}
+#pos.duas img{max-width:393px;max-height:112px}
+#logo{left:450px;top:1745px;width:180px}
+</style>
+<div class="abs" id="foto"><img id="f"></div>
+<div class="abs link">LINK NA<br>BIO</div>
+<div class="abs faixa">ESTAMOS AO VIVO</div>
+<div class="abs" id="tema"><div id="t"></div></div>
+<div class="abs" id="pos"><img id="p"></div>
+<img class="abs" id="logo">
+<script>
+const q=new URLSearchParams(location.search);
+f.src=q.get('foto'); p.src=q.get('pos'); logo.src=q.get('logo');
+if(q.get('pos2')){const i=document.createElement('img');i.src=q.get('pos2');
+  const b=document.getElementById('pos');b.appendChild(i);b.classList.add('duas')}
+if(q.get('largura'))document.body.style.setProperty('--largura',q.get('largura')+'px');
+t.textContent=q.get('tema');
+// tema: maior fonte (até 56px, a do modelo) que cabe em até 2 linhas na caixa
+const box=document.getElementById('tema'); let fs=56;
+const set=()=>t.style.fontSize=fs+'px'; set();
+while(t.offsetHeight>box.clientHeight&&fs>24){fs-=1;set()}
+</script>

@@ -13,6 +13,8 @@ Um pacote só, o **ppgvet**, com as skills de vídeo e de foto da equipe, no pad
 | `/ppgvet:cortes-live` | live (arquivo ou link) vira 7 ou 8 posts 9:16, com o professor em foco e slide e quem pergunta como apoio; também a aula completa com abertura, sem as partes da live | "tira os cortes dessa live" + link |
 | `/ppgvet:editar-video` | edição livre e Reels de fala com textos animados (HyperFrames, com o Studio no navegador), legenda, cor, música, compressão | "edita esse vídeo para Reels" |
 | `/ppgvet:baixar-video` | baixar vídeo do YouTube, TikTok, Facebook, Reddit, Twitch, X, Instagram e outros ~1.700 sites | "baixa esse vídeo" + link |
+| `/ppgvet:live-vmix` | pacote da live no vMix num zip: moldura do Instagram, QR do cronograma (com UTM) e do certificado, links do chat e título da pós no topo; live de uma ou duas pós | "monta a live de quinta, pós PS, tema X" + foto do professor |
+| `/ppgvet:patrocinador-podcast` | vídeo de boas-vindas a patrocinador de podcast com o mascote: prompts de Nano Banana e Veo para o Google Flow, conferência de cada geração e edição final com cartela e logos | "vídeo de boas-vindas da <empresa> no SuinoCast" |
 | `/ppgvet:editar-foto` | foto como um fotógrafo: retoque de luz, cor, pele, nitidez e horizonte, recorte no tamanho de uso, ampliar, tirar o fundo | "deixa essa foto profissional", "tira o fundo" |
 | `/ppgvet:instalar` | prepara o computador (uma vez) e diz o que falta quando algo dá erro | "instala o kit", "está tudo instalado?" |
 

@@ -1,0 +1,32 @@
+<!doctype html><meta charset="utf-8">
+<style>
+@font-face{font-family:M;src:url(../fontes/montserrat-variavel.ttf) format('truetype');font-weight:100 900}
+html,body{margin:0;background:transparent}
+.l{display:inline-flex;align-items:stretch;gap:22px;padding:24px;font-family:M;color:#3A3A3A;filter:drop-shadow(0 0 5px rgba(0,0,0,.12))}
+.p{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.p b{font-weight:900;font-size:96px;line-height:.82;letter-spacing:-2px}
+.p i{font-style:normal;font-weight:300;font-size:30.5px;line-height:1;letter-spacing:.5px;margin-top:6px}
+.bar{width:4px;background:currentColor}
+.n{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;white-space:nowrap;color:#D24BA8}
+.n div{font-weight:800;line-height:.95;text-transform:uppercase;letter-spacing:-.3px}
+.n .sub{font-weight:600;color:#3A3A3A;line-height:1.1;letter-spacing:0}
+.especial .n div{font-family:A;font-weight:700;letter-spacing:0;line-height:.98}
+.claro{color:#fff!important;filter:none!important}.claro .n,.claro .n .sub{color:#fff!important}
+.selo{background:#D24BA8;color:#fff;padding:.12em .35em .08em;margin-top:.12em;margin-left:.9em;transform:rotate(-1.5deg)}
+</style>
+<div class="l" id="l"><div class="p" id="p"><b>PÓS</b><i>GRADUAÇÃO</i></div><div class="bar"></div><div class="n" id="n"></div></div>
+<script>
+// ?linhas=A|B|C&sub=X|Y&especial=1&selo=VETERINÁRIA
+const q=new URLSearchParams(location.search), n=document.getElementById('n');
+if(q.get('claro'))document.getElementById('l').classList.add('claro');
+if(q.get('especial'))document.getElementById('l').classList.add('especial');
+const add=(t,c)=>{const d=document.createElement('div');d.textContent=t;if(c)d.className=c;n.appendChild(d);return d};
+q.get('linhas').split('|').forEach(t=>add(t));
+(q.get('sub')||'').split('|').filter(Boolean).forEach(t=>add(t,'sub'));
+if(q.get('selo'))add(q.get('selo'),'selo');
+// maior fonte (até o teto) cujo bloco do nome cabe na altura da barra
+const H=document.getElementById('p').offsetHeight, teto=+(q.get('teto')||44);
+const esc={sub:.5,selo:.62};
+let fs=teto; const set=()=>n.querySelectorAll('div').forEach(d=>d.style.fontSize=fs*(esc[d.className]||1)+'px');
+set(); while(n.scrollHeight>H&&fs>8){fs-=.5;set()}
+</script>

@@ -12,7 +12,8 @@ EXE = ".exe" if WIN else ""
 # subpastas de trabalho de cada tipo de vídeo (dentro da pasta "trabalho" escolhida no instalar)
 TIPOS = {"chamadas": "chamadas", "aulas": "aulas-curriculares", "conferir": "conferir-aula",
          "cortes": "cortes-live", "treinamentos": "treinamentos", "edicoes": "edicoes", "musicas": "musicas",
-         "downloads": "downloads"}
+         "downloads": "downloads", "lives": "lives",
+         "patrocinadores": "patrocinadores"}
 USADAS = "musicas-usadas.txt"  # dentro de musicas/: data, música e vídeo, uma por linha
 
 
@@ -108,6 +109,33 @@ def baixo(cmd, **kw):
 def dur(f):
     return float(subprocess.run([FFPROBE(), "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f],
                                 capture_output=True, text=True, check=True).stdout)
+
+
+NAVEGADORES = ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+               "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+               r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+               r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+               r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+               r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"]
+
+
+def print_html(url, largura, altura, saida, escala=1):
+    """print de uma página (modelo HTML do acervo) com fundo transparente, no Chrome ou Edge sem janela"""
+    import shutil
+    nav = next((n for n in NAVEGADORES + [shutil.which(x) for x in ("google-chrome", "chromium", "msedge")]
+                if n and os.path.exists(n)), None)
+    if not nav:
+        sys.exit("Falta o Google Chrome (ou o Edge) para gerar a imagem: instale o Chrome e rode de novo")
+    subprocess.run([nav, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--allow-file-access-from-files",
+                    "--default-background-color=00000000", f"--force-device-scale-factor={escala}",
+                    f"--window-size={largura},{altura}", "--virtual-time-budget=3000", f"--screenshot={saida}", url],
+                   check=True, capture_output=True)
+
+
+def url_arquivo(caminho, **params):
+    """file:// de um arquivo local (Mac e Windows), com parâmetros na query"""
+    from urllib.parse import urlencode, quote
+    return Path(caminho).resolve().as_uri() + ("?" + urlencode(params, quote_via=quote) if params else "")
 
 
 def filtro_caminho(p):
