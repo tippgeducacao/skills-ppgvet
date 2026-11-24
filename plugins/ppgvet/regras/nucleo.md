@@ -15,6 +15,20 @@ O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
 | som | voz e música | + room tone; efeito raro | sound design completo, teste do mudo |
 | revisão | nota e folha de quadros | + 2 rodadas | + 3 rodadas, quadro cheio em cada corte |
 
+## O estúdio: uma peça usa todos os ofícios
+Cada skill faz a sua parte e chama as outras no que a peça tiver; ninguém refaz o que outro ofício já faz.
+
+| a peça tem | quem faz | e confere com |
+|---|---|---|
+| texto: cartão, legenda, CTA, título de arte, legenda do post, WhatsApp | `copy` (`oficio/copy.md`) | `checar_texto.py` |
+| foto: professor, insert, capa, fundo tirado | `editar-foto` (`oficio/foto.md`) | antes e depois, nota |
+| arte parada: capa, thumbnail, card, post, carrossel | `designer` (`oficio/design.md`) | `arte.py` |
+| movimento: cartão, texto, logo, abertura, vinheta | `video` › `editar-video` (`hf.py`) ou `motion` (`oficio/motion.md`) | folha de quadros, `checar.py` |
+| som: voz, música, efeitos | dentro do vídeo (`oficio/som.md`, acervo `sons/`) | `checar.py` (volume) |
+| corte, cor e ritmo | `video` (`oficio/video.md`) | `checar.py`, folha |
+
+Exemplo: um Reels de pós é o `editar-video` montando, a `copy` escrevendo pergunta, cartões e legenda do post, a `editar-foto` tratando o insert, o motion animando, o som mixado e a `designer` fazendo a capa.
+
 ## Ambiente
 - O shell não guarda variável de um comando para o outro: definir `PY`, `S` (e `FF`, `A` quando usar) no começo de **cada** comando.
 - `PY=$(cat ~/.ppgvet/python)`, `S=<pasta scripts do pacote>` (a skill mostra o caminho) e `FF=$("$PY" "$S/comum.py" --ff)`, o ffmpeg completo (tem zscale, legenda e texto; o `ffprobe` fica na mesma pasta). Se `~/.ppgvet/python` não existir, rodar a skill `instalar` primeiro.
@@ -35,6 +49,7 @@ O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
 1. **Plano, uma vez:** antes de começar, mostrar o que vai ser feito (cada skill diz o que o plano dela inclui) e perguntar o que falta saber. Esperar o ok.
 2. **Depois do ok, fazer tudo sem parar:** o lote inteiro, um atrás do outro. As dúvidas vão no plano; parar no meio só se surgir uma que a pessoa precisa decidir.
 3. **Conferir e dar nota** a cada entrega: nota de 0 a 10 em cada critério da skill, mais acabamento geral, conferido contra o `antislop-midia.md`. Abaixo de 8: corrigir sozinho e conferir de novo. O que vale para todo vídeo:
+   - todo texto que aparece na peça (cartão, pergunta, legenda, título) passa pelo `checar_texto.py` (`--tipo arte`) antes do render;
    - folha de quadros durante todo o tempo de cada gráfico (nada cobre nem encosta no rosto);
    - começo e fim transcritos de novo;
    - `"$PY" "$S/checar.py" entrega.mp4 [--srt legenda.srt] [--instagram] [--lufs <alvo da skill>] [--rosto <y do texto mais alto>]`: volume (voz -16 LUFS; a skill diz se o alvo é outro), pico, os dois canais, cor, primeiro quadro, legenda, formato e queixo acima dos textos (Reels do `hf.py`: `--rosto 915`). FALHA barra a entrega: corrigir e rodar de novo. AVISO: olhar e decidir (tela preta prevista no fade é normal).

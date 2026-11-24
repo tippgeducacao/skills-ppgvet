@@ -1,6 +1,6 @@
 ---
 name: video
-description: Edição de vídeo da PPGVET/PPG - chamada, depoimento, aula curricular, treinamento, conferir aula que alguém editou antes de subir, cortes de live, Reels, edição livre e baixar vídeo de link. Use em qualquer pedido de editar, montar, cortar, pôr legenda no vídeo, conferir ou baixar vídeo ou aula gravada.
+description: Edição de vídeo da PPGVET/PPG - chamada, depoimento, aula curricular, treinamento, conferir aula que alguém editou antes de subir, cortes de live, Reels, motion (vinheta, abertura, texto animado), edição livre e baixar vídeo de link. Use em qualquer pedido de editar, montar, cortar, pôr legenda no vídeo, conferir ou baixar vídeo ou aula gravada.
 ---
 
 # Vídeo
@@ -16,7 +16,8 @@ Porta das tarefas de vídeo: acha a tarefa, lê o passo a passo dela e segue. Ca
 | cortes de live ou de aula gravada em posts 9:16; aula completa de uma live | `cortes-live` |
 | Reels de fala, legenda, cor, música, compressão, qualquer outra edição | `editar-video` |
 | baixar vídeo de um link (YouTube, Instagram, TikTok…) | `baixar-video` |
+| peça de motion sozinha: abertura, vinheta, logo ou texto animado, explicativo animado | `motion` |
 
 1. Ler `${CLAUDE_PLUGIN_ROOT}/skills/<tarefa>/SKILL.md` inteiro e seguir. Nesse arquivo, a raiz do pacote (`CLAUDE_PLUGIN_ROOT`) é `${CLAUDE_PLUGIN_ROOT}`.
 2. Pedido que cabe em duas tarefas, ou em nenhuma: perguntar qual, em caixa de opção (regra de perguntas do `nucleo.md`).
-3. Foto é a skill `editar-foto`; preparar o computador, a `instalar`.
+3. Foto é a skill `editar-foto`; arte estática, a `designer`; texto, a `copy`; preparar o computador, a `instalar`. Som não tem skill própria: vai dentro do vídeo (`oficio/som.md`).

@@ -1,6 +1,6 @@
 ---
 name: designer
-description: Arte estática da PPGVET/PPG como um designer da casa - post, carrossel, story, criativo de professor, arte de anúncio - com referência nas artes da equipe e conferência medida. Use quando pedirem arte, post, carrossel, story ou criativo. Aulas da semana: skill aulas-da-semana.
+description: Arte estática da PPGVET/PPG como um designer da casa - post do feed, carrossel, story, criativo de professor, capa, thumbnail, arte de anúncio - com conferência medida. Use quando pedirem arte, post para o feed, carrossel, story, capa ou criativo. Aulas da semana: aulas-da-semana.
 ---
 
 # Designer (arte estática)
