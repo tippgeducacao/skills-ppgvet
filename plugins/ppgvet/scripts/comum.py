@@ -31,7 +31,7 @@ PARTE_DA_CHAVE = {"realesrgan": "foto"}
 
 
 def falta_parte(parte):
-    """parte do kit que só é instalada quando alguém precisa (regra em regras/edicao.md, "Ambiente")"""
+    """parte do kit que só é instalada quando alguém precisa (regra em regras/nucleo.md, "Ambiente")"""
     sys.exit(f"Falta a parte '{parte}' do kit ({PARTES[parte]}): rode instalar.py --{parte} e depois este comando de novo")
 
 
