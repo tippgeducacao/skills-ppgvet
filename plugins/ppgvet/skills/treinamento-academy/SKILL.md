@@ -6,7 +6,7 @@ description: Edita treinamentos para o PPGVET Academy (time comercial, embaixado
 # Treinamento para o PPGVET Academy
 
 ## Antes de começar
-- Ler `${CLAUDE_PLUGIN_ROOT}/regras/edicao.md` (ambiente e regras gerais) e `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças).
+- Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills), `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças), `${CLAUDE_PLUGIN_ROOT}/regras/video.md` (técnica, motion e Instagram).
 - `PY=$(cat ~/.ppgvet/python)` e `S="${CLAUDE_PLUGIN_ROOT}/scripts"`.
 - Pasta: a linha `treinamentos:` de `"$PY" "$S/comum.py" --pastas` (aqui `<treinos>`). As gravações ficam na raiz dela, os prontos em `<treinos>/prontos/` e o trabalho de cada treinamento (transcrição e `treinamento.json`) em `<treinos>/trabalho/<nome>/`.
 

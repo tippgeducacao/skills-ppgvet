@@ -8,7 +8,7 @@ description: Tira cortes de uma live ou aula gravada da PPGVET (Meet/Zoom com mo
 **O plano desta skill:** link ou arquivo da live, tema, se faz a aula completa e o nome da pós dos posts. Depois do ok, tudo sem parar: baixar, transcrever, escolher os cortes, cortar, aula completa e todos os posts. A pessoa revisa os cortes, os títulos e os posts juntos no fim (seção 3).
 
 ## Antes de começar
-- Ler `${CLAUDE_PLUGIN_ROOT}/regras/edicao.md` (ambiente e regras gerais) e `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças).
+- Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills), `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças), `${CLAUDE_PLUGIN_ROOT}/regras/video.md` (técnica, motion e Instagram), `${CLAUDE_PLUGIN_ROOT}/regras/bancos-e-referencias.md` (referência, inserções, música e sons).
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`.
 - Pasta: a linha `cortes:` de `"$PY" "$S/comum.py" --pastas` (aqui chamada de `<cortes>`). Todos os comandos rodam de dentro de `<cortes>/`.
 
@@ -97,9 +97,9 @@ As aulas de abertura são lives com este roteiro: vinheta → fala do diretor �
 2. `"$PY" "$S/post.py" <tema>/posts/post-x.json --legenda` transcreve o corte e mostra o caminho do `.srt` (ler com Read). Com ele:
    - achar o `inicio` (logo antes da primeira frase) e o `fim` (logo depois da última palavra);
    - anotar os erros do whisper em `correcoes`. A legenda sai em minúsculas e sem pontuação, e as correções valem depois disso;
-   - na dúvida sobre um nome, pesquisar a grafia certa antes (`edicao.md`).
-3. `apoio` (opcional): uma imagem ou vídeo do assunto real, que cobre a tela de `de` até `ate` (segundos do post), com zoom de entrada e saída. Onde buscar: regra de inserções de `edicao.md`.
-4. Música: uma faixa calma, escolhida pela regra de música de `edicao.md`. Diferente entre os posts da mesma live, fora das 10 últimas usadas, nunca em loop.
+   - na dúvida sobre um nome, pesquisar a grafia certa antes (`nucleo.md`).
+3. `apoio` (opcional): uma imagem ou vídeo do assunto real, que cobre a tela de `de` até `ate` (segundos do post), com zoom de entrada e saída. Onde buscar: regra de inserções de `bancos-e-referencias.md`.
+4. Música: uma faixa calma, escolhida pela regra de música de `bancos-e-referencias.md`. Diferente entre os posts da mesma live, fora das 10 últimas usadas, nunca em loop.
 5. `"$PY" "$S/post.py" <tema>/posts/post-x.json`. Se a saída já existir, o script para: usar outro nome `-vN`.
 6. **Conferir e dar nota** (`"$PY" "$S/folha.py" <tema>/posts/post-x.mp4 folha.jpg 2`), de 0 a 10 em cada critério; abaixo de 8, corrigir e montar de novo:
    - o corte prende na primeira frase e fecha a ideia (entende-se sem o resto da live);

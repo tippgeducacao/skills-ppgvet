@@ -6,7 +6,7 @@ description: Edita as aulas curriculares gravadas no Meet ("Aula Curricular _ <s
 # Aula curricular (Meet → Panda)
 
 ## Antes de começar
-- Ler `${CLAUDE_PLUGIN_ROOT}/regras/edicao.md` (ambiente e regras gerais) e `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças).
+- Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills), `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças), `${CLAUDE_PLUGIN_ROOT}/regras/video.md` (técnica, motion e Instagram).
 - `PY=$(cat ~/.ppgvet/python)` e `S="${CLAUDE_PLUGIN_ROOT}/scripts"`.
 - Pasta: a linha `aulas:` de `"$PY" "$S/comum.py" --pastas` (aqui chamada de `<aulas>`). As gravações ficam na raiz dela e as prontas em `<aulas>/prontas/`. O trabalho de cada aula (transcrição, `aula.json`, card e folhas) fica numa subpasta própria, `<aulas>/trabalho/<DD-MM>-<sigla>-<professor>/`, para as aulas do lote não se sobrescreverem; os comandos abaixo rodam de dentro dela.
 

@@ -10,7 +10,7 @@ Só confere e aponta. Não mexe nos vídeos: quem decide e corrige é a pessoa. 
 **O plano desta skill:** quantas aulas, qual edição ou pós e se já há referência. Depois do ok, o lote inteiro sem parar e o relatório completo no fim. **Limpar** depois que a pessoa usar o relatório: as pastas de cada aula em `resultados/` (o relatório `.md` fica).
 
 ## Antes de começar
-- Ler `${CLAUDE_PLUGIN_ROOT}/regras/edicao.md` (ambiente e regras gerais) e `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças).
+- Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills), `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças).
 - `PY=$(cat ~/.ppgvet/python)` e `S="${CLAUDE_PLUGIN_ROOT}/scripts"`.
 - Pasta: a linha `conferir:` de `"$PY" "$S/comum.py" --pastas` (aqui chamada de `<conferir>`). A pessoa põe as aulas em `<conferir>/entrada/`, e os resultados saem em `<conferir>/resultados/`.
 

@@ -8,6 +8,7 @@ description: Edita foto da PPGVET como um fotógrafo profissional - retoque de l
 O Claude olha a foto, decide o que fazer e explica o porquê; os scripts aplicam. A meta é a foto parecer **bem fotografada, não editada**.
 
 ## Antes de começar
+- Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills).
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`. Se `~/.ppgvet/python` não existir, rodar a skill `instalar` primeiro.
 - **Ampliar e tirar fundo** são a parte `foto` do kit, sob demanda (~0,7 GB). Se o comando disser "Falta a parte 'X' do kit": avisar em uma linha, rodar `"$PY" "$S/instalar.py" --X` em segundo plano e repetir.
 - **Original nunca muda.** Sempre partir do original em alta. A saída é um arquivo novo ao lado, com nome minúsculo-com-hífen (`foto-professor-retocada.jpg`); se já existir, `-v2`. **Menor, mas nunca mais feia.**

@@ -62,7 +62,7 @@ São automáticas, desde que o auto-update esteja ligado. Depois de cada mudanç
 | configuração de cada pessoa, Python do pacote, modelo do whisper | `~/.ppgvet/` no computador de cada um |
 | vídeos de trabalho, entregas, músicas baixadas (`musicas/`), downloads e referências de aula aprovadas | a pasta escolhida no kit (padrão: `Filmes/PPGVET` no Mac, `Vídeos/PPGVET` no Windows) |
 
-O card com o nome do professor é gerado na hora, a partir do card sem nome. Música, som e efeito não vêm no pacote: cada pessoa baixa quando precisa (onde e como: regras de edição).
+O card com o nome do professor é gerado na hora, a partir do card sem nome. Música, som e efeito não vêm no pacote: cada pessoa baixa quando precisa (onde e como: `regras/bancos-e-referencias.md`).
 
 ## Problemas
 - Uma skill deu erro de programa ou de arquivo não encontrado: pedir *"confere a instalação"*.
@@ -79,7 +79,7 @@ Tudo numa ida só; a pessoa só fecha e abre o Claude Code no fim.
 
 ## Para quem cuida do pacote
 - **Publicar:** commit e `./publicar.sh` (roda os testes dos scripts, valida o pacote e dá push). Sem número de versão no `plugin.json`, cada commit é uma versão nova, e a equipe recebe sozinha.
-- **Organização:** tudo em `plugins/ppgvet/`. As regras que valem para todas as skills de vídeo ficam num lugar só, `regras/edicao.md` (ambiente, arquivo e versões, como trabalhar, PC e tokens, conteúdo, técnica, motion, padrão Instagram, música), e a marca em `regras/marca.md` (marcas, peças, siglas e molduras). Cada skill traz só o próprio passo a passo. Regra nova que vale para todas: entra em `edicao.md`, não na skill.
+- **Organização:** tudo em `plugins/ppgvet/`. As regras ficam em `regras/`, um assunto por arquivo: `nucleo.md` (vale para todas: ambiente, arquivo e versões, como trabalhar, perguntas, IA, PC e tokens, grafia), `video.md` (corte, cor, áudio, motion, padrão Instagram), `bancos-e-referencias.md` (referência, inserções, música e sons) e `marca.md` (marcas, peças, siglas e molduras). Cada skill traz só o próprio passo a passo e lê só os arquivos de que precisa. Regra nova que vale para todas: entra no `nucleo.md`; de um assunto, no arquivo dele.
 - **Skill nova:** criar `plugins/ppgvet/skills/<nome>/SKILL.md`; chega sozinha para todo mundo.
 - **Ferramenta nova:** se toda skill usa, vai no essencial (`instalar()` em `scripts/instalar.py`; quem já instalou roda de novo). Se é de poucas, vira parte sob demanda: entra em `partes()` do `instalar.py` e em `PARTES` do `comum.py`, e o script que usa chama `falta_parte("<parte>")` quando faltar.
 - **Peças no repositório:** só as gerais da marca, em `acervo/`. O detector de rosto (YuNet, licença MIT) fica em `modelos/`. Música, som e efeito não entram: as licenças (Pixabay, Mixkit) não permitem redistribuir o arquivo solto.

@@ -6,10 +6,10 @@ description: Baixa vídeo do YouTube, TikTok, Facebook, Reddit, Twitch, X, Vimeo
 # Baixar vídeo
 
 ## Antes de começar
-- Ler `${CLAUDE_PLUGIN_ROOT}/regras/edicao.md` (ambiente e regras gerais).
+- Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills).
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`.
 - Pasta: a linha `downloads:` de `"$PY" "$S/comum.py" --pastas` (aqui chamada de `<downloads>`).
-- **Para que serve:** referência de estilo ou material da própria PPGVET. Vídeo de terceiros não entra em post nosso, e da referência se copia o estilo (ritmo, transição, texto), nunca o conteúdo nem a marca (`edicao.md`).
+- **Para que serve:** referência de estilo ou material da própria PPGVET. Vídeo de terceiros não entra em post nosso, e da referência se copia o estilo (ritmo, transição, texto), nunca o conteúdo nem a marca (`bancos-e-referencias.md`).
 - **Nunca pedir nem digitar senha.** Se o site pedir login, usar direto a sessão do navegador ("Conteúdo que pede login"): a pessoa pediu o download, não precisa perguntar de novo.
 
 ## O que preciso de você

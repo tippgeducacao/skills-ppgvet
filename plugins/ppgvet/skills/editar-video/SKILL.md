@@ -6,7 +6,7 @@ description: Edição de vídeo da PPGVET/PPG com ffmpeg, whisper local e HyperF
 # Editar vídeo
 
 ## Antes de começar
-- Ler `${CLAUDE_PLUGIN_ROOT}/regras/edicao.md` (ambiente e regras gerais) e `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças).
+- Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills), `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças), `${CLAUDE_PLUGIN_ROOT}/regras/video.md` (técnica, motion e Instagram), `${CLAUDE_PLUGIN_ROOT}/regras/bancos-e-referencias.md` (referência, inserções, música e sons).
 - `PY=$(cat ~/.ppgvet/python)`, `S="${CLAUDE_PLUGIN_ROOT}/scripts"` e `FF=$("$PY" "$S/comum.py" --ff)`.
 - Trabalho: `<edicoes>/<assunto>/<video>/`, com roteiro, legenda, `tmp/` e o projeto `hf/`. Entrega: ao lado dos originais (`pasta_saida` no roteiro), como `<assunto>-<tema>-vN.mp4`.
 
@@ -18,17 +18,17 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 - Exemplo de pedido: *"edita esse vídeo do Rafael pra Reels, no estilo dessa referência"* + arquivo e link.
 
 ## Passo a passo
-1. **Ver sem mexer.** Rodar `ffprobe`, olhar a folha de quadros e conferir orientação, cor e os canais de áudio (regras de cor e áudio da câmera em `edicao.md`). Câmera deitada: `transpose=1` ou `2`, conferir num quadro.
+1. **Ver sem mexer.** Rodar `ffprobe`, olhar a folha de quadros e conferir orientação, cor e os canais de áudio (regras de cor e áudio da câmera em `video.md`). Câmera deitada: `transpose=1` ou `2`, conferir num quadro.
 2. **Transcrever local** (o áudio não sai do computador):
    `"$PY" "$S/transcrever.py" X w -- --prompt "Éé... ahn, hum, né, é." -dtw large.v3.turbo -nfa -ml 1 -sow -ojf`
    O prompt faz o whisper escrever os vícios de fala, que sem ele somem. Depois, `"$PY" "$S/blocos.py" a.wav w.json` lista os blocos de fala entre silêncios, com as palavras (o `a.wav` sai de `"$FF" -i X -ar 16000 -ac 1 a.wav`).
 3. **Plano** para a pessoa, em português: para cada vídeo, o que sai, textos na tela, inserções, música e o roteiro do motion. Esperar o ok.
 4. **Editar** todos, um atrás do outro, sem parar.
-5. **Conferir e dar nota** de 0 a 10 (lista em `edicao.md` mais ritmo, leitura, marca e acabamento); abaixo de 8, corrigir.
+5. **Conferir e dar nota** de 0 a 10 (lista em `nucleo.md` mais ritmo, leitura, marca e acabamento); abaixo de 8, corrigir.
 6. **Revisão no fim:** folha de quadros e nota de cada vídeo; para os Reels, o link do Studio para ajuste fino. Limpar depois da aprovação: `tmp/`, `hf/` e as prévias (ficam o original, o `roteiro.json`, a `legenda.srt` e a entrega).
 
 ## Vídeo vertical de fala com motion (Reels)
-Pessoa falando para a câmera, com caixinha de pergunta, cartões de destaque, legenda, logo, música e vinheta. Usa o HyperFrames (parte `motion` do kit, instalada na primeira vez: regra em `edicao.md`, "Ambiente").
+Pessoa falando para a câmera, com caixinha de pergunta, cartões de destaque, legenda, logo, música e vinheta. Usa o HyperFrames (parte `motion` do kit, instalada na primeira vez: regra em `bancos-e-referencias.md`, "Ambiente").
 
 Roteiro `roteiro.json` (tempos em segundos do **original**):
 ```json
@@ -52,12 +52,12 @@ Roteiro `roteiro.json` (tempos em segundos do **original**):
 - `pergunta` com `"de"` e `"ate"` (tempos do original): a caixinha entra no momento da pergunta, não no começo do vídeo.
 - `*palavra*`: destaque na cor da marca (no cartão) ou em rosa (na legenda).
 - `marca`: `ppgvet` ou `ppg`. Define as cores, a logo, o ícone da caixinha e a vinheta.
-- `musica`: escolhida pela regra de música de `edicao.md`; precisa ser mais longa que o vídeo.
+- `musica`: escolhida pela regra de música de `bancos-e-referencias.md`; precisa ser mais longa que o vídeo.
 
 Comandos:
 1. `"$PY" "$S/reels.py" roteiro.json base` corta, gira, alterna o zoom e duplica o canal, gerando `tmp/base.mov`.
 2. `"$PY" "$S/reels.py" roteiro.json legenda` gera `legenda-bruta.srt`. Revisar e salvar como `legenda.srt`:
-   - termos certos (regra de grafia de `edicao.md`);
+   - termos certos (regra de grafia de `nucleo.md`);
    - sem ponto final;
    - `*palavra-chave*`;
    - palavra que ficou no grupo errado volta para o grupo dela.
@@ -69,7 +69,7 @@ Comandos:
    - render (no Mac com `nice -n 10` na frente): `npx hyperframes render . -o ../tmp/hf.mp4 --fps 30000/1001 --quality delivery`.
 5. `"$PY" "$S/reels.py" roteiro.json final` junta a vinheta da marca e a mixagem e salva em `pasta_saida`. `--previa` faz uma versão leve na pasta de trabalho.
 
-O que o `hf.py` desenha, na identidade da marca e com Montserrat, nas faixas do padrão Instagram (`edicao.md`):
+O que o `hf.py` desenha, na identidade da marca e com Montserrat, nas faixas do padrão Instagram (`video.md`):
 - **Caixinha de pergunta** no estilo do Instagram: entra com pop, o ícone da marca vem depois e a pergunta entra palavra por palavra.
 - **Cartões:** barra colorida, o cartão abre da esquerda e o texto entra palavra por palavra. Em Reels, só cartão de uma linha (`linhas`, sem `itens`), porque a lista com check não agradou. O corte termina na frase forte, sem muleta ("e é comprovado").
 - **Legenda simples:** o grupo entra inteiro, branco com sombra.

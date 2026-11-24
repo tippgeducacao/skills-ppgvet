@@ -10,10 +10,10 @@ Depoimento de aluno usa este mesmo fluxo: no lugar do professor, o aluno; a past
 **O plano desta skill:** para cada chamada do lote, a tomada escolhida, o tema, a arte de CTA e a música. Depois do ok, monta todas e entrega a revisão com a folha e a nota de cada uma. **Limpar depois da aprovação:** as folhas de quadros.
 
 ## Antes de começar
-- Ler `${CLAUDE_PLUGIN_ROOT}/regras/edicao.md` (ambiente e regras gerais) e `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças).
+- Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md` (regras de todas as skills), `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marca e peças), `${CLAUDE_PLUGIN_ROOT}/regras/video.md` (técnica, motion e Instagram), `${CLAUDE_PLUGIN_ROOT}/regras/bancos-e-referencias.md` (referência, inserções, música e sons).
 - `PY=$(cat ~/.ppgvet/python)` e `S="${CLAUDE_PLUGIN_ROOT}/scripts"`.
 - Pasta das chamadas: a linha `chamadas:` de `"$PY" "$S/comum.py" --pastas`.
-- O layout (legenda e logo) e o volume final da chamada são os desta skill, não os dos Reels; o resto segue `edicao.md`.
+- O layout (legenda e logo) e o volume final da chamada são os desta skill, não os dos Reels; o resto segue `video.md`.
 
 ## O que preciso de você
 Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas linhas, com o caminho real das pastas dela (`--pastas`):
@@ -27,7 +27,7 @@ Se a pessoa chamou sem o material (ou é a primeira vez), explicar em poucas lin
 - Legenda: Montserrat Bold 78, branca com sombra, de 2 a 4 palavras por vez, centro em y=1100 (peito). **Nunca cobre o rosto.**
 - Logo PPGVET (`acervo/logos/ppgvet/logo-ppgvet.png`), com 270 px de largura, em y=1430, centralizada.
 - Fim: a arte sobe com borrão vertical (0,3 s) e fica 6 s na tela. A arte é o PNG 1080x1350 da campanha, que a pessoa entrega (nunca inventar), sobre um fundo borrado dela mesma.
-- Música: regra de música de `edicao.md` (séria, sem vocal, fora das 10 últimas usadas e nunca repetida entre as chamadas do mesmo professor; nunca em loop). Fica mais baixa sob a voz e sobe na arte. Volume final ≈ -14 LUFS.
+- Música: regra de música de `bancos-e-referencias.md` (séria, sem vocal, fora das 10 últimas usadas e nunca repetida entre as chamadas do mesmo professor; nunca em loop). Fica mais baixa sob a voz e sobe na arte. Volume final ≈ -14 LUFS.
 
 ## Pastas
 ```
@@ -42,10 +42,10 @@ chamadas/<PROFESSOR>/
 Na primeira chamada de um professor, criar essa estrutura e pedir para a pessoa pôr os vídeos em `_originais/` e a arte na pasta do professor.
 
 ## Passo a passo
-1. **Bruto:** pegar a tomada certa em `_originais`, cortar a fala e, se for vídeo de iPhone HDR, converter para BT.709 (filtro em `edicao.md`, com `FF=$("$PY" "$S/comum.py" --ff)`). Salvar em `bruto/`.
+1. **Bruto:** pegar a tomada certa em `_originais`, cortar a fala e, se for vídeo de iPhone HDR, converter para BT.709 (filtro em `video.md`, com `FF=$("$PY" "$S/comum.py" --ff)`). Salvar em `bruto/`.
 2. **Legenda:** `"$PY" "$S/transcrever.py" "bruto/chamada N.mp4" legenda -- -dtw large.v3.turbo -nfa -ml 16 -sow -osrt -ojf`
    Isso gera `legenda.srt` (e um `legenda.json`, que não é usado).
-   Corrigir os erros direto no `legenda.srt` (termos técnicos, números como "1 ml"): é ele que vai para o vídeo. O campo `correcoes` do roteiro é só anotação do que foi corrigido. Na dúvida sobre um nome, pesquisar a grafia certa antes (`edicao.md`).
+   Corrigir os erros direto no `legenda.srt` (termos técnicos, números como "1 ml"): é ele que vai para o vídeo. O campo `correcoes` do roteiro é só anotação do que foi corrigido. Na dúvida sobre um nome, pesquisar a grafia certa antes (`nucleo.md`).
 3. **Roteiro** (`roteiro.json`, com caminhos relativos à pasta da chamada):
    ```json
    {
