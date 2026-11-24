@@ -1,6 +1,6 @@
 ---
 name: aula-curricular
-description: Edita as aulas curriculares gravadas no Meet ("Aula Curricular _ <sala> - <data> - Recording.mp4"). Corta o começo até o "boa noite" do professor, tira o intervalo e o silêncio do fim, põe a abertura animada, a moldura da pós e o card do professor acima da câmera, salva com o nome da tarefa e sobe na Panda (com a chave da API) ou diz onde subir cada aula. Use quando mandarem a tarefa da aula ("Inserir abertura animada… Nomear aula como… Anexar no Panda…") ou pedirem para editar aula curricular.
+description: Edita as aulas curriculares gravadas no Meet ("Aula Curricular _ <sala> - <data> - Recording.mp4"). Corta o começo até o "boa noite" do professor, tira o intervalo e o silêncio do fim, põe a abertura animada, a moldura da pós e o card do professor acima da câmera, salva com o nome da tarefa e diz onde subir cada aula na Panda. Use quando mandarem a tarefa da aula ("Inserir abertura animada… Nomear aula como… Anexar no Panda…") ou pedirem para editar aula curricular.
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ disable-model-invocation: true
 - Pasta: a linha `aulas:` de `"$PY" "$S/comum.py" --pastas` (aqui chamada de `<aulas>`). As gravações ficam na raiz dela e as prontas em `<aulas>/prontas/`. O trabalho de cada aula (transcrição, `aula.json`, card e folhas) fica numa subpasta própria, `<aulas>/trabalho/<DD-MM>-<sigla>-<professor>/`, para as aulas do lote não se sobrescreverem; os comandos abaixo rodam de dentro dela.
 
 ## O plano desta skill
-Uma tabela só, com uma linha por tarefa: aula, gravação achada, sigla e moldura, nome e gênero do card, destino na Panda e alerta quando o mês do destino não bate com a data da aula. As dúvidas vão nele: duas salas possíveis sem como decidir pelo quadro, sigla sem moldura, gênero impossível de deduzir pelo nome. Depois do ok, as seções 1 a 4 rodam para cada aula, uma atrás da outra, e a seção 5 fecha o lote com a tabela da Panda (com a chave da API, a seção 6 sobe cada aula).
+Uma tabela só, com uma linha por tarefa: aula, gravação achada, sigla e moldura, nome e gênero do card, destino na Panda e alerta quando o mês do destino não bate com a data da aula. As dúvidas vão nele: duas salas possíveis sem como decidir pelo quadro, sigla sem moldura, gênero impossível de deduzir pelo nome. Depois do ok, as seções 1 a 4 rodam para cada aula, uma atrás da outra, e a seção 5 fecha o lote com a tabela da Panda.
 
 **Limpar depois da aprovação:** as subpastas de `<aulas>/trabalho/`. Ficam a gravação original e a aula pronta.
 
@@ -36,7 +36,7 @@ Anexar a aula editada na plataforma PANDA VÍDEO no seguinte caminho: PPGVET > S
   - O nome vem da tarefa (a parte depois do último "|", sem o "Prof."). Se o nome inteiro não couber, o script usa só o primeiro e o último ("Gabriela Bittencourt").
   - O gênero é deduzido pelo nome e vai no `aula.json` como `"genero": "professora"` ou `"genero": "professor"` (o card escreve "Professora/Professor do Grupo PPG Educação"). Se o nome não deixar claro, perguntar no plano.
   - O `--pontos` (passo 3) gera o `card-conferir.png` ao lado do `aula.json`, para o Claude conferir o nome e o gênero antes de montar.
-- **Panda:** quem tem a chave da API no computador (`"$PY" "$S/panda.py" --chave` sai 0) recebe a aula subida direto (seção 6); os outros sobem à mão pela tabela da seção 5. Guardar, para cada aula, o destino que a tarefa diz ou o **link da pasta** da Panda, se a pessoa mandar (`https://dashboard.pandavideo.com.br/#/folders/<id>`). O caminho escrito na tarefa costuma vir errado: avisar se o mês do caminho não bater com a data da aula (exemplo: aula de 03/11 com "10.OUTUBRO" quando a pasta certa é "11.NOVEMBRO").
+- **Panda:** a pessoa sobe à mão (não há chave de API para todos). Guardar, para cada aula, o destino que a tarefa diz ou o **link da pasta** da Panda, se a pessoa mandar (`https://dashboard.pandavideo.com.br/#/folders/<id>`). O caminho escrito na tarefa costuma vir errado: avisar se o mês do caminho não bater com a data da aula (exemplo: aula de 03/11 com "10.OUTUBRO" quando a pasta certa é "11.NOVEMBRO").
 
 ## 1. Transcrever (em segundo plano, cerca de 4 min por hora de aula)
 `"$PY" "$S/transcrever.py" "<bruto>" aula --leitura -- -mc 0 -sns -osrt`
@@ -92,7 +92,7 @@ Para cada aula pronta, uma folha de quadros (`"$PY" "$S/folha.py" <aula>.mp4 fol
 - card com o nome e o gênero certos, acima da câmera;
 - volume (≈ -16 LUFS) e duração coerente com a gravação.
 
-No fim do lote, uma tabela só (sem a chave da Panda, é por ela que a pessoa sobe à mão):
+No fim do lote, uma tabela só, para a pessoa subir à mão:
 
 | aula (arquivo em `<aulas>/prontas/`) | pasta na Panda | título na Panda | duração | nota | observação |
 |---|---|---|---|---|---|
@@ -100,9 +100,3 @@ No fim do lote, uma tabela só (sem a chave da Panda, é por ela que a pessoa so
 - A pasta na Panda é o link que a pessoa mandou ou o caminho da tarefa, com o alerta quando o mês não bate com a data da aula.
 - O título na Panda é o título exato da tarefa, com `/` e `|` (no Windows o arquivo troca esses caracteres, a Panda não).
 - A Panda fica um tempo "processando" o vídeo depois do upload. Isso é normal.
-
-## 6. Subir na Panda (só com a chave da API)
-A chave fica no Keychain do Mac (conta `ppgvet`, serviço `panda-api`), nunca em `.env`, no chat nem no pacote. Para pôr ou trocar: `security add-generic-password -U -a ppgvet -s panda-api -w '<chave>'`, rodado pela própria pessoa.
-1. `"$PY" "$S/panda.py" "<link da pasta, ou o caminho da tarefa>" "<aula pronta>" "<título da tarefa>"` só confere o destino. Aceita o nível que a tarefa omite (`PPG VET > CURSOS DE PÓS-GRADUAÇÃO > …`) e diferença de espaço e acento ("10. OUTUBRO" = "10.OUTUBRO"). O destino vai no plano.
-2. Com o destino conferido, o mesmo comando com `--enviar`, em segundo plano. São 2 a 3 GB em pedaços; se a conexão cair, continua de onde parou. O título na Panda é o nome do arquivo (título da tarefa + ".mp4").
-3. No fim, ele mostra o `video_id` e o **link do player** (`player-vz-…/embed/?v=…`), que vai na tabela para a pessoa pôr na tarefa.
