@@ -36,26 +36,27 @@ Cópia, para o vídeo, do guia de marca da PPGVET (21/11/2026). Se o guia mudar,
 | PPG | azul `#1670C2` | teal `#00ADA3` | teal `#00ADA3` |
 
 ## Pós (sigla, nome e moldura da aula curricular)
-| sigla | nome | marca | moldura |
-|---|---|---|---|
-| RNGB | Reprodução, Nutrição e Gestão de Bovinos | PPGVET | BOVINOS |
-| NGB | Nutrição e Gestão de Bovinos | PPGVET | BOVINOS |
-| CMCB | Clínica Médica e Cirúrgica de Bovinos | PPGVET | BOVINOS |
-| GPL | Gestão na Pecuária Leiteira | PPGVET | BOVINOS |
-| SA | Sanidade Avícola | PPGVET | AVES |
-| PC | Postura Comercial | PPGVET | AVES |
-| PS | Produção de Suínos | PPGVET | SUÍNOS |
-| CBEA | Comportamento e Bem-Estar Animal | PPGVET | PETFOOD |
-| CMMV | Cannabis Medicinal na Medicina Veterinária | PPGVET | PETFOOD |
-| QSAOA | Qualidade e Segurança de Alimentos de Origem Animal | PPGVET | QUALIDADE |
-| SUZ | Saúde Única e Zoonoses | PPGVET | QUALIDADE |
-| GPERA | Gestão de Pessoas e Extensão Rural na Agroindústria | PPGVET | PADRÃO |
-| PPT | Piscicultura e Produção de Tilápia | PPGVET | perguntar |
-| MIFV | Medicina Integrativa e Fitoterapia Veterinária com Ênfase em Cães e Gatos | PPGVET | perguntar |
-| GIA | Gestão da Indústria de Alimentos Ênfase em Tecnologia e Inteligência Artificial | PPGVET | perguntar |
-| GCC | Gestão de Cooperativas de Crédito | PPG | PADRÃO |
-| CRCV | Crédito Rural, Cooperativismo e Vendas | PPG | PADRÃO |
-| GPDCA | Gestão de Pessoas e Desenvolvimento de Carreira no Agronegócio | PPG | perguntar |
-| MVPA | Marketing e Vendas na Produção Animal | PPG | perguntar |
+| sigla | nome | marca | moldura | cor |
+|---|---|---|---|---|
+| RNGB | Reprodução, Nutrição e Gestão de Bovinos | PPGVET | BOVINOS | `#580B55` |
+| NGB | Nutrição e Gestão de Bovinos | PPGVET | BOVINOS | `#00BEA0` |
+| CMCB | Clínica Médica e Cirúrgica de Bovinos | PPGVET | BOVINOS | `#016752` |
+| GPL | Gestão na Pecuária Leiteira | PPGVET | BOVINOS | `#6E5A22` |
+| SA | Sanidade Avícola | PPGVET | AVES | `#F94C56` |
+| PC | Postura Comercial | PPGVET | AVES | `#DA4C00` |
+| PS | Produção de Suínos | PPGVET | SUÍNOS | `#974D8A` |
+| CBEA | Comportamento e Bem-Estar Animal | PPGVET | PETFOOD | `#026E66` |
+| CMMV | Cannabis Medicinal na Medicina Veterinária | PPGVET | PETFOOD | `#41A514` |
+| QSAOA | Qualidade e Segurança de Alimentos de Origem Animal | PPGVET | QUALIDADE | `#086ED4` |
+| SUZ | Saúde Única e Zoonoses | PPGVET | QUALIDADE | `#004F5A` |
+| GPERA | Gestão de Pessoas e Extensão Rural na Agroindústria | PPGVET | PADRÃO | `#3C8246` |
+| PPT | Piscicultura e Produção de Tilápia | PPGVET | perguntar | `#0EA5E9` |
+| MIFV | Medicina Integrativa e Fitoterapia Veterinária com Ênfase em Cães e Gatos | PPGVET | perguntar | `#B05CE6` |
+| GIA | Gestão da Indústria de Alimentos Ênfase em Tecnologia e Inteligência Artificial | PPGVET | perguntar | `#E16E32` |
+| GCC | Gestão de Cooperativas de Crédito | PPG | PADRÃO | `#1E3A8A` |
+| CRCV | Crédito Rural, Cooperativismo e Vendas | PPG | PADRÃO | `#FB6D2D` |
+| GPDCA | Gestão de Pessoas e Desenvolvimento de Carreira no Agronegócio | PPG | perguntar | `#4F46E5` |
+| MVPA | Marketing e Vendas na Produção Animal | PPG | perguntar | `#E0287D` |
 
 A coluna moldura é a tabela `MOLDURA` do `scripts/aula.py` (o script é quem manda). Sigla fora dela: perguntar qual moldura usar.
+A cor (código exato, do guia de marca) é detalhe da pós: uma cor de pós por peça, e a cor da marca continua a principal. Texto em cima: branco quando dá 3:1 (letra grande), senão `#1A1A1A`.

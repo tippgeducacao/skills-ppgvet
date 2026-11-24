@@ -18,7 +18,7 @@ O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
 ## Ambiente
 - `PY=$(cat ~/.ppgvet/python)`, `S=<pasta scripts do pacote>` (a skill mostra o caminho) e `FF=$("$PY" "$S/comum.py" --ff)`, o ffmpeg completo (tem zscale, legenda e texto; o `ffprobe` fica na mesma pasta). Se `~/.ppgvet/python` não existir, rodar a skill `instalar` primeiro.
 - **Parte do kit sob demanda:** o kit instala só o essencial (ffmpeg, whisper, Python do pacote). Se um comando disser "Falta a parte 'X' do kit", avisar em uma linha o que vai baixar e quanto pesa, rodar `"$PY" "$S/instalar.py" --X` em segundo plano e repetir o comando. Sem pedir ok de novo. Se já der para saber no plano (Reels com motion, limpar voz), pôr o download no plano. Depois de `--motion`, rodar `/reload-plugins` para as skills `hyperframes` e `animate` aparecerem.
-- Pastas desta pessoa: `"$PY" "$S/comum.py" --pastas` (chamadas, aulas, conferir, cortes, edicoes, musicas, downloads).
+- Pastas desta pessoa: `"$PY" "$S/comum.py" --pastas` (chamadas, aulas, conferir, cortes, edicoes, musicas, downloads, artes).
 - Nos roteiros: `acervo:<caminho>` é uma peça do pacote (`acervo:logos-animadas/encerramento-ppgvet-vertical.mp4`) e `musicas:<arquivo>` é uma música da pasta `musicas/` da pessoa.
 
 ## Arquivo e versões

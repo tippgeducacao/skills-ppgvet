@@ -18,7 +18,7 @@ EXE = ".exe" if WIN else ""
 TIPOS = {"chamadas": "chamadas", "aulas": "aulas-curriculares", "conferir": "conferir-aula",
          "cortes": "cortes-live", "treinamentos": "treinamentos", "edicoes": "edicoes", "musicas": "musicas",
          "downloads": "downloads", "lives": "lives",
-         "patrocinadores": "patrocinadores"}
+         "patrocinadores": "patrocinadores", "artes": "artes"}
 USADAS = "musicas-usadas.txt"  # dentro de musicas/: data, música e vídeo, uma por linha
 
 

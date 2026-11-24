@@ -22,14 +22,23 @@ Lido quando a peça tem arte, cartão ou carrossel, no nível padrão e no capri
 ## Instagram (conferir na doc da Meta na hora: muda)
 | formato | tamanho | nota |
 |---|---|---|
-| feed | 1080x1350 (4:5) | a grade do perfil mostra 3:4 (1080x1440): manter o essencial no centro |
+| feed | 1080x1350 (4:5) | o app aceita até 3:4 (1080x1440), mas a API (agendador do sistema) só até 4:5: na dúvida, 4:5. A grade do perfil mostra 3:4: essencial no centro |
 | carrossel | todos os itens na proporção do primeiro | 1º = gancho, último = CTA, mesmo grid em todos |
 | stories e Reels | 1080x1920 | margens no `video.md` |
+
+## O que os nossos perfis ensinam (estudo de 24/11/2026: 100 posts e as artes do Carlos e da Kelrin)
+- **Foto e vídeo real vencem:** Reels de campo alcançaram 34 a 50 mil (mediana 2,9 mil); carrossel só com fotos da turma, 28,8 mil. O pior: arte só de texto com foto de banco. Pessoa e lugar de verdade sempre que houver.
+- **Molde da casa:** fundo claro `#FAF9FB` (grade leve), logo no topo ao centro, margem de ~10%, até 3 níveis de texto em Montserrat (título Black em caixa alta, apoio Bold, detalhe), bloco "PÓS-GRADUAÇÃO │ nome" (`acervo/titulos-pos`), professor em cartão ou recortado com titulação certa (só Dr./Dra., Me./Ma.).
+- **Cor:** só os códigos do `marca.md` (as artes antigas derivaram: magenta `#B8569A`/`#CE5A9B`, teal `#00A19C`, azul PPG `#005EF2`; não copiar). Teal e magenta de acento: letra branca sobre o teal `#00B7AB` dá 2,6:1 e sobre o magenta 3,95:1, reprovado para letra pequena; texto em cima vai na caixa escura `#1A1A1A`.
+- **Tamanho no celular:** a peça de 1080 px aparece com ~390 pt de largura (×0,36). Letra abaixo de ~52 px em negrito (ou ~64 px normal) é pequena no celular: contraste de 4,5:1.
+- **Texto:** "Pós-Graduação", nunca "MBA"; números da marca iguais em toda peça; data sem crase ("23 a 25"); dia da semana tirado da data; grafia do nome conferida (foto, site). PPG e PPGVET nunca na mesma peça.
+- **Carrossel:** mesmo grid em todas as lâminas; 1ª = gancho ou capa que muda a cada edição (capa igual toda semana não dá novidade), meio = uma ideia por lâmina, última = chamada; "ARRASTA PARA O LADO" no rodapé, no mesmo lugar.
 
 ## O que denuncia cara de IA ou de template
 - Grade de cards iguais (ícone + título + 2 linhas), tudo centralizado e do mesmo tamanho, sem hierarquia.
 - Degradê roxo-azul neon, vidro fosco, bolhas 3D genéricas, brilho e sombra borrada grande.
 - Fontes demais, pesos aleatórios, texto longo em arte de feed.
 - Pessoa de banco, mockup genérico, ícone decorativo sem função.
+- Imagem de IA fingindo cena (bicho de camisa, porco astronauta), interface falsa (card de Threads, app Notas), emoji na arte, neon e vidro fosco, 3 famílias de fonte na mesma peça.
 
 Fontes: Müller-Brockmann, *Grid Systems in Graphic Design*; Bringhurst, *The Elements of Typographic Style*; Albers, *Interaction of Color*; [WCAG 1.4.3](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html). Conferido em 24/11/2026.
