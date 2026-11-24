@@ -1,6 +1,6 @@
 # Núcleo (vale para todas as skills)
 
-Cada skill traz só o próprio passo a passo; o que vale para todas está aqui. Por assunto, nesta mesma pasta e lidos só quando a skill ou o nível manda: `marca.md` (marca, peças, pós), `video.md` (corte, cor, áudio, motion, Instagram), `bancos-e-referencias.md` (referência, inserções, música e sons), `antislop-midia.md` (sinais de "feito por IA", conferido em toda entrega) e `oficio/` (como o profissional decide: `video`, `foto`, `design`, `motion`, `som`, `copy`), pelo nível de esforço abaixo.
+Cada skill traz só o próprio passo a passo; o que vale para todas está aqui. O essencial que vale até sem skill (marca, regras duras, qual skill abrir) está no `sempre.md`, que entra sozinho em toda sessão e não se repete aqui. Por assunto, nesta mesma pasta e lidos só quando a skill ou o nível manda: `marca.md` (marca, peças, pós), `video.md` (corte, cor, áudio, motion, Instagram), `bancos-e-referencias.md` (referência, inserções, música e sons), `antislop-midia.md` (sinais de "feito por IA", conferido em toda entrega) e `oficio/` (como o profissional decide: `video`, `foto`, `design`, `motion`, `som`, `copy`), pelo nível de esforço abaixo.
 
 ## Nível de esforço
 O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
@@ -37,8 +37,7 @@ Exemplo: um Reels de pós é o `editar-video` montando, a `copy` escrevendo perg
 - Nos roteiros: `acervo:<caminho>` é uma peça do pacote (`acervo:logos-animadas/encerramento-ppgvet-vertical.mp4`) e `musicas:<arquivo>` é uma música da pasta `musicas/` da pessoa.
 
 ## Arquivo e versões
-- **Original nunca é mexido.** Tudo sai em arquivo novo.
-- **Versão nova nunca sobrescreve:** `-v2`, `-v3`… Versão com defeito: avisar e perguntar antes de apagar.
+- **Original e versões** (`sempre.md`): tudo sai em arquivo novo, `-v2`, `-v3`… Versão com defeito: avisar e perguntar antes de apagar.
 - **Nome de arquivo:** minúsculo, com hífen, do geral ao específico (`assunto-tema-v1.mp4`). Exceções: a aula curricular usa o título da tarefa, e a chamada usa o padrão de pastas dela (`CHAMADA N/`, `chamada <curso> N - <tema>.mp4`).
 - **Menor, mas nunca mais feio:** compressão para site ou WhatsApp é H.264 `-crf 23 -preset slow -movflags +faststart`, conferindo que não piorou.
 - **Organização:** o trabalho fica na pasta padrão do tipo (`--pastas`), com o nome padrão; a entrega vai onde a skill diz. Nada solto fora disso.
@@ -56,9 +55,8 @@ Exemplo: um Reels de pós é o `editar-video` montando, a `copy` escrevendo perg
 4. **Revisão no fim:** tudo pronto de uma vez (folha de quadros, nota de cada vídeo em uma linha e o que foi feito) para a pessoa aprovar ou pedir ajuste. Ajuste vira versão nova (`-v2`).
 5. **Limpar depois da aprovação:** apagar só o que a própria skill criou de intermediário (cada skill lista): `tmp/` e `hf/` dos Reels, `posts/.tmp-post/` dos cortes, transcrições de trabalho, folhas de quadros e prévias. **Nunca** o original, a entrega, a legenda usada no vídeo nem os roteiros (`.json`), que servem para refazer.
 
-- **Não inventar visual, texto, marca nem nome de pessoa:** perguntar no plano. Nome do curso, arte de CTA e grafia de nome vêm da pessoa ou de fonte confiável.
+- **Não inventar** (`sempre.md`): perguntar no plano. Nome do curso, arte de CTA e grafia de nome vêm da pessoa ou de fonte confiável.
 - **Perguntas** em caixas de opção (AskUserQuestion): até 4 por vez, a recomendada primeiro, cada uma compreensível sozinha. Texto que só a pessoa escreve (título, CTA, nome): opção "manter como está" e o texto vem no "Other".
-- **IA generativa e banco** (dono desta regra): IA (imagem, vídeo, voz, som) só em último caso, com aprovação da pessoa; nem IA nem banco fingindo aluno, professor ou sede.
 - **Doc oficial:** ferramenta, formato de rede social ou plataforma segue a documentação oficial, conferida na hora quando o detalhe pode ter mudado (limite, formato, licença). Dizer qual doc foi usada.
 
 ## PC e tokens

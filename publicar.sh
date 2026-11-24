@@ -8,6 +8,8 @@ PY="${PY:-$(cat "$HOME/.ppgvet/python" 2>/dev/null || echo python3)}"  # PY=<pyt
 for s in comum transcrever cortar chamada aula treinamento conferir post instalar retocar checar hf live_titulos live_qr sons imagem aulas_semana checar_texto reels arte; do
   printf "teste %-12s " "$s"; "$PY" "$S/$s.py" --teste
 done
+# sempre.md entra em toda sessão de quem instalou: cada caractere custa contexto sempre
+n=$(wc -m < plugins/ppgvet/regras/sempre.md); [ "$n" -le 3000 ] || { echo "sempre.md com $n caracteres (máximo 3000)"; exit 1; }
 command -v claude >/dev/null && claude plugin validate . && claude plugin validate plugins/ppgvet
 [ -z "$(git status --porcelain)" ] || { echo "Há mudanças sem commit: faça o commit antes de publicar"; exit 1; }
 git push

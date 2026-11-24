@@ -62,4 +62,4 @@ Minúsculo, palavras com hífen, sem acento nem número, a partir do tema ("As p
 | `acervo/titulos-pos/titulo-pos-<sigla>-branco.png` | todo branco (moldura do Instagram) |
 | `acervo/live/titulos-overlay/titulo-live-<sigla>.png` | vMix: 1920x1080 transparente, título no topo (~88 px, a ~30 px do topo) |
 
-Desenho: Montserrat, "PÓS GRADUAÇÃO | NOME", quebras de linha iguais às dos criativos, sem "MBA" (`marca.md`). **Pós nova ou nome mudou:** pôr a sigla e as linhas em `POS` do `scripts/live_titulos.py`, rodar `"$PY" "$S/live_titulos.py" <sigla>` e publicar o pacote (quem cuida do pacote).
+Desenho: Montserrat, "PÓS GRADUAÇÃO | NOME", quebras de linha iguais às dos criativos, sem "MBA" (`sempre.md`). **Pós nova ou nome mudou:** pôr a sigla e as linhas em `POS` do `scripts/live_titulos.py`, rodar `"$PY" "$S/live_titulos.py" <sigla>` e publicar o pacote (quem cuida do pacote).

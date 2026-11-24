@@ -1,0 +1,17 @@
+{
+  "description": "Põe no contexto, no início de cada sessão, o essencial da marca e o mapa das skills (regras/sempre.md)",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf 'Pacote ppgvet: %s\\n\\n' \"${CLAUDE_PLUGIN_ROOT}\"; cat \"${CLAUDE_PLUGIN_ROOT}/regras/sempre.md\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

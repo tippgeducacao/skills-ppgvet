@@ -25,7 +25,7 @@ Fluxo de 10 a 15 min (nível caprichado, ou quando pedirem):
 
 ## Inserções (imagem ou vídeo de apoio)
 - Só quando somam. Sem imagem boa, o vídeo sai sem inserção: o ritmo vem do zoom e dos cartões.
-- Sempre do assunto real (banco e IA: regra no `nucleo.md`). CC0 libera o direito autoral, não o direito de imagem de quem aparece: pessoa reconhecível só em contexto neutro e real.
+- Sempre do assunto real (banco e IA: regra no `sempre.md`). CC0 libera o direito autoral, não o direito de imagem de quem aparece: pessoa reconhecível só em contexto neutro e real.
 - Sem logo ou embalagem de outra marca à vista (parece patrocínio); se não der para evitar, desfocar.
 - Onde procurar, nesta ordem:
   1. Drive de insumos da PPGVET (link em "Música", abaixo).

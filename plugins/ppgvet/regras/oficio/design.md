@@ -28,10 +28,10 @@ Lido quando a peça tem arte, cartão ou carrossel, no nível padrão e no capri
 
 ## O que os nossos perfis ensinam (estudo de 24/11/2026: 100 posts e as artes dos designers da casa)
 - **Foto e vídeo real vencem:** Reels de campo alcançaram 34 a 50 mil (mediana 2,9 mil); carrossel só com fotos da turma, 28,8 mil. O pior: arte só de texto com foto de banco. Pessoa e lugar de verdade sempre que houver.
-- **Molde da casa:** fundo claro `#FAF9FB` (grade leve), logo no topo ao centro, margem de ~10%, até 3 níveis de texto em Montserrat (título Black em caixa alta, apoio Bold, detalhe), bloco "PÓS-GRADUAÇÃO │ nome" (`acervo/titulos-pos`), professor em cartão ou recortado, com a titulação pela regra do `oficio/copy.md`.
+- **Molde da casa:** fundo claro `#FAF9FB` (grade leve), logo no topo ao centro, margem de ~10%, até 3 níveis de texto em Montserrat (título Black em caixa alta, apoio Bold, detalhe), bloco "PÓS-GRADUAÇÃO │ nome" (`acervo/titulos-pos`), professor em cartão ou recortado, com a titulação pela regra do `sempre.md`.
 - **Cor:** só os códigos do `marca.md` (as artes antigas derivaram: magenta `#B8569A`/`#CE5A9B`, teal `#00A19C`, azul PPG `#005EF2`; não copiar). Teal e magenta de acento: letra branca sobre o teal `#00B7AB` dá 2,6:1 e sobre o magenta 3,95:1, reprovado para letra pequena; texto em cima vai na caixa escura `#1A1A1A`.
 - **Tamanho no celular:** a peça de 1080 px aparece com ~390 pt de largura (×0,36). Letra abaixo de ~52 px em negrito (ou ~64 px normal) é pequena no celular: contraste de 4,5:1.
-- **Texto:** regras de texto e titulação em `oficio/copy.md`; marcas, exceções e "nunca MBA" no `marca.md`. Na arte: data sem crase ("23 a 25"), dia da semana tirado da data.
+- **Texto:** regras de texto em `oficio/copy.md`; titulação e "nunca MBA" no `sempre.md`; marcas e exceções no `marca.md`. Na arte: data sem crase ("23 a 25"), dia da semana tirado da data.
 - **Carrossel:** mesmo grid em todas as lâminas; 1ª = gancho ou capa que muda a cada edição (capa igual toda semana não dá novidade), meio = uma ideia por lâmina, última = chamada; "ARRASTA PARA O LADO" no rodapé, no mesmo lugar.
 
 ## O que denuncia cara de IA ou de template

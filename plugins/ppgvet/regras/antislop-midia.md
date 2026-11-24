@@ -20,6 +20,6 @@ Conferido em toda entrega, antes da nota. Cada sinal aparecendo derruba a nota d
 | degradê com faixas em fundo escuro | grão leve ou `deband` |
 | primeiro quadro preto ou vazio | conferir o primeiro quadro na folha |
 | transição de template (star wipe, cubo, glitch) | tabela de transições de `oficio/video.md` |
-| imagem de banco ou IA fingindo aluno, professor ou sede | proibido (`nucleo.md`) |
+| imagem de banco ou IA fingindo aluno, professor ou sede | proibido (`sempre.md`) |
 | grade de cards iguais, tudo centralizado | hierarquia de 3 níveis e grid (`oficio/design.md`) |
 | "mais alto parece melhor" | comparar versões no mesmo volume |

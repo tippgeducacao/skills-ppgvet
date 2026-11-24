@@ -1,6 +1,6 @@
 # Ofício: copy (texto de marketing)
 
-Lido pela skill `copy` e por toda peça com texto (arte, legenda, WhatsApp, anúncio). Marca, exceções, público e dor de cada pós, tom, frases, provas e botões: `marca.md`. Esta regra é dona da titulação e das regras de texto. Fonte: [O] doc oficial, [L] livro clássico, [D] dado dos nossos perfis (100 legendas × alcance, salvamentos e compartilhamentos, nov/2026), [E] regra da equipe, [N] proposta da casa.
+Lido pela skill `copy` e por toda peça com texto (arte, legenda, WhatsApp, anúncio). Marca, exceções, público e dor de cada pós, tom, frases, provas e botões: `marca.md`. Esta regra é dona das regras de texto; titulação e "nunca MBA" são do `sempre.md`. Fonte: [O] doc oficial, [L] livro clássico, [D] dado dos nossos perfis (100 legendas × alcance, salvamentos e compartilhamentos, nov/2026), [E] regra da equipe, [N] proposta da casa.
 
 ## O que funciona nos nossos perfis [D]
 | achado | número | regra |
@@ -44,7 +44,6 @@ Lido pela skill `copy` e por toda peça com texto (arte, legenda, WhatsApp, anú
 | anúncio | texto principal até 125 caracteres, título até 40 | dor em cena ou prova → oferta → ação | [O] [Guia de anúncios da Meta](https://www.facebook.com/business/ads-guide/update/image/instagram-feed); nunca afirmar atributo pessoal de quem lê (saúde, finanças, idade: "Você está endividado?") ([O] [Padrões de publicidade](https://transparency.meta.com/policies/ad-standards/objectionable-content/privacy-violations-personal-attributes/)). É proposta para o responsável pelo tráfego |
 
 ## Regras da casa
-- **Titulação** [E] (dona desta regra): só Dr./Dra. (doutorado) e Me./Ma. (mestrado), comprovados (currículo, Lattes). Sem comprovação: só o nome, e avisar. Nunca Prof., Profa., M.V., Esp., PhD.
 - **Números e provas** [E]: só os do `marca.md`, na forma dele ("12.000+ alunos ativos", nunca "12 mil", "+12.000" ou "12K"; "300+ professores"; "Nota máxima (5) no MEC"). Nada de "formados" no lugar de "ativos". Número sem fonte não entra. Norma, portaria e estudo: conferir na fonte oficial antes.
 - **Nomes** [E]: pós com o nome exato do `marca.md`; professor e convidado com a grafia conferida (foto, site, Lattes); marcas e exceções pelo `marca.md`.
 - **Hashtags** [E]: até 5, sem acento (`#medicinaveterinaria`, `#ppgeducacao`), grafia conferida.

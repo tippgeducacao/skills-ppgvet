@@ -11,7 +11,7 @@ description: Carrossel "Aulas da semana" do Instagram da PPGVET/PPG (imagem, nã
 
 ## O que preciso de você
 Se a pessoa chamou sem a lista (ou é a primeira vez), explicar em poucas linhas:
-- **A lista da semana**, colada, uma aula por linha: pós, data, horário, professor e o tema. Titulação: regra do `oficio/copy.md` (sem comprovação, só o nome).
+- **A lista da semana**, colada, uma aula por linha: pós, data, horário, professor e o tema. Titulação: regra do `sempre.md` (sem comprovação, só o nome).
 - **As fotos dos professores**: a pasta onde estão (nome-sobrenome.jpg) ou os arquivos. Sem foto, a lâmina não sai: nunca foto de banco nem gerada.
 - Exemplo: *"faz o carrossel da semana"* + `CBEA | 23/11 | 19h | Dra. Ana Souza | Bem-estar na criação`.
 

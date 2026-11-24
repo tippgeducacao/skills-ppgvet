@@ -77,4 +77,4 @@ Na primeira vez, o `fundo` baixa o modelo de recorte (~1 GB; um para pessoa, out
 - Nota de 0 a 10 em: natural (não parece editada), luz, cor e pele, nitidez, enquadramento. Abaixo de 8: refazer com outra intensidade. Não melhorou: dizer isso e entregar o original.
 - Mostrar o antes e depois para a pessoa com o que foi feito, uma linha por ajuste (exemplo: "sombras +25: o rosto estava no escuro").
 - Limpar depois da aprovação: as folhas de antes e depois e os arquivos intermediários (ampliada antes do retoque etc.). Ficam o original e a entrega.
-- Imagem de terceiros: sempre do assunto real (banco e IA: `nucleo.md`), com `.origem.txt` ao lado (link e licença).
+- Imagem de terceiros: sempre do assunto real (banco e IA: `sempre.md`), com `.origem.txt` ao lado (link e licença).

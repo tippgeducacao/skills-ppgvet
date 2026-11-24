@@ -9,7 +9,7 @@ LIMITES = {"legenda": 2200, "whatsapp": 600, "anuncio": 600, "arte": 400}  # leg
 VISIVEL = 125  # a legenda e o texto principal do anúncio mostram ~125 caracteres antes do "mais"
 
 FALHAS = [  # (regex, por quê)
-    (r"\bMBA\b", 'é "Pós-Graduação", nunca "MBA" (marca.md)'),
+    (r"\bMBA\b", 'é "Pós-Graduação", nunca "MBA" (sempre.md)'),
     (r"—|–", "sem travessão (marca.md)"),
     (r"\b(Prof|Profa|Profª|M\.\s?V|Esp)\.\s+[A-ZÁÉÍÓÚ]", "titulação só Dr./Dra. e Me./Ma.; sem comprovação, só o nome (regras de copy da equipe)"),
     (r"(?i)ouça agora nas principais plataformas", "frase proibida pelas regras de copy da equipe"),
