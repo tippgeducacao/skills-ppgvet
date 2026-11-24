@@ -63,10 +63,10 @@ Aplicar: `"$PY" "$S/retocar.py" aplicar foto.jpg foto-retocada.jpg '{"auto_branc
 |---|---|
 | ampliar foto | `"$PY" "$S/imagem.py" ampliar in.jpg out.png` (4x; `2` ou `3` no fim se 4x for demais) |
 | ampliar arte ou ilustração | `"$PY" "$S/imagem.py" ampliar in.png out.png --arte` |
-| tirar fundo | `"$PY" "$S/imagem.py" fundo in.jpg out.png` (pessoa: `--pessoa`, que recorta melhor cabelo e ombro) |
+| tirar fundo | `"$PY" "$S/imagem.py" fundo in.jpg out.png` (pessoa: `--pessoa`, que recorta melhor cabelo e ombro e limpa o halo do fundo antigo) |
 | cortar num ponto exato | `"$FF" -i in.png -vf "crop=w:h:x:y,scale=W:-1" out.png` (enquadrar pelo rosto numa proporção: `recorte` do retoque) |
 
-Na primeira vez, o `fundo` baixa o modelo de recorte (de ~170 MB a ~1 GB com `--pessoa`). Avisar que demora.
+Na primeira vez, o `fundo` baixa o modelo de recorte (~1 GB; um para pessoa, outro para objeto). Avisar que demora.
 
 ## 5. Conferir, dar nota e entregar
 - Antes e depois lado a lado (mesma altura): `"$FF" -i in.jpg -i out.jpg -filter_complex "[0]scale=-1:700[a];[1]scale=-1:700[b];[a][b]hstack" cmp.jpg` e abrir.

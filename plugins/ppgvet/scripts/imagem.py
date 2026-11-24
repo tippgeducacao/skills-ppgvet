@@ -20,7 +20,9 @@ def comando(acao, entrada, saida, extra):
         rembg = Path(sys.executable).with_name(f"rembg{EXE}")  # roda com o Python do pacote, onde o rembg está
         if not rembg.exists():
             falta_parte("foto")
-        return [str(rembg), "i", *(["-m", "birefnet-portrait"] if "--pessoa" in extra else []), entrada, saida]
+        # modelo sempre explícito: o padrão do rembg 2.0.8x é o BRIA RMBG-2.0, de licença não comercial
+        modelo = ["-m", "birefnet-portrait", "-dc"] if "--pessoa" in extra else ["-m", "birefnet-general"]
+        return [str(rembg), "i", *modelo, entrada, saida]
     sys.exit(__doc__)
 
 
