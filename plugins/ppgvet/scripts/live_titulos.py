@@ -21,7 +21,7 @@ POS = {  # sigla: (linhas, sub) — "|" quebra a linha
     'suz': ('Saúde Única|e Zoonoses', ''),
     'gpera': ('Gestão de Pessoas|e Extensão Rural|na Agroindústria', ''),
     'ppt': ('Piscicultura e|Produção de Tilápia', ''),
-    'mifv': ('Medicina Integrativa e|Fitoterapia Veterinária', ''),
+    'mifv': ('Medicina Integrativa e|Fitoterapia Veterinária', 'com Ênfase em Cães e Gatos'),
     'gia': ('Gestão da|Indústria de|Alimentos', 'Ênfase em Tecnologia|e Inteligência Artificial'),
     'gcc': ('Gestão de|Cooperativas|de Crédito', ''),
     'crcv': ('Crédito Rural,|Cooperativismo|e Vendas', ''),
