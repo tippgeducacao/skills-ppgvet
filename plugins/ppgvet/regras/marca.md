@@ -17,6 +17,7 @@ Cópia, para o vídeo, do guia de marca da PPGVET (21/11/2026). Se o guia mudar,
 | encerramento PPGVET | `logos-animadas/encerramento-ppgvet-vertical.mp4` (1080x1920, 6 s, "Mais que uma formação, uma transformação!") | fim de vídeo vertical PPGVET. Com música, o som da logo sai |
 | encerramento PPG (logo 3D PPG) | `logos-animadas/encerramento-ppg-vertical.mp4` (1080x1920, 6 s) | fim de vídeo vertical PPG |
 | logo 3D PPGVET | `logos-animadas/logo-ppgvet-horizontal.mp4` (1920x1080, 15 s, mudo) | abertura e fim de vídeo horizontal |
+| logo 3D PPG | `logos-animadas/logo-ppg-horizontal.mp4` (1920x1080, 15 s, mudo) | abertura e fim de vídeo horizontal da PPG |
 | abertura de aula | `intro/PPGVET.mov` (10,7 s, com slogan) | toda aula curricular, mesmo de pós da PPG |
 | molduras das pós | `molduras-aula/<AVES, BOVINOS, PADRÃO, PETFOOD, QUALIDADE, SUÍNOS>.png` | aula curricular (qual moldura de cada pós: tabela abaixo) |
 | moldura do post de corte | `molduras/moldura-post-corte-ppgvet.png` e `-ppg.png` (1080x1920: avatar, nome e @ do Instagram; o `post.py` escreve pós e título por cima) | posts da `cortes-live` (`"marca"` no `post.json`) |
