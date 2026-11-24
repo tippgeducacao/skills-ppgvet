@@ -20,7 +20,7 @@ MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "a
 MARCA = {"PPGVET": {"cor": "#D24BA8", "acao": "#00B7AB", "logo": "logos/ppgvet/logo-ppgvet.png"},
          "PPG": {"cor": "#1670C2", "acao": "#00ADA3", "logo": "logos/ppg/logo-ppg-educacao.png"}}
 ESCURO, FUNDO = "#1A1A1A", "#FAF9FB"
-TITULOS = ("Dr.", "Dra.", "Me.", "Ma.")  # só estas (regra de texto da equipe); sem titulação: "Prof."
+TITULOS = ("Dr.", "Dra.", "Me.", "Ma.")  # só estas (regra de copy da equipe); sem titulação comprovada, só o nome
 CAL = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
        'stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>')
 REL = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
@@ -56,17 +56,18 @@ def slug(s):
 
 
 def titulo_e_nome(prof):
-    """'Dra. Ana Souza' -> ('Dra.', 'Ana Souza'); erro para titulação fora do padrão"""
+    """'Dra. Ana Souza' -> ('Dra.', 'Ana Souza', None). Fora de Dr./Dra./Me./Ma. a titulação sai e fica só o nome
+    (nunca "Prof.", "Esp.", "M.V.", "PhD"), com aviso quando era uma que pode esconder mestrado ou doutorado"""
     prof = " ".join(prof.split())
-    m = re.match(r"^(Dra?|Ma?|Me|Prof[aª]?|Esp|PhD)\.?\s+(.+)$", prof, re.I)
+    m = re.match(r"^(Dra?|Ma?|Me|Prof[aª]?|Esp|M\.?\s?V|PhD)\.?\s+(.+)$", prof, re.I)
     if not m:
-        return "Prof.", prof
+        return "", prof, None
     t = m.group(1).capitalize() + "."
     if t in TITULOS:
-        return t, m.group(2)
-    if t in ("Prof.", "Profa.", "Profª."):
-        return "Prof.", m.group(2)
-    raise ValueError(f'titulação "{m.group(1)}" fora do padrão (só {", ".join(TITULOS)}): {prof}')
+        return t, m.group(2), None
+    if t.startswith("Prof"):
+        return "", m.group(2), None
+    return "", m.group(2), f'"{m.group(1)}" não entra (só Dr./Dra., Me./Ma. comprovados): ficou só o nome'
 
 
 def achar_foto(nome, fotos):
@@ -115,11 +116,9 @@ def preparar(d, fotos=None):
         if not h:
             erros.append(f'aula {i}: horário "{a.get("hora")}" (use 19h ou 19h30)')
             continue
-        try:
-            tit, nome = titulo_e_nome(a["professor"])
-        except ValueError as e:
-            erros.append(f"aula {i}: {e}")
-            continue
+        tit, nome, aviso_tit = titulo_e_nome(a["professor"])
+        if aviso_tit:
+            avisos.append(f"aula {i}: {aviso_tit}")
         foto, aviso = (Path(a["foto"]), None) if a.get("foto") else achar_foto(nome, fotos)
         if aviso:
             avisos.append(f"aula {i}: {aviso}")
@@ -185,6 +184,7 @@ def lamina(m, a, tam=40):
     tarja = a["cor"] or cor  # módulo comum a várias pós: a cor da marca
     d = a["data"]
     fonte_tema = 36 if len(a["tema"]) <= 75 else 32
+    rotulo = f"<p>{a['titulo']}</p>" if a["titulo"] else ""  # sem titulação comprovada, só o nome
     return base(m) + f"""<style>
 .col{{position:absolute;top:232px;bottom:48px;left:0;right:0;display:flex;flex-direction:column}}
 .pos{{text-align:center;font-weight:900;font-size:98px;line-height:1.05;letter-spacing:-1px;color:{cor};text-transform:uppercase}}
@@ -199,7 +199,7 @@ def lamina(m, a, tam=40):
 .linha svg{{width:58px;height:58px;flex:none;color:{acao}}}
 .rot{{font-weight:600;font-size:31px;text-transform:uppercase;line-height:1.1}} .val{{font-weight:800;font-size:36px;text-transform:uppercase;line-height:1.1;white-space:nowrap}}
 .prof{{margin:44px 0 0 66px}}
-.prof p:first-child{{font-weight:600;font-size:32px}} .prof p:last-child{{font-weight:800;font-size:44px;line-height:1.08}}
+.prof p{{font-weight:600;font-size:32px}} .prof p:last-child{{font-weight:800;font-size:44px;line-height:1.08}}
 .tema{{margin:36px 90px 0;text-align:center;font-size:{fonte_tema}px;line-height:1.2;text-transform:uppercase}}
 .tema b{{font-weight:900;box-shadow:inset 0 -12px 0 {cor}55}}
 .col .arrasta{{position:static;margin:auto {MARGEM}px 0;padding-top:24px}}
@@ -207,7 +207,7 @@ def lamina(m, a, tam=40):
 <div class=meio><div class=foto><img src="{a['foto'].resolve().as_uri()}"></div>
 <div class=dir><div class=quando data-m=quando><div class=linha>{CAL}<div><p class=rot>{DIAS[d.weekday()]}</p><p class=val data-m=data>{d.day} de {MESES[d.month - 1]}</p></div></div>
 <div class=linha>{REL}<div><p class=rot>Horário</p><p class=val data-m=hora>às {a['hora']}</p></div></div></div>
-<div class=prof data-m=prof><p>{a['titulo']}</p><p>{a['nome']}</p></div></div></div>
+<div class=prof data-m=prof>{rotulo}<p>{a['nome']}</p></div></div></div>
 <p class=tema data-m=tema><b>Aula:</b> {a['tema']}</p>
 <p class=arrasta data-m=arrasta><b>Arrasta</b> para o lado</p></div>""" + MEDIR
 
@@ -287,14 +287,11 @@ def teste():
     assert letra_sobre("#00BEA0") == ESCURO and letra_sobre("#026E66") == "#FFFFFF"
     assert max(contraste(c, "#DA4C00") for c in ("#FFFFFF", ESCURO)) < 4.5  # laranja da PC: vai com letra grande
     assert contraste("#FFFFFF", "#D24BA8") < 4.5 < contraste("#FFFFFF", ESCURO)
-    assert titulo_e_nome("Dra. Ana Souza") == ("Dra.", "Ana Souza")
-    assert titulo_e_nome("Prof. João Silva") == ("Prof.", "João Silva") and titulo_e_nome("Ana Souza") == ("Prof.", "Ana Souza")
-    for ruim in ("PhD João Silva", "Esp. Ana Souza"):
-        try:
-            titulo_e_nome(ruim)
-            raise SystemExit(f"devia recusar: {ruim}")
-        except ValueError:
-            pass
+    assert titulo_e_nome("Dra. Ana Souza") == ("Dra.", "Ana Souza", None)
+    assert titulo_e_nome("Prof. João Silva") == ("", "João Silva", None) and titulo_e_nome("Ana Souza") == ("", "Ana Souza", None)
+    for ruim in ("PhD João Silva", "Esp. Ana Souza", "M.V. Ana Souza"):
+        tit, nome, aviso = titulo_e_nome(ruim)
+        assert tit == "" and aviso and " " in nome and not nome.startswith(("M.", "V ")), (ruim, nome)
     with tempfile.TemporaryDirectory() as t:
         from PIL import Image
         Image.new("RGB", (600, 800), "#888").save(f"{t}/ana-maria-souza.jpg")

@@ -5,4 +5,4 @@ timeout_seconds: 300
 allowed_tools: [Skill, Read, Glob, Grep]
 ---
 
-escreve uma legenda de post sobre mastite em vacas leiteiras, só o texto
+qual a diferença entre mastite clínica e subclínica em vacas leiteiras?

@@ -1,6 +1,6 @@
-# Marca nos vídeos
+# Marca (vídeo, arte e texto)
 
-Cópia, para o vídeo, do guia de marca da PPGVET (21/11/2026). Se o guia mudar, este arquivo muda junto.
+Cópia do guia de marca da PPGVET para as skills da equipe (21/11/2026; texto em 24/11/2026). Se o guia mudar, este arquivo muda junto.
 
 ## Duas marcas, nunca misturadas
 - **PPGVET** (veterinária) e **PPG Educação** (gestão e cooperativismo). Vídeo da PPG fecha com a logo da PPG, vídeo da PPGVET com a da PPGVET.
@@ -60,3 +60,42 @@ Cópia, para o vídeo, do guia de marca da PPGVET (21/11/2026). Se o guia mudar,
 
 A coluna moldura é a tabela `MOLDURA` do `scripts/aula.py` (o script é quem manda). Sigla fora dela: perguntar qual moldura usar.
 A cor (código exato, do guia de marca) é detalhe da pós: uma cor de pós por peça, e a cor da marca continua a principal. Texto em cima: branco quando dá 3:1 (letra grande), senão `#1A1A1A`.
+
+## Texto (cópia do guia de marca, 24/11/2026; mudou lá, muda aqui)
+
+### Público e dor (o foco do texto de cada pós)
+Público: 23 a 45 anos, já formado e trabalhando, que descobriu a lacuna na prática. Dor-mãe: "a graduação não me preparou para o que o mercado cobra hoje". Escrever a dor em cena concreta e mostrar que a pós resolve pela prática.
+
+| sigla | dor | o que queremos que ele alcance |
+|---|---|---|
+| CMCB | medo de chegar na fazenda e não saber operar; perde o cliente para quem faz | segurança para executar a cirurgia e a clínica no campo |
+| NGB | nunca formulou dieta em software; recebe o laudo e não sabe usar (nutrição = até 50% do custo) | formular e gerir a nutrição com números |
+| RNGB | domina uma área e trava quando o produtor pergunta das outras | ser o profissional completo de reprodução, nutrição e gestão |
+| PS | entrou na indústria sem nunca ter pisado numa granja; não sabe liderar a equipe | dominar a granja, a reprodução e a equipe |
+| SA | uma disciplina de avicultura na faculdade; desgaste com o integrado; teto em 1 ou 2 anos | crescer na sanidade avícola e na conversa com o produtor |
+| PC | decide por intuição; não lê curva de postura; mercado virando cage-free | decidir por técnica na cadeia do ovo |
+| QSAOA | nunca fez PAC nem APPCC do zero; o RT é quem responde; metade quer concurso | estar preparado de verdade (e somar título no concurso) |
+| SUZ | setor público; quer ponto na prova de títulos e o que o edital cobra | visão de saúde única que o cargo exige |
+| CBEA | trata o sintoma sem entender o animal; fica fora de auditoria e certificação | ler o comportamento e entrar no mercado de bem-estar |
+| CMMV | clínica de pequenos saturada (consulta de R$ 70 a 150, 88% já pensaram em largar) | uma área nova e bem paga, com respaldo da RDC 936/2024 |
+| GPERA | tem a técnica e não convence o produtor; lidera sem ter aprendido | liderar pessoas e levar o produtor a mudar |
+| GCC / CRCV | PPG: governança que trava, indicador que ninguém lê, conversa com o cooperado. PPGVET: técnico que bateu no teto e quer entrar no cooperativismo | decidir e crescer dentro do sistema cooperativo |
+| GPL, PPT, MIFV, GIA, GPDCA, MVPA | sem pesquisa de público: perguntar antes de escrever | — |
+
+### Tom (a vibe, não o visual)
+Fonte: vídeo manifesto da PPGVET. Falamos como líder do mercado: somos os maiores e os melhores, e dizemos isso com o número do lado. O inimigo é o modelo tradicional: professor que fala, aluno que anota, tudo para a prova. A profissão cobra na hora, no curral, na granja, na mesa do cooperado, com alguém esperando a sua resposta. **Slogan oficial: "Nossa bandeira é a prática"** (sempre assim, decisão de 13/11/2026). Vai em lugares fixos (rodapé, quadro "sobre" do blog, `slogan` no schema), nunca repetido no texto para SEO.
+
+| | família | cena que resume | o visitante pensa |
+|---|---|---|---|
+| PPGVET | Jaleco Branco: página limpa, com a bota suja dentro (foto de curral, granja, aula no campo) | professor com a mão no animal, a turma em volta | "esse pessoal faz o que eu vou ter que fazer amanhã" |
+| PPG | Terno Escuro: página escura, números, gente decidindo | gestor mostrando o indicador ao conselho da cooperativa | "é aqui que se forma quem decide" |
+
+
+**Frases de marca** (usar como estão): Mais que uma formação, uma transformação · Aqui tem prática · Ponto fora da caixa · Professores que vivem o que ensinam · Eles vêm do mercado para a sala de aula · Excelência profissional não é um dom, é repetição com metodologia · A PPGVET não termina quando a aula acaba · Não é só mais uma pós-graduação · Enquanto outras oferecem pós-graduação, nós oferecemos uma transformação (PPGVET) · A decisão que separa quem assiste de quem lidera o mercado (PPG).
+
+**Sempre**: dizer que somos os maiores e os melhores, com o número do lado · urgência de campanha (contador, últimas vagas, turma fechando) · a mão na massa em foto e vídeo · professor com cargo e empresa · a dor numa cena concreta · frase de efeito curta no título, explicação no corpo.
+**Nunca**: cara de faculdade tradicional (beca, capelo, pilha de livro, quadro-negro; exceção: o capelo do carimbo dourado do kit da Escola 3ª edição, 19/11/2026) · academiquês ("contribuir para a formação de profissionais qualificados") · foto de banco fingindo ser aluno, professor ou sede · texto que serviria para qualquer escola (trocou o nome e continua valendo: refazer).
+
+- **Texto**: português humano, sem travessão, sem cara de IA; nunca inventar número. Provas: Nota máxima (5) no MEC (da ITH) · 12.000+ alunos ativos (sempre assim, nunca "+12.000", "12K+" ou "12 mil+") · 300+ professores · 100+ turmas · 15+ pós-graduações · alunos em todos os estados e em 7 países (usar quando der autoridade) · podcasts entre os 5% mais compartilhados do Spotify (confirmado pelo usuário em 24/11/2026).
+- **Botões** (rótulo padrão por ação; a copy pode variar, a caixa não: CTA principal em MAIÚSCULAS, secundário normal): Falar com um especialista · Baixar a Ementa Completa · Garantir minha vaga (só matrícula paga) · Liberar meu acesso gratuito · Entrar na comunidade · Ver a pós (ir à página de uma pós) · Ver o curso (curso livre) · Ler o post (blog) · Confirmar presença (evento).
+- **Texto**: frases de marketing, CTAs variados para a mesma ação, superlativo e urgência ficam (não listar como slop). Padroniza-se entre sites: a mesma seção com o mesmo texto na PPGVET, PPG e Escola; botão de envio de formulário "QUERO MAIS INFORMAÇÕES!" (exceção: o formulário da Escola 3ª edição envia com "Receber meu acesso", em caixa normal, 19/11/2026).

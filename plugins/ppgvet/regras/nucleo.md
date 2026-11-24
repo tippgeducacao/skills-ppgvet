@@ -1,6 +1,6 @@
 # Núcleo (vale para todas as skills)
 
-Cada skill traz só o próprio passo a passo; o que vale para todas está aqui. Por assunto, nesta mesma pasta e lidos só quando a skill ou o nível manda: `marca.md` (marca, peças, pós), `video.md` (corte, cor, áudio, motion, Instagram), `bancos-e-referencias.md` (referência, inserções, música e sons), `antislop-midia.md` (sinais de "feito por IA", conferido em toda entrega) e `oficio/` (como o profissional decide: `video`, `foto`, `design`, `motion`, `som`), pelo nível de esforço abaixo.
+Cada skill traz só o próprio passo a passo; o que vale para todas está aqui. Por assunto, nesta mesma pasta e lidos só quando a skill ou o nível manda: `marca.md` (marca, peças, pós), `video.md` (corte, cor, áudio, motion, Instagram), `bancos-e-referencias.md` (referência, inserções, música e sons), `antislop-midia.md` (sinais de "feito por IA", conferido em toda entrega) e `oficio/` (como o profissional decide: `video`, `foto`, `design`, `motion`, `som`, `copy`), pelo nível de esforço abaixo.
 
 ## Nível de esforço
 O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
