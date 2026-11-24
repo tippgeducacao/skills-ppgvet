@@ -1,6 +1,6 @@
 ---
 name: instalar
-description: Prepara o computador (Mac ou Windows) para as skills da PPGVET com o kit essencial (ffmpeg completo, whisper com o modelo em português e Python do pacote com yt-dlp) e confere o que falta quando algo dá erro. As partes pesadas (voz, motion com HyperFrames e animate, foto) ficam para quando uma skill precisar. Pergunta só onde guardar os vídeos. Use na primeira vez, quando uma skill disser para rodar o instalar, quando der erro de programa ou arquivo não encontrado, quando perguntarem "está tudo instalado?" ou quando a pessoa pedir para trocar a pasta dos vídeos.
+description: Prepara o computador (Mac ou Windows) para as skills da PPGVET - kit essencial e, sob demanda, as partes pesadas - e confere o que falta. Use na primeira vez, quando uma skill pedir, quando der erro de programa ou arquivo não encontrado, ou para trocar a pasta dos vídeos.
 ---
 
 # Instalar e conferir

@@ -1,6 +1,7 @@
 ---
 name: cortes-live
 description: Tira cortes de uma live ou aula gravada da PPGVET (Meet/Zoom com moldura) e transforma cada um num post vertical 9:16 para o Instagram, com cartão de perfil "PPGVET - Educação", título roxo, câmera do professor em foco (slide e quem pergunta como apoio, em trechos), legenda, imagem de apoio opcional, encerramento animado e música calma. Também gera a aula completa de uma live, com a abertura PPGVET e sem as partes da live. Aceita o arquivo ou o link da live. Use quando pedirem cortes de live ou de aula, cortes da aula de abertura, aula completa de uma live, ou posts de trechos de aula. Aula curricular do Meet ("Nomear aula como…"): skill `aula-curricular`.
+disable-model-invocation: true
 ---
 
 # Cortes de live → posts

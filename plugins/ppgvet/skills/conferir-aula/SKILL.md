@@ -1,6 +1,7 @@
 ---
 name: conferir-aula
 description: Confere aulas gravadas que outra pessoa já editou ("AULA 04 PARTE 01.mp4"…), sem precisar assistir em 2x. Confere se a intro e a moldura são as da pós, a cartela (título, nome da aula, numeração, erro de digitação), erro de fala do professor que não foi cortado e corte que come fala. Devolve a lista com o minuto de cada coisa para a pessoa checar. Use quando pedirem para corrigir, conferir ou revisar aulas, ou "ver os erros das aulas". Aula curricular do Meet que a gente mesmo edita: skill `aula-curricular`.
+disable-model-invocation: true
 ---
 
 # Conferir aula (sem assistir)

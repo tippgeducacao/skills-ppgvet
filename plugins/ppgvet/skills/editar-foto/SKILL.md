@@ -1,6 +1,6 @@
 ---
 name: editar-foto
-description: Edita foto da PPGVET como um fotógrafo profissional - retoque de luz, exposição, balanço de branco, contraste, cor, sombras e realces, pele suave sem "plástico", ruído, nitidez e horizonte torto; enquadramento e recorte no tamanho de uso; ampliar sem borrar (Real-ESRGAN); tirar o fundo (rembg); rosto borrado (com o ampliar). Para retrato de professor, campo e evento, post de Instagram e produto ou material. Use quando pedirem para editar, melhorar, tratar, retocar ou "deixar profissional" uma foto, corrigir foto escura, amarelada, estourada, granulada ou torta, ampliar, recortar, redimensionar, tirar o fundo ou melhorar um rosto.
+description: Edita foto da PPGVET/PPG como um fotógrafo - luz, cor, pele, ruído, nitidez e horizonte; recorte no tamanho de uso; ampliar sem borrar; tirar o fundo. Use quando pedirem para editar, melhorar, retocar, ampliar, recortar ou tirar o fundo de uma foto (retrato de professor, evento, campo, post).
 ---
 
 # Editar foto

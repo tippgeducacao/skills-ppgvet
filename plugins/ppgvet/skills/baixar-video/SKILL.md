@@ -1,6 +1,7 @@
 ---
 name: baixar-video
 description: Baixa vídeo do YouTube, TikTok, Facebook, Reddit, Twitch, X, Vimeo, LinkedIn, Instagram (Reels e vídeo) e outros ~1.700 sites, com o yt-dlp, para a pasta de downloads, para usar como referência ou para editar material da própria PPGVET (live, aula, vídeo do canal). Use quando pedirem para baixar um vídeo, um Reels ou uma live a partir de um link.
+disable-model-invocation: true
 ---
 
 # Baixar vídeo

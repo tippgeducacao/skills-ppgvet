@@ -1,6 +1,7 @@
 ---
 name: treinamento-academy
 description: Edita treinamentos para o PPGVET Academy (time comercial, embaixadores, ferramentas como Manychat ou CRM). Põe a intro PPGVET no começo, corta os erros (recomeço, repetição, gaguejo longo, conversa de bastidor, pausa longa) e encaixa na moldura do Academy - tela compartilhada do Meet na moldura com a tela grande e a câmera à direita; só câmera (Meet em tela cheia ou câmera do estúdio) no bloco centralizado. Sem legenda e sem música. Use quando pedirem edição "estilo treinamento", "treinamento para o Academy", "treinamento do comercial" ou mandarem gravações de treinamento.
+disable-model-invocation: true
 ---
 
 # Treinamento para o PPGVET Academy

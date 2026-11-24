@@ -1,6 +1,7 @@
 ---
 name: aula-curricular
 description: Edita as aulas curriculares gravadas no Meet ("Aula Curricular _ <sala> - <data> - Recording.mp4"). Corta o começo até o "boa noite" do professor, tira o intervalo e o silêncio do fim, põe a abertura animada, a moldura da pós e o card do professor acima da câmera, salva com o nome da tarefa e diz onde subir cada aula na Panda. Use quando mandarem a tarefa da aula ("Inserir abertura animada… Nomear aula como… Anexar no Panda…") ou pedirem para editar aula curricular.
+disable-model-invocation: true
 ---
 
 # Aula curricular (Meet → Panda)

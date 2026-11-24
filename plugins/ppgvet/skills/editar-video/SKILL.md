@@ -1,6 +1,7 @@
 ---
 name: editar-video
 description: Edição de vídeo da PPGVET/PPG com ffmpeg, whisper local e HyperFrames. Corte de fala, legenda, caixinha de pergunta, cartões de destaque, zoom, cor de iPhone HDR, música, vinheta, Reels 9:16 e compressão. Use quando pedirem para editar, cortar, legendar, montar, comprimir ou "deixar igual à referência" um vídeo, ou um vídeo vertical de alguém falando para o Instagram. Chamada, aula curricular, conferir aula e cortes de live têm skill própria.
+disable-model-invocation: true
 ---
 
 # Editar vídeo

@@ -1,6 +1,7 @@
 ---
 name: chamada
 description: Monta a "chamada" da PPGVET para o Instagram, um vídeo 9:16 curto de professor falando do curso, com legenda na altura do peito, logo PPGVET embaixo, transição para a arte de CTA no fim e música de fundo. Também serve para depoimento de aluno, que segue o mesmo formato. Use quando pedirem para fazer, montar ou editar uma chamada ou um depoimento de aluno, ou vídeos de professor ou aluno falando do curso para o Instagram.
+disable-model-invocation: true
 ---
 
 # Chamada (Instagram)
