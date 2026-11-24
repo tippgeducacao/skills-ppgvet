@@ -49,8 +49,8 @@ Quando um comando disser "Falta a parte 'X' do kit" (ou a pessoa pedir), avisar 
 
 | parte | o que instala | peso | quem usa |
 |---|---|---|---|
-| `--voz` | DeepFilterNet | ~0,4 GB | limpar ruído da voz |
+| `--voz` | DeepFilterNet (programa oficial) | ~30 MB | limpar ruído da voz |
 | `--motion` | Node.js, Playwright, plugins HyperFrames e animate | ~0,6 GB | Reels com texto animado, animação de motion design |
-| `--foto` | Real-ESRGAN e rembg | ~0,7 GB | `editar-foto`: ampliar e tirar fundo |
+| `--foto` | Real-ESRGAN e rembg | ~0,7 GB e ~1 GB de modelo na 1ª vez | `editar-foto`: ampliar e tirar fundo |
 
 Os plugins do `--motion` (públicos, sem conta): o script instala sozinho se o comando `claude` existir. Se não existir, mostra os comandos `/plugin` para a pessoa digitar. Depois, `/reload-plugins`.

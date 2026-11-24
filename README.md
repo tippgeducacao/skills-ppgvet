@@ -42,15 +42,15 @@ Depois: `/plugin` → **Marketplaces** → **ppgvet** → ligar auto-update; fec
 |---|---|
 | ffmpeg completo | cortar, montar, legenda, cor |
 | whisper + modelo em português | transcrição no próprio computador |
-| Python do pacote (com OpenCV e yt-dlp) | rodar os scripts, baixar vídeos |
+| Python do pacote (com OpenCV, yt-dlp e foto HEIC do iPhone) | rodar os scripts, baixar vídeos |
 
 **Sob demanda:** o resto é instalado sozinho na primeira vez que uma skill precisar. O Claude avisa antes, em uma linha.
 
 | parte | para quê | peso |
 |---|---|---|
-| voz (DeepFilterNet) | limpar ruído da voz | ~0,4 GB |
+| voz (DeepFilterNet) | limpar ruído da voz | ~30 MB |
 | motion (Node.js, Playwright, HyperFrames, animate) | textos animados nos Reels e animações de motion design | ~0,6 GB |
-| foto (Real-ESRGAN, rembg) | ampliar imagem, tirar fundo | ~0,7 GB |
+| foto (Real-ESRGAN, rembg) | ampliar imagem, tirar fundo | ~0,7 GB e ~1 GB de modelo na 1ª vez |
 
 No Mac, se faltar o Homebrew, o Claude pede para você colar no Terminal o comando do site https://brew.sh, porque esse comando pede a senha do Mac.
 

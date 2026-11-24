@@ -19,6 +19,11 @@ from pathlib import Path
 import numpy as np
 os.environ.setdefault("OPENCV_LOG_LEVEL", "ERROR")  # aviso interno do OpenCV, não é erro
 import cv2  # noqa: E402
+try:  # foto HEIC do iPhone abre como qualquer outra (pillow-heif, no essencial do kit)
+    from pillow_heif import register_heif_opener
+    register_heif_opener()
+except ImportError:
+    pass
 from PIL import Image, ImageOps
 
 MODELO_ROSTO = Path(__file__).resolve().parents[1] / "modelos" / "face_detection_yunet_2023mar.onnx"

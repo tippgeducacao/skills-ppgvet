@@ -2,6 +2,11 @@
 A configuração de cada pessoa fica em ~/.ppgvet/video.json, gravada pelo instalar.py."""
 import json, os, re, subprocess, sys
 from pathlib import Path
+try:  # foto HEIC do iPhone abre como qualquer outra (pillow-heif, no essencial do kit)
+    from pillow_heif import register_heif_opener
+    register_heif_opener()
+except ImportError:
+    pass
 
 HOME = Path.home() / ".ppgvet"
 CONFIG = HOME / "video.json"
@@ -26,8 +31,9 @@ def config():
 _C = None
 
 
-PARTES = {"voz": "limpeza de voz, ~0,4 GB", "motion": "HyperFrames e animate, ~0,6 GB",
-          "foto": "ampliar e tirar fundo, ~0,7 GB"}
+PARTES = {"voz": "limpeza de voz, ~30 MB", "motion": "HyperFrames e animate, ~0,6 GB",
+          "foto": "ampliar e tirar fundo, ~0,7 GB e ~1 GB de modelo na 1ª vez"}
+HF = "hyperframes@0.9.90"  # versão fixa: sai versão nova quase todo dia; subir de propósito, depois de testar um render
 PARTE_DA_CHAVE = {"realesrgan": "foto"}
 
 
@@ -172,7 +178,7 @@ elif __name__ == "__main__" and sys.argv[1:] == ["--hf-env"]:
     import shutil
     if not shutil.which("npx"):
         falta_parte("motion")
-    print(f"export HYPERFRAMES_FFMPEG_PATH='{FF()}' HYPERFRAMES_FFPROBE_PATH='{FFPROBE()}'")
+    print(f"export HYPERFRAMES_FFMPEG_PATH='{FF()}' HYPERFRAMES_FFPROBE_PATH='{FFPROBE()}' HF='{HF}'")
 elif __name__ == "__main__" and sys.argv[1:] == ["--ff"]:
     print(FF())  # para comandos soltos: FF=$("$PY" "$S/comum.py" --ff)
 elif __name__ == "__main__":

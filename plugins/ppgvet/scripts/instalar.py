@@ -3,12 +3,14 @@
 uso: instalar.py --conferir            só mostra o que está ok, o que falta e as partes de fora (não muda nada)
      instalar.py [--trabalho <pasta>]  instala o essencial (padrão da pasta: Filmes/PPGVET no Mac, Vídeos/PPGVET no Windows)
      instalar.py --voz|--motion|--foto   instala uma parte sob demanda, quando uma skill precisar
-Essencial (o estúdio de edição): ffmpeg completo, whisper + modelo, Python do pacote (Pillow, numpy, OpenCV, yt-dlp).
+Essencial (o estúdio de edição): ffmpeg completo, whisper + modelo, Python do pacote (Pillow com HEIC, numpy, OpenCV, yt-dlp).
 Sob demanda: voz (DeepFilterNet), motion (Node.js, Playwright, plugins HyperFrames e animate),
 foto (Real-ESRGAN e rembg).
 Usa só a biblioteca padrão do Python: roda antes de existir o ambiente do pacote."""
-import glob, json, os, shutil, subprocess, sys, urllib.request, zipfile
+import glob, json, os, platform, shutil, subprocess, sys, urllib.request, zipfile
 from pathlib import Path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from comum import HF  # noqa: E402  (comum.py só usa a biblioteca padrão)
 
 WIN, MAC = sys.platform == "win32", sys.platform == "darwin"
 HOME = Path.home() / ".ppgvet"
@@ -21,11 +23,14 @@ ACERVO_PASTAS = ["fontes", "logos", "logos-animadas", "molduras-aula", "intro", 
 BIN = "Scripts" if WIN else "bin"
 EXE = ".exe" if WIN else ""
 VENV_PY = HOME / "venv" / BIN / f"python{EXE}"
-DF = HOME / "deepfilternet" / BIN / f"deepFilter{EXE}"
+DF = HOME / "deepfilternet" / f"deep-filter{EXE}"
+# programa oficial do DeepFilterNet (mesma versão e licença da biblioteca em Python, ~27 MB em vez de ~390 MB)
+DF_URL = "https://github.com/Rikorose/DeepFilterNet/releases/download/v0.5.6/deep-filter-0.5.6-" + (
+    "x86_64-pc-windows-msvc.exe" if WIN else ("aarch64" if platform.machine() == "arm64" else "x86_64") + "-apple-darwin")
 # última versão do Real-ESRGAN com programa pronto (ncnn) para Mac e Windows
 ESRGAN_URL = ("https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/"
               f"realesrgan-ncnn-vulkan-20220424-{'windows' if WIN else 'macos'}.zip")
-PIP_PACOTE = ["pillow", "numpy", "opencv-python-headless", "yt-dlp"]
+PIP_PACOTE = ["pillow", "pillow-heif", "numpy", "opencv-python-headless", "yt-dlp"]
 PIP_FOTO = ["rembg[cpu,cli]"]  # sozinho puxa ~600 MB (onnxruntime, scipy, gradio): fica na parte foto
 PLUGINS = {"hyperframes": "https://github.com/heygen-com/hyperframes",  # https: não precisa de chave SSH
            "animate": "https://github.com/cth9191/animate"}
@@ -154,7 +159,7 @@ def achar_esrgan():
 def venv_ok():
     if not VENV_PY.exists() or (versao_py([str(VENV_PY)]) or (0, 0)) < (3, 11):
         return False
-    return subprocess.run([VENV_PY, "-c", "import PIL, numpy, cv2, yt_dlp"], capture_output=True).returncode == 0
+    return subprocess.run([VENV_PY, "-c", "import PIL, pillow_heif, numpy, cv2, yt_dlp"], capture_output=True).returncode == 0
 
 
 def rembg_ok():
@@ -208,9 +213,9 @@ def motion_ok():
 
 def partes():
     """partes sob demanda: chave -> (nome, peso, está instalada?, instalar)"""
-    p = {"voz": ("limpeza de voz (DeepFilterNet)", "~0,4 GB", DF.exists, instalar_voz),
+    p = {"voz": ("limpeza de voz (DeepFilterNet)", "~30 MB", DF.exists, instalar_voz),
          "motion": ("motion: Node.js, Playwright, HyperFrames e animate", "~0,6 GB", motion_ok, instalar_motion),
-         "foto": ("foto: Real-ESRGAN (ampliar) e rembg (tirar fundo)", "~0,7 GB",
+         "foto": ("foto: Real-ESRGAN (ampliar) e rembg (tirar fundo)", "~0,7 GB e ~1 GB de modelo na 1ª vez",
                   lambda: bool(achar_esrgan()) and rembg_ok(), instalar_foto)}
     return p
 
@@ -224,7 +229,7 @@ def conferir():
         ("ffmpeg completo (zscale, legenda, texto)", bool(ff) and ffmpeg_completo(ff)),
         ("whisper (transcrição local)", bool(cfg.get("whisper") and os.path.exists(cfg["whisper"]))),
         ("modelo do whisper em português (~574 MB)", bool(achar_modelo(cfg))),
-        ("Python do pacote (Pillow, numpy, OpenCV, yt-dlp)", venv_ok()),
+        ("Python do pacote (Pillow com HEIC, numpy, OpenCV, yt-dlp)", venv_ok()),
         ("peças padrão do pacote (intro, molduras, vinhetas, fontes)", not falta),
         ("pasta de trabalho " + (f"({cfg['trabalho']})" if cfg.get("trabalho") else "(não escolhida)"), bool(cfg.get("trabalho"))),
     ]
@@ -305,10 +310,14 @@ def exigir_essencial():
 
 def instalar_voz():
     exigir_essencial()
-    if not DF.exists():  # torch 2.1.2 só existe para Python 3.9 a 3.11
-        sh([*garantir_python((3, 9), (3, 11), "3.11"), "-m", "venv", HOME / "deepfilternet"], check=True)
-        sh([DF.with_name(f"pip{EXE}"), "install", "-q", "torch==2.1.2", "torchaudio==2.1.2", "numpy<2", "soundfile",
-            "deepfilternet"], check=True)
+    if not DF.exists():
+        if (HOME / "deepfilternet").exists():  # versão antiga do pacote: Python + PyTorch, ~390 MB; o programa substitui
+            print("  tirando a limpeza de voz antiga em Python (~390 MB)")
+            shutil.rmtree(HOME / "deepfilternet")
+        DF.parent.mkdir(parents=True)
+        baixar(DF_URL, DF)
+        if not WIN:
+            os.chmod(DF, 0o755)
 
 
 def instalar_foto():
@@ -336,14 +345,15 @@ def instalar_motion():
     if not (npx and npm):
         sys.exit("Node.js instalado, mas não encontrado: feche e abra o Claude Code e rode de novo.")
     env = dict(os.environ, HYPERFRAMES_FFMPEG_PATH=cfg["ffmpeg"], HYPERFRAMES_FFPROBE_PATH=cfg["ffprobe"])
-    sh([npx, "-y", "hyperframes", "browser", "ensure"], check=True, env=env)
+    sh([npx, "-y", HF, "browser", "ensure"], check=True, env=env)
+    sh([npx, "-y", HF, "telemetry", "disable"], check=True, env=env)  # não manda uso para a HeyGen
     if not playwright_ok():
         if not os.access(npm_global(), os.W_OK):
             # Node do instalador oficial: pasta global do sistema pede senha. Doc do npm ("Resolving EACCES
             # permissions errors"): mudar a pasta global para dentro da pasta pessoal
             sh([npm, "config", "set", "prefix", Path.home() / ".npm-global"], check=True)
         sh([npm, "install", "-g", "playwright"], check=True)
-        sh([shutil.which("node"), Path(npm_global()) / "playwright" / "cli.js", "install", "chromium"], check=True)
+        sh([shutil.which("node"), Path(npm_global()) / "playwright" / "cli.js", "install", "--only-shell", "chromium"], check=True)  # o animate só abre sem janela: ~370 MB a menos
     for nome, url in PLUGINS.items():
         if plugin_ok(nome):
             continue
@@ -375,6 +385,7 @@ def teste():
     assert versao_py([sys.executable]) == sys.version_info[:2]
     assert set(partes()) == {"voz", "motion", "foto"}
     assert "rembg" not in " ".join(PIP_PACOTE)
+    assert DF_URL.endswith(("-apple-darwin", "-msvc.exe")) and DF.name.startswith("deep-filter")
     print("ok")
 
 
