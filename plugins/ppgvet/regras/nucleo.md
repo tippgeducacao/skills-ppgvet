@@ -1,6 +1,19 @@
 # Núcleo (vale para todas as skills)
 
-Cada skill traz só o próprio passo a passo; o que vale para todas está aqui. Por assunto, lidos só quando a skill manda: `marca.md` (marca, peças, pós), `video.md` (corte, cor, áudio, motion, Instagram), `bancos-e-referencias.md` (referência, inserções, música e sons).
+Cada skill traz só o próprio passo a passo; o que vale para todas está aqui. Por assunto, nesta mesma pasta e lidos só quando a skill ou o nível manda: `marca.md` (marca, peças, pós), `video.md` (corte, cor, áudio, motion, Instagram), `bancos-e-referencias.md` (referência, inserções, música e sons), `antislop-midia.md` (sinais de "feito por IA", conferido em toda entrega) e `oficio/` (como o profissional decide: `video`, `foto`, `design`, `motion`, `som`), pelo nível de esforço abaixo.
+
+## Nível de esforço
+O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
+
+| | rápido | padrão | caprichado |
+|---|---|---|---|
+| peças | chamada, cortes de live, aula curricular, treinamento, conferir aula, foto avulsa | Reels institucional, depoimento, carrossel, anúncio pago, teaser de aula, fotos de evento | abertura de marca, manifesto, campanha de matrícula, patrocinador de podcast, vinheta |
+| lê | a skill | + `oficio/` do meio da peça | + `oficio/` de cada parte (motion, som, design) e moodboard de referência |
+| corte | seco e jump cut com punch-in | + J/L, cutaway, respiro | + match cut desenhado, tabela de batidas antes |
+| texto e motion | peças prontas, um estilo | 2 ou 3 movimentos variados | vocabulário próprio da peça, quadros-chave aprovados antes de animar |
+| cor | correção | + combinar planos e pele | + look de marca |
+| som | voz e música | + room tone; efeito raro | sound design completo, teste do mudo |
+| revisão | nota e folha de quadros | + 2 rodadas | + 3 rodadas, quadro cheio em cada corte |
 
 ## Ambiente
 - `PY=$(cat ~/.ppgvet/python)`, `S=<pasta scripts do pacote>` (a skill mostra o caminho) e `FF=$("$PY" "$S/comum.py" --ff)`, o ffmpeg completo (tem zscale, legenda e texto; o `ffprobe` fica na mesma pasta). Se `~/.ppgvet/python` não existir, rodar a skill `instalar` primeiro.
@@ -20,7 +33,7 @@ Cada skill traz só o próprio passo a passo; o que vale para todas está aqui. 
 0. **Primeira vez ou pedido sem material:** antes do plano, explicar em poucas linhas o que a skill precisa, onde pôr (o caminho real da pasta da pessoa) e um exemplo de pedido, pela seção "O que preciso de você" da skill. Se o material já veio, só perguntar o que faltar, no plano.
 1. **Plano, uma vez:** antes de começar, mostrar o que vai ser feito (cada skill diz o que o plano dela inclui) e perguntar o que falta saber. Esperar o ok.
 2. **Depois do ok, fazer tudo sem parar:** o lote inteiro, um atrás do outro. As dúvidas vão no plano; parar no meio só se surgir uma que a pessoa precisa decidir.
-3. **Conferir e dar nota** a cada entrega: nota de 0 a 10 em cada critério da skill, mais acabamento geral. Abaixo de 8: corrigir sozinho e conferir de novo. O que vale para todo vídeo:
+3. **Conferir e dar nota** a cada entrega: nota de 0 a 10 em cada critério da skill, mais acabamento geral, conferido contra o `antislop-midia.md`. Abaixo de 8: corrigir sozinho e conferir de novo. O que vale para todo vídeo:
    - folha de quadros durante todo o tempo de cada gráfico (nada cobre nem encosta no rosto);
    - começo e fim transcritos de novo;
    - volume: `"$FF" -i out.mp4 -af loudnorm=print_format=summary -f null -` (voz ≈ -16 LUFS, pico ≤ -1,5 dBTP) e os dois canais no mesmo nível.

@@ -13,7 +13,7 @@ Lido pelas skills de vídeo, junto com o `nucleo.md`.
 
 ## Motion (textos e cartões animados)
 - Texto na tela, cartões e inserções são animados no HyperFrames, em nível profissional e na identidade da marca. PNG com fade no ffmpeg não basta.
-- Entrada com cauda longa (expo/back out); saída mais curta (blur e fade). Nada cobre nem encosta no rosto. O corte e a fala continuam no ffmpeg.
+- Curvas, durações e coreografia: `oficio/motion.md`. Nada cobre nem encosta no rosto. O corte e a fala continuam no ffmpeg.
 - **O roteiro do motion entra no plano** (cada texto, cartão e caixinha, com o momento): aprovado o plano, renderizar direto. Na revisão do fim, oferecer o Studio do HyperFrames no navegador para ajuste fino. Na nota, entram também ritmo, leitura e marca.
 - Animação de motion design do zero (explicativo, história): plugin **animate**.
 
