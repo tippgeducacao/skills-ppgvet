@@ -42,8 +42,8 @@ def numeros_da_marca(texto):
     return ruins
 
 
-SIGLAS = ("RNGB", "NGB", "CMCB", "GPL", "SA", "PC", "PS", "CBEA", "CMMV", "QSAOA", "SUZ", "GPERA", "PPT", "MIFV", "GIA",
-          "GCC", "CRCV", "GPDCA", "MVA")  # as do regras/marca.md (o teste confere)
+SIGLAS = ("RNGB", "NGB", "CMCB", "GPL", "SA", "PC", "PS", "CBEA", "CMMV", "QSAOA", "SUZ", "GPERA", "PPT", "MIFV", "GIA", "MVA",
+          "GCC", "CRCV", "GPDCA")  # as do regras/marca.md (o teste confere)
 COMENTE_OK = {}  # palavra -> perfil, só as que têm automação ligada (regras/oficio/copy.md); vazio até confirmar
 
 AVISOS = [

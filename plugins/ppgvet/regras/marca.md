@@ -59,10 +59,10 @@ Tom de faixa com letra branca pequena: `#B84482` (o magenta oficial com letra br
 | PPT | Piscicultura e Produção de Tilápia | PPGVET | perguntar | `#0EA5E9` | — |
 | MIFV | Medicina Integrativa e Fitoterapia Veterinária com Ênfase em Cães e Gatos | PPGVET | perguntar | `#B05CE6` | medicina integrativa veterinária, fitoterapia veterinária |
 | GIA | Gestão da Indústria de Alimentos Ênfase em Tecnologia e Inteligência Artificial | PPGVET | perguntar | `#E16E32` | — |
+| MVA | Marketing e Vendas no Agronegócio | PPGVET | perguntar | `#E0287D` | — |
 | GCC | Gestão de Cooperativas de Crédito | PPG | PADRÃO | `#1E3A8A` | cooperativas de crédito, cooperativismo |
 | CRCV | Crédito Rural, Cooperativismo e Vendas | PPG | PADRÃO | `#FB6D2D` | crédito rural |
 | GPDCA | Gestão de Pessoas e Desenvolvimento de Carreira no Agronegócio | PPG | perguntar | `#4F46E5` | — |
-| MVA | Marketing e Vendas no Agronegócio | PPG | perguntar | `#E0287D` | — |
 
 A busca é o termo que o profissional digita (pesquisa de palavras-chave de nov/2026; "—" sem medida): entra na legenda, nunca só na hashtag. A coluna moldura é a tabela `MOLDURA` do `scripts/aula.py` (o script é quem manda). Sigla fora dela: perguntar qual moldura usar.
 A cor (código exato, do guia de marca) é detalhe da pós: uma cor de pós por peça, e a cor da marca continua a principal. **Letra em cima de qualquer cor** (da pós ou da marca): branca ou `#1A1A1A`, a de mais contraste; letra pequena no celular pede 4,5:1, grande 3:1 (o que é "grande" na peça de 1080 px: `oficio/design.md`). Sem a medida, a cor não leva texto.
