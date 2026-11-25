@@ -5,7 +5,7 @@ Adaptado do guia de marca da PPGVET para vídeo, arte e texto (o guia é o dono;
 ## Duas marcas, nunca misturadas
 - **PPGVET** (veterinária) e **PPG Educação** (gestão e cooperativismo). Peça da PPG leva a marca da PPG (logo, azul, encerramento); peça da PPGVET, a da PPGVET. O que é da PPGVET (evento, vaga, podcast) é peça da PPGVET.
 - **Exceções (decisão do usuário):** live (vMix e moldura do Instagram) e chamada saem sempre com a marca PPGVET, também nas pós da PPG; a aula curricular abre com a intro PPGVET e o card diz "Professor(a) do Grupo PPG Educação"; a moldura de intro de aula leva as duas marcas.
-- **Capas da Eduq** (portal do aluno, do Grupo PPG): logo PPG Educação em todas, inclusive nas pós da PPGVET; o fundo leva a cor de ação da marca da pós (`scripts/eduq.py`).
+- **Capas da Eduq** (portal do aluno, do Grupo PPG): logo PPG Educação em todas, inclusive nas pós da PPGVET; o visual é o do PSD da equipe (`acervo/eduq/modelos`, preenchido pelo `scripts/eduq.py`); nas pós da PPG, fundo `#0A84E8` e pílula `#0072D6` (sRGB, das capas publicadas) no lugar do verde.
 - Os podcasts (SuinoCast, O Aviário, +Rúmen e PetFood) são da PPGVET. A PPG não tem podcast de veterinária.
 
 ## Peças do pacote (pasta `acervo/`, nos roteiros `acervo:<caminho>`)
