@@ -41,29 +41,29 @@ Neutros: fundo claro `#FAF9FB`, texto e caixa escura `#1A1A1A`, branco `#FFFFFF`
 Tom de faixa com letra branca pequena: `#B84482` (o magenta oficial com letra branca dá 3,95:1 e reprova; usado na faixa "ESTAMOS AO VIVO" da moldura do Instagram da live).
 
 ## Pós (sigla, nome e moldura da aula curricular)
-| sigla | nome | marca | moldura | cor |
-|---|---|---|---|---|
-| RNGB | Reprodução, Nutrição e Gestão de Bovinos | PPGVET | BOVINOS | `#580B55` |
-| NGB | Nutrição e Gestão de Bovinos | PPGVET | BOVINOS | `#00BEA0` |
-| CMCB | Clínica Médica e Cirúrgica de Bovinos | PPGVET | BOVINOS | `#016752` |
-| GPL | Gestão na Pecuária Leiteira | PPGVET | BOVINOS | `#6E5A22` |
-| SA | Sanidade Avícola | PPGVET | AVES | `#F94C56` |
-| PC | Postura Comercial | PPGVET | AVES | `#DA4C00` |
-| PS | Produção de Suínos | PPGVET | SUÍNOS | `#974D8A` |
-| CBEA | Comportamento e Bem-Estar Animal | PPGVET | PETFOOD | `#026E66` |
-| CMMV | Cannabis Medicinal na Medicina Veterinária | PPGVET | PETFOOD | `#41A514` |
-| QSAOA | Qualidade e Segurança de Alimentos de Origem Animal | PPGVET | QUALIDADE | `#086ED4` |
-| SUZ | Saúde Única e Zoonoses | PPGVET | QUALIDADE | `#004F5A` |
-| GPERA | Gestão de Pessoas e Extensão Rural na Agroindústria | PPGVET | PADRÃO | `#3C8246` |
-| PPT | Piscicultura e Produção de Tilápia | PPGVET | perguntar | `#0EA5E9` |
-| MIFV | Medicina Integrativa e Fitoterapia Veterinária com Ênfase em Cães e Gatos | PPGVET | perguntar | `#B05CE6` |
-| GIA | Gestão da Indústria de Alimentos Ênfase em Tecnologia e Inteligência Artificial | PPGVET | perguntar | `#E16E32` |
-| GCC | Gestão de Cooperativas de Crédito | PPG | PADRÃO | `#1E3A8A` |
-| CRCV | Crédito Rural, Cooperativismo e Vendas | PPG | PADRÃO | `#FB6D2D` |
-| GPDCA | Gestão de Pessoas e Desenvolvimento de Carreira no Agronegócio | PPG | perguntar | `#4F46E5` |
-| MVPA | Marketing e Vendas na Produção Animal | PPG | perguntar | `#E0287D` |
+| sigla | nome | marca | moldura | cor | busca (vai na legenda) |
+|---|---|---|---|---|---|
+| RNGB | Reprodução, Nutrição e Gestão de Bovinos | PPGVET | BOVINOS | `#580B55` | reprodução bovina |
+| NGB | Nutrição e Gestão de Bovinos | PPGVET | BOVINOS | `#00BEA0` | nutrição animal, nutrição de bovinos |
+| CMCB | Clínica Médica e Cirúrgica de Bovinos | PPGVET | BOVINOS | `#016752` | buiatria, clínica de bovinos |
+| GPL | Gestão na Pecuária Leiteira | PPGVET | BOVINOS | `#6E5A22` | pecuária leiteira |
+| SA | Sanidade Avícola | PPGVET | AVES | `#F94C56` | avicultura, sanidade avícola |
+| PC | Postura Comercial | PPGVET | AVES | `#DA4C00` | avicultura de postura |
+| PS | Produção de Suínos | PPGVET | SUÍNOS | `#974D8A` | suinocultura, produção de suínos |
+| CBEA | Comportamento e Bem-Estar Animal | PPGVET | PETFOOD | `#026E66` | comportamento animal, bem-estar animal |
+| CMMV | Cannabis Medicinal na Medicina Veterinária | PPGVET | PETFOOD | `#41A514` | cannabis veterinária, canabidiol veterinária |
+| QSAOA | Qualidade e Segurança de Alimentos de Origem Animal | PPGVET | QUALIDADE | `#086ED4` | inspeção de produtos de origem animal |
+| SUZ | Saúde Única e Zoonoses | PPGVET | QUALIDADE | `#004F5A` | saúde única, one health |
+| GPERA | Gestão de Pessoas e Extensão Rural na Agroindústria | PPGVET | PADRÃO | `#3C8246` | extensão rural |
+| PPT | Piscicultura e Produção de Tilápia | PPGVET | perguntar | `#0EA5E9` | — |
+| MIFV | Medicina Integrativa e Fitoterapia Veterinária com Ênfase em Cães e Gatos | PPGVET | perguntar | `#B05CE6` | medicina integrativa veterinária, fitoterapia veterinária |
+| GIA | Gestão da Indústria de Alimentos Ênfase em Tecnologia e Inteligência Artificial | PPGVET | perguntar | `#E16E32` | — |
+| GCC | Gestão de Cooperativas de Crédito | PPG | PADRÃO | `#1E3A8A` | cooperativas de crédito, cooperativismo |
+| CRCV | Crédito Rural, Cooperativismo e Vendas | PPG | PADRÃO | `#FB6D2D` | crédito rural |
+| GPDCA | Gestão de Pessoas e Desenvolvimento de Carreira no Agronegócio | PPG | perguntar | `#4F46E5` | — |
+| MVA | Marketing e Vendas no Agronegócio | PPG | perguntar | `#E0287D` | — |
 
-A coluna moldura é a tabela `MOLDURA` do `scripts/aula.py` (o script é quem manda). Sigla fora dela: perguntar qual moldura usar.
+A busca é o termo que o profissional digita (pesquisa de palavras-chave de nov/2026; "—" sem medida): entra na legenda, nunca só na hashtag. A coluna moldura é a tabela `MOLDURA` do `scripts/aula.py` (o script é quem manda). Sigla fora dela: perguntar qual moldura usar.
 A cor (código exato, do guia de marca) é detalhe da pós: uma cor de pós por peça, e a cor da marca continua a principal. **Letra em cima de qualquer cor** (da pós ou da marca): branca ou `#1A1A1A`, a de mais contraste; letra pequena no celular pede 4,5:1, grande 3:1 (o que é "grande" na peça de 1080 px: `oficio/design.md`). Sem a medida, a cor não leva texto.
 
 ## Texto
@@ -85,7 +85,7 @@ Público: 23 a 45 anos, já formado e trabalhando, que descobriu a lacuna na pr�
 | CMMV | clínica de pequenos saturada (consulta de R$ 70 a 150, 88% já pensaram em largar) | uma área nova e bem paga, com respaldo da RDC 936/2024 |
 | GPERA | tem a técnica e não convence o produtor; lidera sem ter aprendido | liderar pessoas e levar o produtor a mudar |
 | GCC / CRCV | PPG: governança que trava, indicador que ninguém lê, conversa com o cooperado. PPGVET: técnico que bateu no teto e quer entrar no cooperativismo | decidir e crescer dentro do sistema cooperativo |
-| GPL, PPT, MIFV, GIA, GPDCA, MVPA | sem pesquisa de público: perguntar antes de escrever | — |
+| GPL, PPT, MIFV, GIA, GPDCA, MVA | sem pesquisa de público: perguntar antes de escrever | — |
 
 ### Tom (a vibe, não o visual)
 Fonte: vídeo manifesto da PPGVET. Falamos como líder do mercado: somos os maiores e os melhores, e dizemos isso com o número do lado. O inimigo é o modelo tradicional: professor que fala, aluno que anota, tudo para a prova. A profissão cobra na hora, no curral, na granja, na mesa do cooperado, com alguém esperando a sua resposta. **Slogan oficial: "Nossa bandeira é a prática"** (sempre assim). Vai em lugares fixos (rodapé, quadro "sobre" do blog, `slogan` no schema), nunca repetido no texto para SEO.

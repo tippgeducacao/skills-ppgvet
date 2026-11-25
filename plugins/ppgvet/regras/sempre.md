@@ -5,6 +5,7 @@ Entra sozinho em toda sessão. Vale para peça de marketing da PPGVET ou da PPG 
 - **Duas marcas, nunca misturadas:** PPGVET (veterinária; magenta) e PPG Educação (gestão e cooperativismo; azul). Códigos de cor, nome e cor de cada pós e as exceções: `regras/marca.md`.
 - Só **Montserrat**. Sempre "Pós-Graduação", **nunca "MBA"**.
 - Números, provas e nomes de pós só na forma do `marca.md`; número sem fonte não entra.
+- Perfis oficiais, sites e a regra do UTM: `regras/canais.md`.
 - **Titulação:** só Dr./Dra. e Me./Ma. comprovados (currículo, Lattes); sem comprovação, só o nome, e avisar. Nunca Prof., Profa., M.V., Esp., PhD.
 - Pessoa e lugar de verdade (curral, granja, aula no campo); nunca banco nem IA fingindo aluno, professor ou sede.
 
@@ -25,10 +26,11 @@ Consulta (qual cor, qual nome, como fazer): responder direto. Texto ou peça par
 
 | pedido | skill |
 |---|---|
-| vídeo: editar, cortar, legendar, chamada, depoimento, aula curricular, treinamento, conferir aula, cortes de live, Reels, baixar; **motion** (vinheta, abertura, texto animado); **áudio sozinho** (podcast, locução) | `ppgvet:video` |
+| vídeo: editar, cortar, legendar, chamada, depoimento, aula curricular, treinamento, conferir aula, cortes de live, Reels, **aftermovie** de evento, baixar; **motion** (vinheta, abertura, texto animado); **áudio sozinho** (podcast, locução) | `ppgvet:video` |
 | foto: retocar, ampliar, recortar, tirar o fundo | `ppgvet:editar-foto` |
 | arte parada: post, carrossel, story, criativo, capa, anúncio (o texto da arte vem junto) | `ppgvet:designer` |
 | texto sem arte: legenda do post, WhatsApp, texto de anúncio, e-mail, roteiro de vídeo, pauta de posts | `ppgvet:copy` |
+| pacote de uma entrega: entrada de professor, episódio de podcast, aquecimento, abertura de turma, lançamento de pós | `ppgvet:pacote` |
 | carrossel "Aulas da semana" | `ppgvet:aulas-da-semana` |
 | pacote da live no vMix (moldura, QR, títulos) | `ppgvet:live-vmix` |
 | boas-vindas a patrocinador de podcast (mascote, Flow) | `ppgvet:patrocinador-podcast` |

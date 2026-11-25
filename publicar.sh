@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 S=plugins/ppgvet/scripts
 PY="${PY:-$(cat "$HOME/.ppgvet/python" 2>/dev/null || echo python3)}"  # PY=<python> ./publicar.sh para usar outro
-for s in comum transcrever cortar chamada aula treinamento conferir post instalar retocar checar hf live_titulos live_qr sons imagem aulas_semana checar_texto reels arte; do
+for s in comum transcrever cortar chamada aula treinamento conferir post instalar retocar checar hf live_titulos live_qr sons imagem aulas_semana checar_texto reels arte aftermovie; do
   printf "teste %-12s " "$s"; "$PY" "$S/$s.py" --teste
 done
 # sempre.md entra em toda sessão de quem instalou: cada caractere custa contexto sempre

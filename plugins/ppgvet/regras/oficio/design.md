@@ -25,6 +25,8 @@ Lido quando a peça tem arte, cartão ou carrossel, no nível padrão e no capri
 | `feed`, `carrossel` | 1080x1350 (4:5) | 64 px em volta. O app aceita até 3:4, mas a API (agendador do sistema) só até 4:5. A grade do perfil mostra 3:4: essencial no centro. Carrossel: todos na proporção do primeiro |
 | `quadrado` | 1080x1080 | 64 px em volta |
 | `story`, `story-anuncio` | 1080x1920 | as margens do 9:16 do `video.md` (o `arte.py` mede) |
+| `youtube` (thumb) | desenha 1920x1080, sai 3840x2160 | 96 px dos lados, 64 em cima e embaixo; nada no canto de baixo à direita (a duração cobre). 16:9, mínimo de 640 de largura ([O] [YouTube](https://support.google.com/youtube/answer/72431)) |
+| `email` (banner) | desenha 600x650, sai em dobro | 32 px em volta [N] |
 
 ## O que os nossos perfis ensinam (estudo de 24/11/2026: 100 posts e as artes dos designers da casa)
 - **Foto e vídeo real vencem:** Reels de campo alcançaram 34 a 50 mil (mediana 2,9 mil); carrossel só com fotos da turma, 28,8 mil. O pior: arte só de texto com foto de banco. Pessoa e lugar de verdade sempre que houver.

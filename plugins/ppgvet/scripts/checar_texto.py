@@ -40,7 +40,7 @@ def numeros_da_marca(texto):
 
 
 SIGLAS = ("RNGB", "NGB", "CMCB", "GPL", "SA", "PC", "PS", "CBEA", "CMMV", "QSAOA", "SUZ", "GPERA", "PPT", "MIFV", "GIA",
-          "GCC", "CRCV", "GPDCA", "MVPA")  # as do regras/marca.md (o teste confere)
+          "GCC", "CRCV", "GPDCA", "MVA")  # as do regras/marca.md (o teste confere)
 COMENTE_OK = {}  # palavra -> perfil, só as que têm automação ligada (regras/oficio/copy.md); vazio até confirmar
 
 AVISOS = [
@@ -53,6 +53,11 @@ AVISOS = [
      r"contribuir para a formação|profissionais qualificados|transformador\w*|revolucion\w+|desvend\w+)", "palavra vazia ou de academiquês: trocar por algo concreto"),
     (r"(?i)\b(você|vc)\s+(tem|está|é|sofre|anda)\b[^.?!\n]{0,40}\b(doen\w+|depress\w+|ansiedade|endividad\w+|dívida|desempregad\w+|\d+\s+anos)",
      "anúncio não pode afirmar atributo pessoal de quem lê (saúde, finanças, idade): política de anúncios da Meta"),
+    (r"(?i)\b(vamos ser sinceros|sejamos honestos|a verdade é que|neste (post|vídeo|texto) (você|vc) vai|ficou alguma dúvida|espero que (tenha|isso) (ajudado|te ajude))",
+     "abertura ou fecho de chatbot: começar pelo gancho e fechar na ação (copy.md)"),
+    (r"(?i)\b(especialistas|estudos|pesquisas) (dizem|mostram|apontam|afirmam)\b", "autoridade sem dono: dizer quem, qual estudo ou o número (copy.md)"),
+    (r"(?i)\b(e isso muda tudo|e é aí que entra|o futuro é promissor)", "fecho de efeito ou conclusão genérica: terminar no fato ou na ação (copy.md)"),
+    (r"(?m)^\s*(\w+\.\s+){2,}\w+\.\s*$", "frase picotada (\"Simples. Direto. Eficaz.\"): dizer a uma coisa que importa (copy.md)"),
 ]
 
 
@@ -148,6 +153,9 @@ def teste():
     f, a = checar("Olá, Ana. As inscrições abriram.\nPara parar de receber, clique aqui.", "email", "Inscrições abertas até sexta")
     assert not f and not a, (f, a)
     assert any("caracteres" in x for x in checar("fala " * 250, "roteiro")[1])
+    _, a = checar("Vamos ser sinceros: estudos mostram que a granja mudou.\nSimples. Direto. Eficaz.\nE isso muda tudo.", "legenda")
+    assert sum(any(k in x for x in a) for k in ("chatbot", "sem dono", "picotada", "fecho de efeito")) == 4, a
+    assert not checar("Aula prática na granja, quinta às 19h. Link na bio.", "legenda")[1]  # texto normal não acende
     print("ok")
 
 

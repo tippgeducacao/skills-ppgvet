@@ -26,7 +26,7 @@ POS = {  # sigla: (linhas, sub) — "|" quebra a linha
     'gcc': ('Gestão de|Cooperativas|de Crédito', ''),
     'crcv': ('Crédito Rural,|Cooperativismo|e Vendas', ''),
     'gpdca': ('Gestão de Pessoas e|Desenvolvimento|de Carreira no|Agronegócio', ''),
-    'mvpa': ('Marketing e Vendas|na Produção Animal', ''),
+    'mva': ('Marketing e Vendas|no Agronegócio', ''),
 }
 ALTURA_OVERLAY, TOPO_OVERLAY = 99, 24  # com sombra: texto sólido de ~88 px a ~31 px do topo
 PAD = 40

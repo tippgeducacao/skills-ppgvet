@@ -7,7 +7,6 @@ description: Texto de marketing da PPGVET/PPG como um copywriter da casa - a leg
 
 ## Antes de começar
 - Ler `${CLAUDE_PLUGIN_ROOT}/regras/nucleo.md`, `${CLAUDE_PLUGIN_ROOT}/regras/oficio/copy.md` (o ofício e as regras da casa) e `${CLAUDE_PLUGIN_ROOT}/regras/marca.md` (marcas, pós e nomes).
-- Se o plugin `antislop` estiver instalado, carregar a skill `antislop-copywriting` junto.
 - `PY=$(cat ~/.ppgvet/python)` e `S="${CLAUDE_PLUGIN_ROOT}/scripts"`.
 
 ## O que preciso de você

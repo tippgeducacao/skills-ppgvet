@@ -46,14 +46,17 @@ Lido pela skill `copy` e por toda peça com texto (arte, legenda, WhatsApp, anú
 | e-mail marketing | assunto com o fato (o quê e quando); prévia que completa o assunto; corpo de 3 a 5 parágrafos curtos | assunto → fato → por que importa para quem lê → um botão ou link do gerador "Links com UTM" → assinatura da marca e descadastro | só para quem aceitou receber ([O] [LGPD](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm)); assunto que não engana e sem "Re:" ou "Fwd:" falso; link de descadastro visível no corpo, em um clique para quem envia mais de 5 mil por dia ([O] [Gmail: regras para remetentes](https://support.google.com/a/answer/81126)) |
 | pauta de posts | uma semana por perfil | tabela: dia, perfil, formato, ideia, gancho e o material real que precisa (vídeo, foto, professor); uma marca por perfil | o mix segue "O que funciona nos nossos perfis" (acima): Reels de cena real, carrossel com fotos reais, conteúdo para guardar. Cada ideia com material que existe (perguntar); nunca evento, data ou convidado inventado. Formatos: `oficio/design.md` e `video.md` |
 
+**Perguntas reais do público** (Google e AnswerThePublic, nov/2026), base de pauta e de post para guardar; responder só com fato confirmado: qual a melhor pós em Medicina Veterinária · quanto custa e quanto ganha um veterinário pós-graduado · qual a área mais bem paga · a suinocultura é lucrativa · quanto ganha um veterinário de inspeção de alimentos, de reprodução bovina ou especialista em comportamento animal · veterinário pode prescrever canabidiol · o que se estuda em saúde única · onde estudar comportamento animal.
+
 ## Regras da casa
 - **Números e provas** [E]: só os do `marca.md`, na forma dele ("12.000+ alunos ativos", nunca "12 mil", "+12.000" ou "12K"; "300+ professores"; "Nota máxima (5) no MEC"). Nada de "formados" no lugar de "ativos". Número sem fonte não entra. Norma, portaria e estudo: conferir na fonte oficial antes.
-- **Nomes** [E]: pós com o nome exato do `marca.md`; professor e convidado com a grafia conferida (foto, site, Lattes); marcas e exceções pelo `marca.md`.
+- **Nomes** [E]: pós com o nome exato do `marca.md`; professor e convidado com a grafia conferida (foto, site, Lattes); @ de colaborador só de perfil que existe e é público (perfil privado ou @ errado derruba o agendamento); marcas e exceções pelo `marca.md`.
 - **Hashtags** [E]: até 5, sem acento (`#medicinaveterinaria`, `#ppgeducacao`), grafia conferida.
 - **Sem isca de engajamento** ([O] [Meta](https://transparency.meta.com/features/approach-to-ranking/content-distribution-guidelines/engagement-bait/)): nada de "comente SIM", "marque um amigo" ou "compartilhe" sem algo real por trás; isso tira o post da recomendação. **"Comente PALAVRA e receba no direct"** só com automação ligada no perfil e o material entregue de verdade. Palavras confirmadas: nenhuma ainda; até lá, perguntar a quem pede.
 - **Nunca** [E]: "Ouça agora nas principais plataformas…"; sobra de rascunho ("Ganchos alternativos:", `**negrito**`, "Versão A"); ano errado (conferir o ano de toda data).
 - **Português do Brasil, "você"** [N]: sem "tu", "estás", "equipa", "connosco"; sem travessão.
-- **Link**: todo link que sai à mão (bio, post, WhatsApp, QR) sai do gerador "Links com UTM" do sistema; anúncio leva o destino no campo do link e o UTM no modelo de parâmetros da plataforma; link entre os nossos sites, sem UTM.
+- **Link e UTM:** perfis, sites e a regra do UTM em `canais.md`.
+- **Busca:** o termo da coluna "busca" do `marca.md` entra no texto da legenda (o Instagram busca pela legenda, não pela hashtag sozinha).
 
 ## Podcast [E]
 Regras de copy da equipe para os podcasts (valem por cima das outras quando houver conflito):
@@ -65,10 +68,16 @@ Regras de copy da equipe para os podcasts (valem por cima das outras quando houv
 - Episódio de parceria (ex.: Nucleovet/SBSBL): seguir o modelo que a equipe mandar (título, host, hashtags); sem modelo, perguntar.
 
 ## Cara de texto de IA em português [N]
+Adaptado do antislop-copywriting (Miqdad Badjuber, licença MIT) para o nosso texto. Vale o **conjunto**: um sinal sozinho não prova nada; três juntos, reescrever.
 - "Não é X. É Y.": dizer o Y direto. Exceção: a frase de marca "Não é só mais uma pós-graduação".
 - ✅ em lista, "imperdível", "especialistas de peso", "conteúdo de ponta", "transformar a sua carreira", "jornada", "alavancar", "mergulhar", "cada vez mais", "no cenário atual": trocar pelo fato concreto.
 - "na prática" e "real" repetidos três vezes no mesmo texto: uma vez, no lugar certo.
-- Com o plugin `antislop` instalado, a skill `antislop-copywriting` complementa.
+- **Trio automático** ("rápido, prático e completo") e **frase picotada** ("Simples. Direto. Eficaz."): dizer a uma coisa que importa.
+- **Fecho de efeito** ("E isso muda tudo.", "E é aí que entra a pós.") e **conclusão genérica** ("O futuro é promissor."): terminar no fato ou na ação.
+- **Abertura de chatbot** ("Vamos ser sinceros:", "A verdade é que", "Neste post você vai ver") e **fecho de chatbot** ("Ficou alguma dúvida? Estamos aqui!", "Espero que tenha ajudado"): começar pelo gancho, fechar na ação.
+- **Autoridade sem dono** ("especialistas dizem", "estudos mostram") e **exagero de importância** ("um marco", "fundamental", "essencial"): dizer quem, qual estudo ou o número.
+- **Detalhe inventado** para soar específico (número, nome, caso): só fato que veio de quem pede ou de fonte oficial.
+- **Preservar o que é humano:** detalhe estranho e difícil de inventar, frase curta e longa alternadas, gíria do campo, a fala do professor como ele disse.
 
 ## Conferência
 `"$PY" "$S/checar_texto.py" texto.txt --tipo <legenda|arte|whatsapp|anuncio|roteiro|email|pauta> [--titulo "<título do anúncio ou assunto do e-mail>"]`: tamanho, assunto falso e descadastro no e-mail, 1ª linha, linhas do WhatsApp, hashtags (quantidade e grafia), "MBA", travessão, titulação, números da marca, sigla sozinha, frases proibidas, isca de engajamento, sobra de rascunho, português de Portugal, muletas, link sem UTM e atributo pessoal em anúncio. FALHA barra a entrega.

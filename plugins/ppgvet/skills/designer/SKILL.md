@@ -28,7 +28,7 @@ Se a pessoa chamou sem o material, explicar em poucas linhas:
    - logos, títulos das pós e peças pelo caminho do acervo (`file://`); cores só pelo código do `marca.md`;
    - foto tratada antes pela skill `editar-foto` (retoque, ampliar, tirar fundo) e nunca esticada;
    - faixa ou foto de ponta a ponta: `data-sangra` no elemento (pode encostar na borda).
-4. **Gerar e medir:** `"$PY" "$S/arte.py" <peca>.html --formato <feed|carrossel|story|story-anuncio|quadrado>` em cada HTML. Ele gera o PNG e reprova texto que estoura ou sai da área segura, fonte que não é Montserrat, contraste baixo (pequena 4,5:1, grande 3:1), cor fora do `marca.md` e texto que a conferência da copy barra. FALHA: corrigir e rodar de novo. AVISO de letra sobre foto: olhar na peça e, se não ler bem, escurecer a foto com um degradê atrás do texto.
+4. **Gerar e medir:** `"$PY" "$S/arte.py" <peca>.html --formato <feed|carrossel|story|story-anuncio|quadrado|youtube|email>` em cada HTML. Ele gera o PNG e reprova texto que estoura ou sai da área segura, fonte que não é Montserrat, contraste baixo (pequena 4,5:1, grande 3:1), cor fora do `marca.md` e texto que a conferência da copy barra. FALHA: corrigir e rodar de novo. AVISO de letra sobre foto: olhar na peça e, se não ler bem, escurecer a foto com um degradê atrás do texto.
 5. **Conferir e dar nota** de 0 a 10: hierarquia (o olho vai para o gancho primeiro), leitura no celular (olhar a peça com ~390 px de largura), marca e acabamento (`antislop-midia.md`). Carrossel: as lâminas lado a lado numa folha só (mesmo grid, ritmo). Abaixo de 8: corrigir.
 6. **Entregar** os PNGs (e a folha do carrossel) com a nota em uma linha. Ajuste vira versão nova (`-v2`); o HTML fica para refazer.
 

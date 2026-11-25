@@ -14,6 +14,7 @@ Porta das tarefas de vídeo: acha a tarefa, lê o passo a passo dela e segue. Ca
 | treinamento do comercial, de embaixadores ou de ferramenta para o PPGVET Academy | `treinamento-academy` |
 | conferir aulas que alguém já editou | `conferir-aula` |
 | cortes de live ou de aula gravada em posts 9:16; aula completa de uma live | `cortes-live` |
+| aftermovie: vídeo-resumo de evento (aula prática, fórum, aula de abertura, feira) a partir do material bruto | `aftermovie` |
 | Reels de fala, legenda, cor, música, compressão, qualquer outra edição | `editar-video` |
 | áudio sozinho (podcast, locução, áudio de WhatsApp): limpar ruído, igualar volume, cortar | `editar-video` ("Só áudio") |
 | baixar vídeo de um link (YouTube, Instagram, TikTok…) | `baixar-video` |

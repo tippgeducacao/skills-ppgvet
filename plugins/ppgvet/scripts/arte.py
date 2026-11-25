@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Arte estática (post, carrossel, story, anúncio): gera o PNG de uma página HTML e mede antes de entregar.
-uso: arte.py <peca.html> --formato feed|carrossel|story|story-anuncio|quadrado [--saida peca.png]
+uso: arte.py <peca.html> --formato feed|carrossel|story|story-anuncio|quadrado|youtube|email [--saida peca.png]
      arte.py --teste
 Mede no navegador, depois de a fonte carregar: texto que não cabe ou sai da área segura do formato (elemento com
 `data-sangra` pode encostar na borda, como faixa ou foto de ponta a ponta), fonte que não é Montserrat, contraste
@@ -16,7 +16,9 @@ from checar_texto import checar  # noqa: E402
 MARCA_MD = Path(__file__).resolve().parent.parent / "regras" / "marca.md"
 # formato: (largura, altura, margem dos lados, livre em cima, livre embaixo); fontes em regras/oficio/design.md e video.md
 FORMATOS = {"feed": (1080, 1350, 64, 64, 64), "carrossel": (1080, 1350, 64, 64, 64), "quadrado": (1080, 1080, 64, 64, 64),
-            "story": (1080, 1920, 64, 250, 250), "story-anuncio": (1080, 1920, 65, 269, 672)}  # anúncio: 6% lados, 14% topo, 35% base
+            "story": (1080, 1920, 64, 250, 250), "story-anuncio": (1080, 1920, 65, 269, 672),  # anúncio: 6% lados, 14% topo, 35% base
+            "youtube": (1920, 1080, 96, 64, 64), "email": (600, 650, 32, 32, 32)}
+ESCALA = {"youtube": 2, "email": 2}  # thumb sai 3840x2160 (ajuda do YouTube); banner de e-mail em dobro para tela retina
 GRANDE_NEGRITO, GRANDE_NORMAL = 52, 64  # px na peça de 1080 que viram "letra grande" no celular (oficio/design.md)
 NAO_E_MONTSERRAT = re.compile(r"^(?!.*montserrat)", re.I)
 
@@ -137,7 +139,7 @@ def main(html_arq, formato, saida):
         medida.write_text(html.replace("</body>", MEDIR + "</body>") if "</body>" in html else html + MEDIR, encoding="utf-8")
         m = medir(medida, w, h)
         falhas, avisos = problemas(m["textos"], formato, html, m["fotos"])
-    print_html(Path(html_arq).resolve().as_uri(), w, h, saida)
+    print_html(Path(html_arq).resolve().as_uri(), w, h, saida, ESCALA.get(formato, 1))
     for x in falhas:
         print("FALHA:", x)
     for x in avisos:
@@ -148,6 +150,7 @@ def main(html_arq, formato, saida):
 
 def teste():
     assert "#D24BA8" in paleta() and "#FAF9FB" in paleta() and "#965594" not in paleta()
+    assert FORMATOS["youtube"][0] * ESCALA["youtube"] == 3840 and set(ESCALA) <= set(FORMATOS)
     assert cores_fora("a{color:#d24ba8;background:#fff} b{color:#965594}") == ["#965594"]
     assert round(contraste((255, 255, 255), (0xD2, 0x4B, 0xA8)), 2) == 3.95
     caixa = dict(t="x", x0=100, y0=300, x1=900, y1=400, estoura=False, sangra=False, fonte="Arial, sans-serif", tam=40, peso=800,
