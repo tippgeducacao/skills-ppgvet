@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Carrossel "Aulas da semana" do Instagram (1080x1350, 4:5): capa + uma lâmina por aula, no molde da equipe.
-uso: aulas_semana.py semana.json [--fotos <pasta das fotos dos professores>]
+uso: aulas_semana.py semana.json [--fotos <pasta das fotos dos professores>] (sem --fotos: acervo/professores)
      aulas_semana.py --teste
 semana.json: {"ano": 2026, "aulas": [{"pos": "CBEA" (ou ["RNGB","NGB","GPL"] em módulo comum), "data": "23/11",
   "hora": "19h", "professor": "Dra. Ana Souza", "tema": "Bem-estar na criação",
@@ -321,7 +321,7 @@ if __name__ == "__main__":
     if sys.argv[1:] == ["--teste"]:
         teste()
     elif len(sys.argv) >= 2:
-        fotos = sys.argv[sys.argv.index("--fotos") + 1] if "--fotos" in sys.argv else None
+        fotos = sys.argv[sys.argv.index("--fotos") + 1] if "--fotos" in sys.argv else acervo("professores")
         r = gerar(json.load(open(sys.argv[1], encoding="utf-8")), fotos)
         sys.exit(1 if any(f for _, f in r) else 0)
     else:

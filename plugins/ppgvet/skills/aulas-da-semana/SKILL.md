@@ -12,7 +12,7 @@ description: Carrossel "Aulas da semana" do Instagram da PPGVET/PPG (imagem, nã
 ## O que preciso de você
 Se a pessoa chamou sem a lista (ou é a primeira vez), explicar em poucas linhas:
 - **A lista da semana**, colada, uma aula por linha: pós, data, horário, professor e o tema. Titulação: regra do `sempre.md` (sem comprovação, só o nome).
-- **As fotos dos professores**: a pasta onde estão (nome-sobrenome.jpg) ou os arquivos. Sem foto, a lâmina não sai: nunca foto de banco nem gerada.
+- **As fotos dos professores**: só se a pessoa tiver uma mais nova; sem `--fotos`, o script procura pelo nome no acervo (`acervo/professores/`, quem está nos sites). Sem foto, a lâmina não sai: nunca foto de banco nem gerada.
 - Exemplo: *"faz o carrossel da semana"* + `CBEA | 23/11 | 19h | Dra. Ana Souza | Bem-estar na criação`.
 
 ## O molde (o da equipe, com as regras da marca)
@@ -28,7 +28,7 @@ Se a pessoa chamou sem a lista (ou é a primeira vez), explicar em poucas linhas
 
 ## Passo a passo
 1. **Montar a lista** em `<artes>/trabalho/semana-<dd-mm>.json` (formato no começo de `"$S/aulas_semana.py"`): sigla certa pela tabela do `marca.md` (nome de pós que não bate com nenhuma: perguntar no plano), data `dd/mm`, horário como veio, professor como veio.
-2. **Plano**, uma tabela: aula, pós (sigla e nome oficial), dia da semana calculado, horário, professor, foto achada e os avisos. Rodar antes `"$PY" "$S/aulas_semana.py" <json> --fotos <pasta>`: ele para com erro quando falta algo (sigla, data, foto) e avisa titulação que saiu (Esp., PhD, M.V.), grafia que não bate com o nome da foto ("Polleto" × "poletto"), tema longo e aula no fim de semana. Dia da semana que a pessoa escreveu diferente da data: avisar (vale o da data). Esperar o ok.
+2. **Plano**, uma tabela: aula, pós (sigla e nome oficial), dia da semana calculado, horário, professor, foto achada e os avisos. Rodar antes `"$PY" "$S/aulas_semana.py" <json>` (ou `--fotos <pasta>` com fotos novas): ele para com erro quando falta algo (sigla, data, foto) e avisa titulação que saiu (Esp., PhD, M.V.), grafia que não bate com o nome da foto ("Polleto" × "poletto"), tema longo e aula no fim de semana. Dia da semana que a pessoa escreveu diferente da data: avisar (vale o da data). Esperar o ok.
 3. **Gerar**: o mesmo comando. Sai em `<artes>/aulas-semana-<marca>-<dd-mm>/` (nunca sobrescreve: `-v2`), com as lâminas numeradas e a `folha.jpg`.
 4. **Conferir**: o script mede cada lâmina no navegador e marca `FALHA` (texto que não cabe, encosta na borda ou cobre outro). FALHA barra a entrega: encurtar o tema com a pessoa ou corrigir e gerar de novo. Abrir a `folha.jpg` e dar nota de 0 a 10 em: dados (nome, pós, dia, horário e tema iguais à lista conferida), leitura no celular, marca e acabamento (`antislop-midia.md`). Abaixo de 8: corrigir.
 5. **Entregar**: a pasta, a folha e a nota em uma linha. Ajuste vira versão nova. Limpar depois da aprovação: nada (o `.json` fica para refazer).

@@ -13,7 +13,7 @@ Gera tudo o que a live precisa e entrega num zip com os nomes que o projeto do v
 - Pasta da live: `<lives>/live-<aaaa-mm-dd>-<slug>/`, com `<lives>` de `"$PY" "$S/comum.py" --pastas`.
 
 ## O que preciso de você
-- **Foto do professor** (qualquer fundo; o script recorta) e o **tema da live**, escrito como vai aparecer.
+- **Foto do professor** (qualquer fundo; o script recorta) e o **tema da live**, escrito como vai aparecer. Sem foto anexa: a do acervo, `acervo/professores/<nome-sobrenome>.webp` (fundo branco: recorta igual).
 - **A pós** (ou as duas, se a live for de duas pós). Sigla na tabela do `regras/marca.md`; não disse qual, perguntar.
 - **Link do certificado** da Even3. Sem ele, o resto sai e o `.txt` avisa que falta.
 - Exemplo: *"live de quinta sobre biosseguridade na granja, pós PS e SA, foto do professor anexa, certificado https://www.even3.com.br/..."*

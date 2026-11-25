@@ -25,6 +25,7 @@ Adaptado do guia de marca da PPGVET para vídeo, arte e texto (o guia é o dono;
 | moldura de intro de aula | `molduras/moldura-aula-ppgvet-ppg-16x9.png` (o vídeo entra no retângulo azul x 241..1678, y 134..944) | intro de aula com as duas marcas; treinamento do Academy só com câmera |
 | moldura do Academy com tela | `molduras-aula/PADRÃO.png` (tela grande à esquerda, câmera à direita) | treinamento do Academy com tela compartilhada |
 | card do professor | `card-professor/card-sem-nome.png` | base do card gerado na hora na aula curricular |
+| fotos dos professores | `professores/<nome-sobrenome>.webp` (só quem está nos sites; recorte em fundo branco 1920x1080 ou retrato do site). Dono: este acervo; originais em alta em `~/conhecimento/professores/fotos` (só nesta máquina) | aulas da semana, live, arte e chamada, quando a pessoa não manda a foto |
 | títulos das pós | `titulos-pos/titulo-pos-<sigla>.png` (cinza e magenta, 4x) e `-branco.png`; gerados por `scripts/live_titulos.py` | live, arte, qualquer peça com o nome da pós |
 | peças da live | `live/`: `titulos-overlay/titulo-live-<sigla>.png` (vMix, topo), `moldura-insta.html` (modelo) e `moldura-insta-exemplo.png`, `qr-live.html`, `molduras-vmix/` (uma pessoa, duas pessoas, slides) | skill `live-vmix` |
 | efeitos sonoros | `sons/<interface, transicao, impacto, foley>/<nome>.wav`; origem e licença em `sons/ORIGEM.md` | qualquer vídeo com sound design (`regras/oficio/som.md`) |

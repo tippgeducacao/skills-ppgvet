@@ -14,7 +14,7 @@ Se a pessoa chamou sem o material, explicar em poucas linhas:
 - **A peça:** o que é (post, carrossel, story, criativo de professor, anúncio), onde vai e a marca ou a pós.
 - **O objetivo e a ação** (salvar, link na bio, falar com especialista, confirmar presença).
 - **O texto**, ou os fatos para escrever (a skill `copy` escreve e confere).
-- **As fotos reais** (professor, aula, campo, turma). Sem foto boa, a peça sai sem foto; nunca banco nem IA fingindo pessoa ou lugar (`sempre.md`).
+- **As fotos reais** (professor, aula, campo, turma). Professor sem foto anexa: `acervo/professores/<nome-sobrenome>.webp`. Sem foto boa, a peça sai sem foto; nunca banco nem IA fingindo pessoa ou lugar (`sempre.md`).
 - Exemplo: *"post para o feed da pós de Suínos chamando para falar com um especialista, com esta foto da aula na granja"*.
 
 ## Passo a passo
