@@ -20,16 +20,17 @@ Se a pessoa chamou sem o material, explicar em poucas linhas:
 ## Passo a passo
 1. **Referência** (antes do plano; nível padrão e caprichado):
    - Drive conectado: 3 a 5 artes do mesmo tipo nas pastas da equipe, das mais recentes (descer pasta a pasta com `parentId`): artes atuais `1xWSoczhAye1qy_gAeUAQG99GLMD8fS8Y`, artes de 2024 a 2026 `1g5EHmuvCbiIOwAlLUu5WpyYJvk2Sh46y`. Sem Drive: o `oficio/design.md` já resume o padrão, mais os prints que a pessoa mandar.
-   - Perfis `@ppgvet_oficial` e `@ppg.educacao`: o que está no ar do mesmo tipo (prints da pessoa, ou a API da Meta, só leitura, se o MCP estiver conectado).
-   - Tirar 3 princípios (grid, hierarquia, cor) e desenhar do zero com a marca: copiar o como, nunca a peça (`oficio/design.md`, "Usar referência").
-2. **Plano:** o desenho em palavras (formato, grid, os 3 níveis de texto com o texto exato, foto e recorte, cores pelo código, onde vão a logo e o bloco "PÓS-GRADUAÇÃO │ nome" de `$A/titulos-pos/`). Peça nova ou fora do padrão: mostrar um protótipo gerado (passo 4) antes de fazer o resto. Esperar o ok.
-3. **Montar** em `<artes>/<peca>/` um HTML por peça ou lâmina (`01-capa.html`, `02-…`), todas com o mesmo grid:
-   - fonte declarada com o nome Montserrat: `@font-face{font-family:Montserrat;src:url('<$A>/fontes/montserrat-variavel.ttf')}`;
-   - logos, títulos das pós e peças pelo caminho do acervo (`file://`); cores só pelo código do `marca.md`;
-   - foto tratada antes pela skill `editar-foto` (retoque, ampliar, tirar fundo) e nunca esticada;
-   - faixa ou foto de ponta a ponta: `data-sangra` no elemento (pode encostar na borda).
-4. **Gerar e medir:** `"$PY" "$S/arte.py" <peca>.html --formato <feed|carrossel|story|story-anuncio|quadrado|youtube|email>` em cada HTML. Ele gera o PNG e reprova texto que estoura ou sai da área segura, fonte que não é Montserrat, contraste baixo (pequena 4,5:1, grande 3:1), cor fora do `marca.md` e texto que a conferência da copy barra. FALHA: corrigir e rodar de novo. AVISO de letra sobre foto: olhar na peça e, se não ler bem, escurecer a foto com um degradê atrás do texto.
-5. **Conferir e dar nota** de 0 a 10: hierarquia (o olho vai para o gancho primeiro), leitura no celular (olhar a peça com ~390 px de largura), marca e acabamento (`antislop-midia.md`). Carrossel: as lâminas lado a lado numa folha só (mesmo grid, ritmo). Abaixo de 8: corrigir.
-6. **Entregar** os PNGs (e a folha do carrossel) com a nota em uma linha. Ajuste vira versão nova (`-v2`); o HTML fica para refazer.
+   - Perfis `@ppgvet_oficial` e `@ppg.educacao`: o que está no ar do mesmo tipo (prints da pessoa, ou a API da Meta, só leitura).
+   - Tirar 3 princípios (grid, hierarquia, cor) e desenhar com a marca: copiar o como, nunca a peça.
+2. **Plano:** a direção (5 linhas, `antislop-midia.md`), o molde (`oficio/design.md`, "Moldes da casa") ou "fora do molde" com o desenho em palavras, o texto exato de cada campo (a `copy` escreve e confere) e a foto. Peça nova fora do molde: protótipo antes do resto. Esperar o ok.
+3. **Montar:**
+   - **Peça de molde:** a ficha em `<artes>/<peca>/ficha.json` (campos no `"$PY" "$S/molde.py"` sem argumento) e `"$PY" "$S/molde.py" <artes>/<peca>/ficha.json --saida <artes>/<peca>`. Ele preenche, gera PNG e JPEG, confere cada peça com o `arte.py` e faz a `folha.jpg`.
+   - **Fora do molde:** um HTML por peça ou lâmina (`01-capa.html`…), mesmo grid em todas; fonte `@font-face{font-family:Montserrat;src:url('<$A>/fontes/montserrat-variavel.ttf')}`; logos e títulos pelo acervo (`file://`); cores só do `marca.md`; foto tratada antes (`editar-foto`), nunca esticada; faixa ou foto de ponta a ponta com `data-sangra`. Depois `"$PY" "$S/arte.py" <peca>.html --formato <formato>` em cada um.
+   - Foto real sempre; sem foto boa, a peça sai sem foto (`sempre.md`).
+4. **Medir:** FALHA (texto que estoura, fora da área segura, fonte, contraste medido na peça, inclusive sobre foto, cor fora da marca, texto que a copy barra): corrigir e gerar de novo. AVISO (níveis de letra, palavra sozinha no título, bordas fora do grid, foto esticada): olhar na peça e decidir.
+5. **Revisar:**
+   - Rápido: nota de 0 a 10 em hierarquia, leitura no celular (~390 px), marca e acabamento (`antislop-midia.md`, "Conferir"); abaixo de 8, corrigir.
+   - Padrão e caprichado: chamar o agente `ppgvet:revisor-peca` (ferramenta Agent) com o pedido, a direção, os caminhos dos PNG e da folha, a referência e a saída da medição. "corrige" ou "refaz": ajustar e mandar de volta (rodadas e saída: `nucleo.md`).
+6. **Entregar** os JPEG (o que vai para o Instagram) e a folha, com a nota ou o veredito em uma linha. Ajuste vira versão nova (`-v2`); a ficha e o HTML ficam para refazer.
 
-Formatos, tamanhos e área livre: `oficio/design.md`, "Instagram".
+Formatos, tamanhos e área livre: `oficio/design.md`.

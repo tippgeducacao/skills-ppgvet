@@ -1,0 +1,17 @@
+<!-- Thumb do YouTube (16:9): rosto real à direita, 3 a 6 palavras gigantes à esquerda, nada no canto de baixo à direita -->
+<style>
+.thumb .foto{right:0;top:0;width:52%;height:100%}
+.thumb .foto::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(26,26,26,1) 0,rgba(26,26,26,0) 38%)}
+.thumb .miolo{position:absolute;left:var(--lado);top:var(--cima);bottom:var(--baixo);width:56%;display:flex;flex-direction:column;justify-content:center}
+.thumb .titulo{--t:120px;line-height:.95}
+.thumb .rotulo{margin-bottom:34px}
+.thumb .logo{position:absolute;left:var(--lado);bottom:var(--baixo);width:190px}
+</style>
+<div class="peca thumb escuro">
+  <div class="foto" data-sangra><img alt="foto" src="${foto}" style="object-position:${foco}"></div>
+  <div class="miolo">
+    <div><span class="rotulo faixa-pos" data-caixa>${rotulo}</span></div>
+    <h1 class="titulo forte">${titulo}</h1>
+  </div>
+  <img class="logo" alt="logo" src="${logo_branco}">
+</div>

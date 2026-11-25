@@ -13,7 +13,8 @@ O nível vem do tipo de peça e vai no plano; na dúvida, perguntar.
 | texto e motion | peças prontas, um estilo | 2 ou 3 movimentos variados | vocabulário próprio da peça, quadros-chave aprovados antes de animar |
 | cor | correção | + combinar planos e pele | + look de marca |
 | som | voz e música | + room tone; efeito raro | sound design completo, teste do mudo |
-| revisão | nota e folha de quadros | + 2 rodadas | + 3 rodadas, quadro cheio em cada corte |
+| direção | — | 5 linhas no plano (`antislop-midia.md`) | 5 linhas + referência aprovada |
+| revisão | nota e folha de quadros | + agente `revisor-peca`, até 2 rodadas | + agente `revisor-peca`, até 3 rodadas, quadro cheio em cada corte |
 
 ## O estúdio: uma peça usa todos os ofícios
 Cada skill faz a sua parte e chama as outras no que a peça tiver; ninguém refaz o que outro ofício já faz.
@@ -45,9 +46,9 @@ Exemplo: um Reels de pós é o `editar-video` montando, a `copy` escrevendo perg
 
 ## Como trabalhar
 0. **Primeira vez ou pedido sem material:** antes do plano, explicar em poucas linhas o que a skill precisa, onde pôr (o caminho real da pasta da pessoa) e um exemplo de pedido, pela seção "O que preciso de você" da skill. Se o material já veio, só perguntar o que faltar, no plano.
-1. **Plano, uma vez:** antes de começar, mostrar o que vai ser feito (cada skill diz o que o plano dela inclui) e perguntar o que falta saber. Peça para o Instagram (Reels, cortes, chamada, depoimento, arte): perguntar no plano (ou já na primeira resposta, se faltar material) se quer junto a legenda do post (skill `copy`) e, no vídeo, a capa (`designer`); com o sim, saem na mesma entrega. Esperar o ok.
+1. **Plano, uma vez:** antes de começar, mostrar o que vai ser feito (cada skill diz o que o plano dela inclui), com a direção no nível padrão e caprichado, e perguntar o que falta saber. Peça para o Instagram (Reels, cortes, chamada, depoimento, arte): perguntar no plano (ou já na primeira resposta, se faltar material) se quer junto a legenda do post (skill `copy`) e, no vídeo, a capa (`designer`); com o sim, saem na mesma entrega. Esperar o ok.
 2. **Depois do ok, fazer tudo sem parar:** o lote inteiro, um atrás do outro. As dúvidas vão no plano; parar no meio só se surgir uma que a pessoa precisa decidir.
-3. **Conferir e dar nota** a cada entrega: nota de 0 a 10 em cada critério da skill, mais acabamento geral, conferido contra o `antislop-midia.md`. Abaixo de 8: corrigir sozinho e conferir de novo. O que vale para todo vídeo:
+3. **Conferir e dar nota** a cada entrega: nota de 0 a 10 em cada critério da skill, mais acabamento geral, conferido contra o `antislop-midia.md` ("Recusar" e "Conferir"). Abaixo de 8: corrigir sozinho e conferir de novo. Padrão e caprichado: depois da nota, o agente `ppgvet:revisor-peca` (ferramenta Agent) com o pedido, a direção, a peça (PNG, JPG ou a folha de quadros), a referência e a saída do script; só entrega com "entrega". Passou do limite de rodadas (tabela do nível): mostrar à pessoa o que ficou aberto, para ela decidir. O portão do fim do turno (hook do pacote) devolve uma vez o que o script reprovou e ninguém corrigiu. O que vale para todo vídeo:
    - todo texto que aparece na peça (cartão, pergunta, legenda, título) passa pelo `checar_texto.py` (`--tipo arte`) antes do render;
    - folha de quadros durante todo o tempo de cada gráfico (nada cobre nem encosta no rosto);
    - começo e fim transcritos de novo;

@@ -1,0 +1,22 @@
+<!-- Carrossel, lâmina do meio (4:5): uma ideia, título curto, barra da marca, texto com o trecho-chave em negrito; foto real opcional embaixo, de ponta a ponta -->
+<style>
+.cont .logo{position:absolute;left:var(--lado);top:var(--cima);width:130px}
+.cont .miolo{position:absolute;left:var(--lado);right:var(--lado);top:calc(var(--cima) + 170px)}
+.cont .titulo{--t:72px}
+.cont .barra{margin:36px 0 34px}
+.cont .apoio{--a:40px;max-width:900px}
+.cont .foto{left:0;right:0;bottom:0;height:42%}
+.cont .foto .veu{--veu-de:45%;--veu-ate:100%}
+.cont .seta{position:absolute;left:var(--lado);bottom:var(--baixo)}
+.cont.com-foto .seta{color:#FFFFFF}
+</style>
+<div class="peca cont ${tom} ${com_foto}">
+  <img class="logo" alt="logo" src="${logo}">
+  <div class="miolo">
+    <h2 class="titulo forte">${titulo}</h2>
+    <div class="barra"></div>
+    <p class="apoio">${texto}</p>
+  </div>
+  ${foto_html}
+  <div class="rotulo seta">${seta}</div>
+</div>

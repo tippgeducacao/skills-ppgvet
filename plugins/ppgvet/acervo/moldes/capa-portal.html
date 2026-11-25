@@ -1,0 +1,18 @@
+<!-- Capa do portal do aluno (1080x1920 e 1000x1000): foto real da pós, nome do bloco, "aulas curriculares" e a marca -->
+<style>
+.portal .foto{inset:0}
+.portal .veu{--veu-de:18%;--veu-ate:64%}
+.portal .miolo{position:absolute;left:var(--lado);right:var(--lado);bottom:var(--baixo);text-align:center;color:#FFFFFF;display:flex;flex-direction:column;align-items:center}
+.portal .titulo{--t:var(--pt,128px);font-weight:900;text-transform:uppercase;line-height:.95}
+.portal .apoio{font-weight:300;letter-spacing:.14em;text-transform:uppercase;--a:var(--pa,44px);margin-top:18px}
+.portal .logo{width:var(--pl,230px);margin-top:var(--pm,64px)}
+.portal-quadrado{--pt:104px;--pa:36px;--pl:190px;--pm:44px}
+</style>
+<div class="peca portal escuro ${formato}">
+  <div class="foto" data-sangra><img alt="foto" src="${foto}" style="object-position:${foco}"><div class="veu"></div></div>
+  <div class="miolo">
+    <h1 class="titulo">${titulo}</h1>
+    <p class="apoio">${apoio}</p>
+    <img class="logo" alt="logo-sobre-foto" src="${logo_branco}">
+  </div>
+</div>

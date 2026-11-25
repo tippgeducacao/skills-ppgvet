@@ -19,10 +19,10 @@ Entra sozinho em toda sessão. Vale para peça de marketing da PPGVET ou da PPG 
 ## Máquina e tokens
 - Vídeo se olha por folha de quadros, nunca quadro a quadro; transcrição, log e texto grande por busca ou por trecho.
 - Render e transcrição em prioridade baixa e em segundo plano, um pesado por vez.
-- Resposta curta: o que foi feito, onde está, o que precisa de decisão.
+- Resposta curta: o que foi feito, onde está, o que decidir.
 
 ## Qual skill abrir
-Consulta (qual cor, qual nome, como fazer): responder direto. Texto ou peça para publicar, mesmo pedido solto ("uma frase pro story"): abrir a skill do ofício pela ferramenta Skill (`ppgvet:<nome>`), que escreve e confere.
+Consulta (cor, nome, como fazer): responder direto. Texto ou peça para publicar, mesmo pedido solto ("uma frase pro story"): abrir a skill do ofício pela ferramenta Skill (`ppgvet:<nome>`), que escreve e confere.
 
 | pedido | skill |
 |---|---|
@@ -35,3 +35,4 @@ Consulta (qual cor, qual nome, como fazer): responder direto. Texto ou peça par
 | pacote da live no vMix (moldura, QR, títulos) | `ppgvet:live-vmix` |
 | boas-vindas a patrocinador de podcast (mascote, Flow) | `ppgvet:patrocinador-podcast` |
 | preparar o computador, erro de programa | `ppgvet:instalar` |
+| revisar peça pronta (arte, vídeo, foto) | agente `ppgvet:revisor-peca` |

@@ -217,7 +217,7 @@ def medir(html_arq):
     nav = next(n for n in NAVEGADORES + ["/usr/bin/google-chrome", "/usr/bin/chromium"] if n and os.path.exists(n))
     out = subprocess.run([nav, "--headless=new", "--disable-gpu", "--allow-file-access-from-files", f"--window-size={W},{H}",
                           "--virtual-time-budget=3000", "--dump-dom", Path(html_arq).resolve().as_uri()],
-                         capture_output=True, text=True, check=True).stdout
+                         capture_output=True, text=True, encoding="utf-8", check=True).stdout
     m = re.search(r'<pre id="medida">(.*?)</pre>', out, re.S)
     return json.loads(m.group(1).replace("&quot;", '"')) if m else []
 

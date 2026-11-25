@@ -1,0 +1,26 @@
+<!-- Professor (feed 4:5, anúncio): retrato real à direita, logo e bloco da pós ao lado, nome em uma linha embaixo com cargo, empresa e ação -->
+<style>
+.prof .retrato{right:0;top:0;width:52%;height:66%;background:#FFFFFF}
+.prof .col{position:absolute;left:var(--lado);top:var(--cima);width:calc(48% - var(--lado) - 40px);height:calc(66% - var(--cima) - 8px);display:flex;flex-direction:column}
+.prof .col .logo{width:150px}
+.prof .col .lockup{margin-top:auto;flex-direction:column;align-items:flex-start;gap:16px;--lk:380px}
+.prof .col .lk-fio{width:96px;height:5px}
+.prof .ficha{position:absolute;left:var(--lado);right:var(--lado);top:calc(66% + 44px);bottom:var(--baixo);display:flex;flex-direction:column}
+.prof .nome{font-size:62px;font-weight:900;line-height:1.02;letter-spacing:-.02em;margin-top:14px;text-wrap:balance}
+.prof .tit{font-weight:300}
+.prof .cargo{--a:30px;margin-top:12px;max-width:900px}
+.prof .cta{margin-top:auto;align-self:flex-start;white-space:nowrap}
+</style>
+<div class="peca prof ${tom}">
+  <div class="foto retrato" data-sangra><img alt="retrato" src="${foto}" style="object-position:${foco}"></div>
+  <div class="col">
+    <img class="logo" alt="logo" src="${logo}">
+    ${lockup}
+  </div>
+  <div class="ficha">
+    <div class="rotulo">${rotulo}</div>
+    <div class="nome">${nome}</div>
+    <p class="apoio cargo">${cargo}</p>
+    ${cta}
+  </div>
+</div>

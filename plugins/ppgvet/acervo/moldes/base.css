@@ -1,0 +1,38 @@
+/* Sistema dos moldes (regras/oficio/design.md). Cores só por variável: o molde.py põe os códigos do marca.md. */
+@font-face{font-family:Montserrat;src:url('${fonte}')}
+*{box-sizing:border-box;margin:0}
+body{width:${w}px;height:${h}px;overflow:hidden;font-family:Montserrat;background:var(--fundo);color:var(--texto);
+  --cima:${cima}px;--baixo:${baixo}px;--lado:${lado}px}
+.claro{--fundo:${claro};--texto:${escuro};--pos-texto:${pos_texto_claro};--destaque:${destaque_claro}}
+.escuro{--fundo:${escuro};--texto:#FFFFFF;--pos-texto:${pos_texto_escuro};--destaque:${destaque_escuro}}
+:root{--marca:${marca};--acao:${acao};--faixa:${faixa};--pos:${pos};--sobre-pos:${sobre_pos};--escuro:${escuro}}
+.peca{position:relative;width:100%;height:100%;background:var(--fundo);color:var(--texto)}
+
+/* foto de ponta a ponta e véu escuro para o texto ler (o arte.py mede o contraste nos pixels) */
+.foto{position:absolute;overflow:hidden}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,26,26,0) var(--veu-de,35%),rgba(26,26,26,.92) var(--veu-ate,82%))}
+.veu-topo{position:absolute;left:0;right:0;top:0;height:300px;background:linear-gradient(180deg,rgba(26,26,26,.55),rgba(26,26,26,0))}
+
+/* tipografia: até 3 níveis (título, apoio, detalhe) e um rótulo */
+.titulo{font-size:var(--t,92px);line-height:1.02;letter-spacing:-.02em;font-weight:300;text-wrap:balance}
+.titulo b{font-weight:900}
+.titulo.forte{font-weight:900;text-transform:uppercase;line-height:.98;letter-spacing:-.015em}
+.titulo.forte b{color:var(--destaque)}
+.apoio{font-size:var(--a,38px);line-height:1.3;font-weight:500;text-wrap:pretty}
+.apoio b{font-weight:800}
+.rotulo{font-size:26px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;line-height:1.2}
+.faixa-pos{display:inline-block;background:var(--pos);color:var(--sobre-pos);padding:14px 22px}
+.barra{width:120px;height:10px;background:var(--marca)}
+.cta{display:inline-block;background:var(--faixa);color:#FFFFFF;font-weight:800;font-size:28px;letter-spacing:.06em;
+  text-transform:uppercase;padding:24px 40px;border-radius:999px;line-height:1}
+.logo{display:block;height:auto}
+
+/* bloco "PÓS │ GRADUAÇÃO │ nome": a cor da pós no fio; no nome só quando lê (4,5:1) */
+.lockup{display:flex;align-items:stretch;gap:24px}
+.lk-pg{display:flex;flex-direction:column;justify-content:center;line-height:.86}
+.lk-pos{font-weight:900;font-size:72px;letter-spacing:-.01em}
+.lk-grad{font-weight:300;font-size:24px;letter-spacing:.075em;margin-top:6px}
+.lk-fio{width:5px;background:var(--pos);flex:none}
+.lk-nome{font-weight:800;font-size:28px;line-height:1.1;text-transform:uppercase;color:var(--pos-texto);
+  display:flex;align-items:center;max-width:var(--lk,520px)}

@@ -19,7 +19,7 @@ Um pacote só, o **ppgvet**, com as skills de vídeo, áudio, foto, arte e texto
 | `/ppgvet:aulas-da-semana` | carrossel "Aulas da semana" do Instagram: capa e uma lâmina por aula (pós, dia, horário, professor com foto, tema), com cores e nomes oficiais e conferência medida | "faz o carrossel da semana" + a lista das aulas e a pasta das fotos |
 | `/ppgvet:pacote` | as peças de uma entrega que sempre sai junta, num pedido só e com o mesmo nome, data e link: entrada de professor, episódio de podcast, aquecimento, abertura de turma e lançamento de pós | "pacote de entrada do professor Bruno Lima, pós PS, primeira aula 10/12" + foto e link |
 | `/ppgvet:copy` | texto de marketing: legenda do Instagram, texto das artes, WhatsApp, anúncio (proposta para o tráfego), e-mail, roteiro de vídeo e pauta da semana, com 2 ou 3 versões para escolher e conferência medida; abre sozinha em todo texto para publicar | "legenda do carrossel da live de quinta, pós PS" + os fatos e o link do gerador; "roteiro do Reels da professora"; "pauta da semana do perfil da PPGVET" |
-| `/ppgvet:designer` | arte estática (post, carrossel, story, criativo de professor, anúncio) com referência nas artes da equipe, plano antes e conferência medida (cor, fonte, contraste, área segura, texto) | "post para o feed da pós de Suínos" + a foto e o objetivo |
+| `/ppgvet:designer` | arte estática (post, carrossel, story, criativo de professor, anúncio, KV, thumb, capa do portal) nos moldes da casa ou do zero, com direção, conferência medida e revisor | "post para o feed da pós de Suínos" + a foto e o objetivo |
 | `/ppgvet:motion` (pela porta `video`) | peça animada sozinha: abertura, vinheta, logo ou texto animado, explicativo; quadros-chave aprovados antes de animar, som e conferência | "vinheta de 5 s com a logo da PPGVET para o YouTube" |
 | `/ppgvet:editar-foto` | foto como um fotógrafo: retoque de luz, cor, pele, nitidez e horizonte, recorte no tamanho de uso, ampliar, tirar o fundo | "deixa essa foto profissional", "tira o fundo" |
 | `/ppgvet:instalar` | prepara o computador (uma vez) e diz o que falta quando algo dá erro | "instala o kit", "está tudo instalado?" |
@@ -30,6 +30,8 @@ Não precisa digitar o comando: pedir com as próprias palavras basta. Em todas,
 1. **Sempre ligado:** no início de cada sessão, o pacote põe no Claude o essencial da marca, as regras que não mudam e qual skill abrir para cada pedido (`regras/sempre.md`). Por isso até uma pergunta solta ("que cor uso no story da PPG?") já sai no padrão.
 2. **Portas:** as skills acima abrem pelo pedido ou por `/ppgvet:<nome>`; as tarefas de vídeo, motion e áudio passam pela porta `video`.
 3. **Sob demanda:** as regras de cada ofício, o acervo e os scripts que medem e barram a entrega só são lidos dentro da tarefa.
+
+**Bom gosto garantido:** direção antes, moldes da casa (`acervo/moldes`), medição que barra (`arte.py`, `checar.py`, `checar_texto.py`), o agente `revisor-peca` e o portão no fim do turno. Regras: `regras/antislop-midia.md`.
 
 ## Instalar (uma vez por computador)
 

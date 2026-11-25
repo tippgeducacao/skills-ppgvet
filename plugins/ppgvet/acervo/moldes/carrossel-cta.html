@@ -1,0 +1,17 @@
+<!-- Carrossel, última lâmina (4:5): uma ação só, tom invertido para fechar o ritmo, bloco da pós -->
+<style>
+.fim .logo{position:absolute;left:50%;transform:translateX(-50%);top:var(--cima);width:150px}
+.fim .miolo{position:absolute;left:var(--lado);right:var(--lado);top:34%}
+.fim .titulo{--t:88px}
+.fim .apoio{margin:32px 0 48px;max-width:860px}
+.fim .base{position:absolute;left:var(--lado);right:var(--lado);bottom:var(--baixo)}
+</style>
+<div class="peca fim ${tom}">
+  <img class="logo" alt="logo" src="${logo}">
+  <div class="miolo">
+    <h2 class="titulo forte">${titulo}</h2>
+    <p class="apoio">${apoio}</p>
+    ${cta}
+  </div>
+  <div class="base">${lockup}</div>
+</div>

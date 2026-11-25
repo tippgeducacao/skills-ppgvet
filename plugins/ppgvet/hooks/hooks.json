@@ -1,5 +1,5 @@
 {
-  "description": "Põe no contexto, no início de cada sessão, o essencial da marca e o mapa das skills (regras/sempre.md)",
+  "description": "SessionStart: põe no contexto o essencial da marca e o mapa das skills (regras/sempre.md). Stop: o portão de entrega (scripts/portao.py) devolve o turno uma vez se a última conferência de uma peça reprovou",
   "hooks": {
     "SessionStart": [
       {
@@ -9,6 +9,17 @@
             "type": "command",
             "command": "printf 'Pacote ppgvet: %s\\n\\n' \"${CLAUDE_PLUGIN_ROOT}\"; cat \"${CLAUDE_PLUGIN_ROOT}/regras/sempre.md\"",
             "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -s \"$HOME/.ppgvet/conferencias.jsonl\" ] || exit 0; PY=\"$(cat \"$HOME/.ppgvet/python\" 2>/dev/null)\"; [ -n \"$PY\" ] && \"$PY\" \"${CLAUDE_PLUGIN_ROOT}/scripts/portao.py\" || true",
+            "timeout": 10
           }
         ]
       }

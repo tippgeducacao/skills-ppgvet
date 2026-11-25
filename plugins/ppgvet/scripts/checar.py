@@ -11,6 +11,7 @@ com --srt, só conta quando a legenda está na tela."""
 import json, os, re, struct, subprocess, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from comum import FF, FFPROBE, baixo  # noqa: E402
+from portao import registrar  # noqa: E402
 
 TOL_LUFS, PICO_MAX, PICO_AVISO, CANAIS_DB, CPS = 1.5, -1.0, -1.5, 1.0, 17
 
@@ -212,4 +213,6 @@ if __name__ == "__main__":
     res = checar(a[0], op("--srt"), op("--lufs", float) or -16.0, op("--car", int), "--instagram" in a, op("--rosto", int), "--story" in a, op("--tol", float) or TOL_LUFS)
     for nivel, texto in res:
         print(f"{nivel:5} {texto}")
-    sys.exit(1 if any(n == "FALHA" for n, _ in res) else 0)
+    n = sum(nv == "FALHA" for nv, _ in res)
+    registrar(a[0], not n, n)
+    sys.exit(1 if n else 0)

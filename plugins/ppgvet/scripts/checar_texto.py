@@ -3,7 +3,9 @@
 uso: checar_texto.py <arquivo.txt> --tipo legenda|arte|whatsapp|anuncio|roteiro|email|pauta [--titulo "<título do anúncio ou assunto do e-mail>"]
      checar_texto.py --teste
 FALHA barra a entrega (corrigir e rodar de novo); AVISO é para olhar e decidir. Sai 1 se houver FALHA."""
-import re, sys
+import os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from portao import registrar  # noqa: E402
 
 LIMITES = {"legenda": 2200, "whatsapp": 600, "anuncio": 600, "arte": 400,  # legenda: limite do Instagram; os outros, da casa
            "roteiro": 1000, "email": 2000, "pauta": 8000}  # roteiro: ~150 palavras, 60 s de fala
@@ -87,6 +89,13 @@ def checar(texto, tipo, titulo=""):
         avisos.append(f"{len(tags)} hashtags: usar até 5 (limite do app do Instagram)")
     if tipo != "legenda" and tags:
         avisos.append(f"hashtag em {tipo}: só faz sentido na legenda")
+    emojis = re.findall(r"[\U0001F300-\U0001FAFF\u2600-\u27BF\u2B50\u2705]", texto)
+    if tipo == "arte" and emojis:
+        falhas.append(f'emoji na arte ("{emojis[0]}"): sem emoji na peça; ícone só com função (antislop-midia.md)')
+    elif len(emojis) > 3:
+        avisos.append(f"{len(emojis)} emojis: no máximo 3, e só quando ajudam a ler")
+    if texto.count("!") > 2:
+        avisos.append(f'{texto.count("!")} exclamações: no máximo 2; a força vem do fato, não da pontuação')
     if texto.count("✅") >= 3:
         avisos.append("lista de ✅ em série soa a template")
     linhas = [l for l in texto.splitlines() if l.strip()]
@@ -156,6 +165,9 @@ def teste():
     _, a = checar("Vamos ser sinceros: estudos mostram que a granja mudou.\nSimples. Direto. Eficaz.\nE isso muda tudo.", "legenda")
     assert sum(any(k in x for x in a) for k in ("chatbot", "sem dono", "picotada", "fecho de efeito")) == 4, a
     assert not checar("Aula prática na granja, quinta às 19h. Link na bio.", "legenda")[1]  # texto normal não acende
+    assert any("emoji" in x for x in checar("Aula nova 🐄", "arte")[0])
+    assert any("emojis" in x for x in checar("🐄🐖🐔🐟 aula", "legenda")[1]) and not checar("Aula 🐄", "legenda")[1]
+    assert any("exclamações" in x for x in checar("Vem! Corre! Agora!", "legenda")[1])
     print("ok")
 
 
@@ -172,6 +184,7 @@ if __name__ == "__main__":
         for x in a:
             print("AVISO:", x)
         print("ok" if not f else f"{len(f)} falha(s)")
+        registrar(sys.argv[1], not f, len(f))
         sys.exit(1 if f else 0)
     else:
         sys.exit(__doc__)

@@ -1,0 +1,19 @@
+<!-- Carrossel, lâmina 1 (4:5): foto real de ponta a ponta, tese curta em caixa alta, apoio e o convite para arrastar -->
+<style>
+.capa .foto{inset:0}
+.capa .veu{--veu-de:28%;--veu-ate:72%}
+.capa .logo{position:absolute;left:50%;transform:translateX(-50%);top:64px;width:150px}
+.capa .miolo{position:absolute;left:var(--lado);right:var(--lado);bottom:var(--baixo);color:#FFFFFF}
+.capa .titulo{--t:96px}
+.capa .apoio{margin-top:28px;max-width:860px}
+.capa .seta{margin-top:56px}
+</style>
+<div class="peca capa escuro">
+  <div class="foto" data-sangra><img alt="foto" src="${foto}" style="object-position:${foco}"><div class="veu"></div><div class="veu-topo"></div></div>
+  <img class="logo" alt="logo-sobre-foto" src="${logo_branco}">
+  <div class="miolo">
+    <h1 class="titulo forte">${titulo}</h1>
+    <p class="apoio">${apoio}</p>
+    <div class="rotulo seta">Arrasta para o lado →</div>
+  </div>
+</div>
