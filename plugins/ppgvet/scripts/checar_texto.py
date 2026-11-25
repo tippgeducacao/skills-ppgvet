@@ -15,7 +15,7 @@ VISIVEL = 125  # a legenda e o texto principal do anúncio mostram ~125 caracter
 FALHAS = [  # (regex, por quê)
     (r"\bMBA\b", 'é "Pós-Graduação", nunca "MBA" (sempre.md)'),
     (r"—|–", "sem travessão (marca.md)"),
-    (r"\b(Prof|Profa|Profª|M\.\s?V|Esp)\.\s+[A-ZÁÉÍÓÚ]", "titulação só Dr./Dra. e Me./Ma.; sem comprovação, só o nome (regras de copy da equipe)"),
+    (r"\b(?i:Prof|Profa|Profª|M\.\s?V|Esp)\.\s+[A-ZÁÉÍÓÚ]", "titulação só Dr./Dra. e Me./Ma.; sem comprovação, só o nome (regras de copy da equipe)"),
     (r"(?i)ouça agora nas principais plataformas", "frase proibida pelas regras de copy da equipe"),
     (r"\*\*[^*\n]+\*\*", "sobra de rascunho: **negrito** do Markdown não vira negrito no Instagram nem no WhatsApp"),
     (r"(?i)#(medicinavetrinaria|medicinaveternaria|medicinaveterinária|ppgeducação)\b", "hashtag sem acento e com a grafia certa: #medicinaveterinaria, #ppgeducacao (copy.md)"),
@@ -130,6 +130,7 @@ def teste():
     assert len(f) == 2, f
     f, _ = checar("Aula com Prof. João Silva e Dra. Ana Souza", "arte")
     assert len(f) == 1 and "Prof." in f[0], f
+    assert len(checar("COM PROF. JOÃO SILVA", "arte")[0]) == 1 and not checar("Aula prof. de campo", "arte")[0]
     f, _ = checar("Somos +12.000 alunos e 260 professores", "legenda")
     assert len(f) == 2, f
     for ruim in ("15 mil veterinários formados", "mais de 12 mil alunos", "12K alunos", "12.000 alunos", "12000+ alunos"):

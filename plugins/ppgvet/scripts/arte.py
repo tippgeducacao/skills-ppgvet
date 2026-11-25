@@ -7,10 +7,10 @@ Mede no navegador, depois de a fonte carregar: texto que não cabe ou sai da ár
 da letra com o fundo (letra pequena no celular 4,5:1, grande 3:1), cor fora do regras/marca.md e o texto
 pelo checar_texto.py (tipo arte). FALHA barra a entrega; AVISO é para olhar na peça (ex.: letra sobre foto).
 A fonte é declarada com o nome Montserrat (`@font-face{font-family:Montserrat;src:url(...acervo/fontes/montserrat-variavel.ttf)}`)."""
-import json, os, re, subprocess, sys, tempfile, time
+import json, os, re, sys, tempfile, time
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import NAVEGADORES, print_html  # noqa: E402
+from comum import chrome, print_html  # noqa: E402
 from checar_texto import checar  # noqa: E402
 from portao import registrar  # noqa: E402
 
@@ -94,10 +94,7 @@ def cores_fora(html):
 
 
 def medir(html_arq, w, h):
-    nav = next(n for n in NAVEGADORES + ["/usr/bin/google-chrome", "/usr/bin/chromium"] if n and os.path.exists(n))
-    out = subprocess.run([nav, "--headless=new", "--disable-gpu", "--allow-file-access-from-files", f"--window-size={w},{h}",
-                          "--virtual-time-budget=4000", "--dump-dom", Path(html_arq).resolve().as_uri()],
-                         capture_output=True, text=True, encoding="utf-8", check=True).stdout
+    out = chrome(f"--window-size={w},{h}", "--virtual-time-budget=4000", "--dump-dom", Path(html_arq).resolve().as_uri())
     m = re.search(r'<pre id="medida"[^>]*>(.*?)</pre>', out, re.S)
     if not m:
         raise SystemExit("não consegui medir: a página não terminou de carregar (fonte ou imagem com caminho errado?)")

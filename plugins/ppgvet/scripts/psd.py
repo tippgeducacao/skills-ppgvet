@@ -10,16 +10,19 @@ uso (Python):
          "ops": [{"texto_exceto": "pós-graduação", "valor": "MEDICINA\\rFELINA", "caixa_texto": [157, 161, 1171, 490]},
                  {"pintar": "Retângulo 3 copiar 5", "cor": "#0072D6"}]},  # camada de cor por cima da caixa da camada
         {"esconder": "Camada 1"}], {"png": "saida.png", "psd": "saida.psd"})
+    psd.py --conferir arte.psd   (PSD que a equipe mandou: todo texto, também dentro de objeto inteligente, pelo checar_texto)
     psd.py --teste
 Camada que não existe para antes de mexer (no Photopea, erro de script trava a sessão inteira)."""
 import base64, io, json, os, sys, tempfile, time, unicodedata
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from photopea import Indisponivel, Sessao, Travou  # noqa: E402,F401
+from comum import abrir_foto  # noqa: E402
 
-JS_CAMADAS = """var o=[];function lista(c,n){for(var k=0;k<c.layers.length;k++){var l=c.layers[k];
-o.push({nome:l.name,texto:l.kind==LayerKind.TEXT?l.textItem.contents:null,caixa:caixa(l),grupo:l.typename=="LayerSet"});
-if(l.typename=="LayerSet")lista(l);}}lista(app.activeDocument);app.echoToOE(JSON.stringify(o));"""
+JS_CAMADAS = """var o=[];function lista(c,v){for(var k=0;k<c.layers.length;k++){var l=c.layers[k],ve=v&&l.visible;
+o.push({nome:l.name,texto:l.kind==LayerKind.TEXT?l.textItem.contents:null,caixa:caixa(l),grupo:l.typename=="LayerSet",
+so:l.kind==LayerKind.SMARTOBJECT,visivel:ve});
+if(l.typename=="LayerSet")lista(l,ve);}}lista(app.activeDocument,true);app.echoToOE(JSON.stringify(o));"""
 
 
 def js(v):
@@ -57,8 +60,7 @@ def abrir_dentro(pp, nome, tentativas=90):
 
 def recorte(arquivo, caixa, destino, foco=(.5, .5)):
     """corta a foto na proporção da caixa (cobre, sem sobrar fora da caixa; `foco` diz o que fica) e grava JPEG"""
-    from PIL import Image, ImageOps
-    im = ImageOps.exif_transpose(Image.open(arquivo)).convert("RGB")
+    im = abrir_foto(arquivo)  # o JPEG sai sem perfil: a foto P3 do iPhone tem que virar sRGB antes
     w, h = caixa[2] - caixa[0], caixa[3] - caixa[1]
     alvo = w / h
     if im.width / im.height > alvo:
@@ -229,12 +231,60 @@ def preencher(pp, modelo, ops, saidas, pasta_trabalho=None):
     return lista
 
 
+def textos(pp, fundo=2, visivel=True):
+    """(texto, aparece) de cada camada do documento ativo, também dentro dos objetos inteligentes (até `fundo` níveis);
+    texto em camada escondida (ou dentro de objeto escondido) vem com aparece=False"""
+    lista = camadas(pp)
+    saida = [(" ".join(c["texto"].split()), visivel and c["visivel"]) for c in lista if c["texto"] and c["texto"].strip()]
+    for nome, vis in dict(((c["nome"], c["visivel"]) for c in lista if c.get("so")) if fundo else ()).items():
+        abrir_dentro(pp, nome)
+        saida += textos(pp, fundo - 1, visivel and vis)
+        pp.script("app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
+    return saida
+
+
+def grafia_pos(textos_):
+    """texto quase igual ao nome de uma pós do marca.md (acento, letra trocada): aviso de grafia"""
+    import difflib
+    from aulas_semana import pos_tabela
+    nomes = [n for n, _, _ in pos_tabela().values()]
+    avisos = []
+    for t in textos_:
+        for n in nomes:
+            if t.lower() != n.lower() and difflib.SequenceMatcher(None, t.lower(), n.lower()).ratio() > .85:
+                avisos.append(f'"{t}": grafia diferente do marca.md ("{n}")')
+    return avisos
+
+
+def conferir(arquivo):
+    """o texto da peça que a equipe fez (MBA, titulação, travessão, número da marca, UTM); devolve se passou"""
+    from checar_texto import checar
+    from portao import registrar
+    with Sessao() as pp:
+        pp.abrir(arquivo)
+        t = textos(pp)
+    print("textos:", *[x + ("" if vis else "   (escondido)") for x, vis in t], sep="\n  ")
+    falhas, avisos = checar("\n".join(x for x, vis in t if vis), "arte")
+    avisos += grafia_pos([x for x, vis in t if vis])
+    escondidos = [x for x, vis in t if not vis]
+    if escondidos:
+        avisos.append(f"{len(escondidos)} texto(s) em camada escondida: sobra de outra peça? (não sai na imagem, mas vai no PSD)")
+    for x in falhas:
+        print("FALHA:", x)
+    for x in avisos:
+        print("AVISO:", x)
+    print("ok" if not falhas else f"{len(falhas)} falha(s)")
+    registrar(arquivo, not falhas, len(falhas))
+    return not falhas
+
+
 def teste():
     from PIL import Image
     assert quebra("Fitoterapia Veterinária com Ênfase em Plantas Medicinais", 18) == ["Fitoterapia", "Veterinária com", "Ênfase em Plantas", "Medicinais"]
     assert quebra("Crédito Rural, Cooperativismo e Vendas", 18) == ["Crédito Rural,", "Cooperativismo", "e Vendas"]
     assert duas_linhas("Trilha inicial de aprendizado") == ["Trilha inicial", "de aprendizado"]
     assert _falta([{"texto": "Educação", "sobe": ["X"]}], [{"nome": "Educação"}]) == ["X"]
+    assert grafia_pos(["Gestao de Cooperativas de Credito"]) and not grafia_pos(["Gestão de Cooperativas de Crédito", "aulas curriculares"])
     with tempfile.TemporaryDirectory() as d:
         Image.new("RGB", (400, 100), (10, 200, 10)).save(f"{d}/larga.jpg")
         assert Image.open(recorte(f"{d}/larga.jpg", [0, 0, 100, 100], f"{d}/r.jpg")).size == (100, 100)
@@ -268,6 +318,10 @@ def teste():
                 preencher(pp, f"{d}/m.psd", [{"pintar": "FOTO Educação", "cor": "#0000FF"}], {"png": f"{d}/c.png"}, d)
                 c = Image.open(f"{d}/c.png").convert("RGB")
                 assert c.getpixel((70, 60))[2] > 200 and c.getpixel((70, 60))[0] < 60, c.getpixel((70, 60))  # a cor por cima da caixa
+                from comum import acervo
+                pp.abrir(acervo("eduq", "modelos", "modulo-1000x1000.psd"))
+                assert ("Módulo I", True) in textos(pp), "texto do PSD da equipe"
+                pp.script("app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
                 print("ao vivo ok", end=" ")
         except Indisponivel as e:
             print(f"aviso: Photopea indisponível ({e}); parte ao vivo pulada")
@@ -277,5 +331,10 @@ def teste():
 if __name__ == "__main__":
     if sys.argv[1:] == ["--teste"]:
         teste()
+    elif sys.argv[1:2] == ["--conferir"] and len(sys.argv) == 3:
+        try:
+            sys.exit(0 if conferir(sys.argv[2]) else 1)
+        except (Indisponivel, Travou) as e:
+            sys.exit(f"Photopea fora ({e}): conferir o texto da peça olhando o PNG")
     else:
         sys.exit(__doc__)

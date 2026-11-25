@@ -68,6 +68,47 @@ def acervo(*partes):
     return str(ACERVO.joinpath(*partes))
 
 
+def abrir_foto(arq, modo="RGB"):
+    """foto em pé (EXIF) e em sRGB: P3 do iPhone e Adobe RGB viram sRGB pelo perfil embutido; sem isso a cor desbota
+    quando o perfil se perde no caminho (JPEG embutido no HTML, Photopea, IA de ampliar)"""
+    import io
+    from PIL import Image, ImageCms, ImageOps
+    im = ImageOps.exif_transpose(Image.open(arq))
+    icc = im.info.get("icc_profile")
+    alfa = im.getchannel("A") if "A" in im.getbands() else None
+    im = im.convert("RGB")
+    if icc:
+        try:
+            im = ImageCms.profileToProfile(im, ImageCms.ImageCmsProfile(io.BytesIO(icc)), ImageCms.createProfile("sRGB"),
+                                           renderingIntent=ImageCms.Intent.PERCEPTUAL, outputMode="RGB")
+        except (ImageCms.PyCMSError, OSError):
+            pass  # perfil quebrado: segue com os números como estão
+    if modo == "RGBA":
+        im.putalpha(alfa or 255)
+    return im
+
+
+REFERENCIAS = Path(__file__).resolve().parent / "referencias"
+
+
+def igual_referencia(png, nome, limite=16):
+    """teste de molde: a peça tem que bater com a aprovada (scripts/referencias/<nome>.png), em blocos de ~1/32 da largura,
+    o que pega cor ou posição que mudou (a pílula desbotada dava 78). Sem referência, ou com PPGVET_REFERENCIA=nova
+    (mudança de propósito no molde), grava esta como a aprovada"""
+    from PIL import Image, ImageChops
+    im = Image.open(png).convert("RGB")
+    im = im.resize((32, round(im.height * 32 / im.width)), Image.BOX)
+    ref = REFERENCIAS / f"{nome}.png"
+    if not ref.exists() or os.environ.get("PPGVET_REFERENCIA") == "nova":
+        REFERENCIAS.mkdir(exist_ok=True)
+        im.save(ref)
+        return
+    r = Image.open(ref).convert("RGB")
+    dif = 255 if r.size != im.size else max(hi for _, hi in ImageChops.difference(im, r).getextrema())
+    assert dif <= limite, (f"{nome}: a peça mudou em relação à aprovada (diferença {dif}, limite {limite}). "
+                           "Se a mudança foi de propósito: PPGVET_REFERENCIA=nova e rodar o teste de novo")
+
+
 def pasta(tipo):
     """pasta de trabalho de um tipo (chamadas, aulas, conferir, cortes, edicoes); o instalar pode trocar cada uma"""
     p = (_C or config()).get("pastas", {}).get(tipo) or str(Path(c("trabalho"), TIPOS[tipo]))
@@ -126,17 +167,23 @@ NAVEGADORES = ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
                r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"]
 
 
-def print_html(url, largura, altura, saida, escala=1):
-    """print de uma página (modelo HTML do acervo) com fundo transparente, no Chrome ou Edge sem janela"""
+def chrome(*args):
+    """Chrome (ou Edge) sem janela; devolve o que ele escreveu (o DOM, no --dump-dom). Às vezes ele sai com erro sem motivo
+    (visto em 11/2026): tenta de novo uma vez antes de desistir, para uma folha de 36 peças não cair por uma"""
     import shutil
     nav = next((n for n in NAVEGADORES + [shutil.which(x) for x in ("google-chrome", "chromium", "msedge")]
                 if n and os.path.exists(n)), None)
     if not nav:
         sys.exit("Falta o Google Chrome (ou o Edge) para gerar a imagem: instale o Chrome e rode de novo")
-    subprocess.run([nav, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--allow-file-access-from-files",
-                    "--default-background-color=00000000", f"--force-device-scale-factor={escala}",
-                    f"--window-size={largura},{altura}", "--virtual-time-budget=3000", f"--screenshot={saida}", url],
-                   check=True, capture_output=True)
+    cmd = [nav, "--headless=new", "--disable-gpu", "--allow-file-access-from-files", *args]
+    r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    return (r if r.returncode == 0 else subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", check=True)).stdout
+
+
+def print_html(url, largura, altura, saida, escala=1):
+    """print de uma página (modelo HTML do acervo) com fundo transparente"""
+    chrome("--hide-scrollbars", "--default-background-color=00000000", f"--force-device-scale-factor={escala}",
+           f"--window-size={largura},{altura}", "--virtual-time-budget=3000", f"--screenshot={saida}", url)
 
 
 def url_arquivo(caminho, **params):
@@ -189,4 +236,25 @@ elif __name__ == "__main__":
     assert nome_arquivo("03/11 | Extensão Rural - Parte II | Prof. Ana") == "03-11 - Extensão Rural - Parte II - Prof. Ana"
     WIN = False
     assert nome_arquivo("03/11 | Extensão") == "03:11 | Extensão"
+    import tempfile
+    from PIL import Image, ImageCms
+    with tempfile.TemporaryDirectory() as d:
+        # com perfil passa pela conversão (aqui sRGB -> sRGB, sem mudar a cor); perfil quebrado não derruba; alfa fica
+        srgb = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes()
+        Image.new("RGB", (8, 8), (70, 138, 127)).save(f"{d}/a.png", icc_profile=srgb)
+        assert all(abs(x - y) <= 2 for x, y in zip(abrir_foto(f"{d}/a.png").getpixel((2, 2)), (70, 138, 127)))
+        Image.new("RGB", (8, 8), (70, 138, 127)).save(f"{d}/q.png", icc_profile=b"quebrado")
+        assert abrir_foto(f"{d}/q.png").getpixel((2, 2)) == (70, 138, 127)
+        Image.new("RGBA", (8, 8), (1, 2, 3, 40)).save(f"{d}/t.png")
+        assert abrir_foto(f"{d}/t.png", "RGBA").getpixel((2, 2))[3] == 40
+        Image.new("RGB", (64, 64), (200, 30, 30)).save(f"{d}/p.png")
+        REFERENCIAS = Path(d) / "ref"
+        igual_referencia(f"{d}/p.png", "t")  # sem referência: grava
+        igual_referencia(f"{d}/p.png", "t")
+        Image.new("RGB", (64, 64), (200, 120, 30)).save(f"{d}/q.png")
+        try:
+            igual_referencia(f"{d}/q.png", "t")
+            raise SystemExit("cor mudada tinha que reprovar")
+        except AssertionError as e:
+            assert "mudou" in str(e)
     print("ok")

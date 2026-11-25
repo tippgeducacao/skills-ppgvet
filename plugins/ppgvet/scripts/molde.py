@@ -17,7 +17,7 @@ Nunca inventa texto: campo obrigatório vazio para antes de gerar."""
 import base64, datetime as dt, html as H, io, json, os, re, string, sys
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import acervo, pasta  # noqa: E402
+from comum import abrir_foto, acervo, pasta  # noqa: E402
 from aulas_semana import DIAS, achar_foto, contraste, letra_sobre, pos_tabela, titulo_e_nome  # noqa: E402
 import arte  # noqa: E402
 
@@ -56,8 +56,7 @@ def tokens(marca, cor_pos):
 
 def foto_uri(arq, pessoa=False, maximo=1920):
     """foto embutida no HTML (JPEG); retrato em fundo branco (acervo/professores) é cortado em volta da pessoa"""
-    from PIL import Image, ImageOps
-    im = ImageOps.exif_transpose(Image.open(arq)).convert("RGB")
+    im = abrir_foto(arq)  # o JPEG embutido sai sem perfil: P3 do iPhone vira sRGB antes
     if pessoa:
         cinza = im.convert("L")
         cantos = [cinza.getpixel((x, y)) for x in (2, im.width - 3) for y in (2, im.height - 3)]
@@ -230,6 +229,9 @@ def teste():
             {"molde": "carrossel-cta", "titulo": "Fale com um [especialista]", "apoio": "Tire suas dúvidas.", "cta": "Falar com um especialista"}]}
         assert gerar(ficha, f"{d}/out", d), "o molde limpo não pode reprovar"
         assert Path(d, "out", "folha.jpg").exists() and Path(d, "out", "01-kv.jpg").exists() and Path(d, "out", "02-carrossel-conteudo.jpg").exists()
+        from comum import igual_referencia
+        for png in sorted(Path(d, "out").glob("0*.png")):  # o molde não mudou sem querer (cor, posição)
+            igual_referencia(png, f"molde-{png.stem[3:]}")
     print("ok")
 
 

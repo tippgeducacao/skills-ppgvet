@@ -7,7 +7,7 @@ Foto HEIC do iPhone entra direto. Ampliar é último recurso: antes, pedir a fot
 import os, subprocess, sys, tempfile
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import AMPLIAR, EXE, c, falta_parte  # noqa: E402
+from comum import AMPLIAR, EXE, abrir_foto, c, falta_parte  # noqa: E402
 
 PEDACO, BORDA = 192, 16  # a foto é ampliada em pedaços de 192 px (memória baixa), com 16 px de sobra contra emenda
 
@@ -21,8 +21,8 @@ def ampliar_foto(entrada, saida, escala):
     if not AMPLIAR.exists():
         falta_parte("foto")
     import numpy as np
-    from PIL import Image, ImageOps
-    im = ImageOps.exif_transpose(Image.open(entrada)).convert("RGB")
+    from PIL import Image
+    im = abrir_foto(entrada)
     x = np.asarray(im, np.float32) / 255
     h, w = x.shape[:2]
     s = ort.InferenceSession(str(AMPLIAR), providers=["CPUExecutionProvider"])
@@ -71,10 +71,10 @@ def main(acao, entrada, saida, extra):
     assert os.path.exists(entrada), f"não encontrei: {entrada}"
     assert not os.path.exists(saida), f"saída já existe, use outro nome (-v2): {saida}"
     with tempfile.TemporaryDirectory() as t:
-        if entrada.lower().endswith((".heic", ".heif")):  # rembg e Real-ESRGAN não leem HEIC
-            from PIL import Image, ImageOps
-            png = os.path.join(t, "entrada.png")
-            ImageOps.exif_transpose(Image.open(entrada)).save(png)
+        from PIL import Image
+        if entrada.lower().endswith((".heic", ".heif")) or Image.open(entrada).info.get("icc_profile"):
+            png = os.path.join(t, "entrada.png")  # rembg e Real-ESRGAN não leem HEIC e ignoram o perfil (P3 do iPhone desbotava)
+            abrir_foto(entrada, "RGBA").save(png)
             entrada = png
         if acao == "ampliar" and "--arte" not in extra:
             ampliar_foto(entrada, saida, int(next((x for x in extra if x in ("2", "3", "4")), "4")))

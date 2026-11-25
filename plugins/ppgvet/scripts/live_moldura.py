@@ -4,7 +4,7 @@ uso: live_moldura.py --foto <foto> --tema "<tema>" --pos <sigla>[,<sigla 2>] --s
 Fixo no modelo: fundo, faixa "ESTAMOS AO VIVO", "LINK NA BIO", janela do vídeo e logo PPGVET (em todas as pós)."""
 import argparse, os, sys, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import acervo, falta_parte, print_html, url_arquivo  # noqa: E402
+from comum import abrir_foto, acervo, falta_parte, print_html, url_arquivo  # noqa: E402
 
 JANELA = (46, 799, 1032, 1354)  # área do vídeo, medida no modelo do Drive (LIVE › OVERLAYS › MOLDURA INSTA.png)
 
@@ -22,7 +22,7 @@ for t in titulos:
 assert len(titulos) <= 2, 'no máximo 2 pós por live'
 assert not os.path.exists(o.saida), f'saída já existe, use outro nome (-v2): {o.saida}'
 with tempfile.TemporaryDirectory() as tmp:
-    foto = Image.open(o.foto).convert('RGBA')
+    foto = abrir_foto(o.foto, 'RGBA')
     if not o.sem_recorte:
         try:
             from rembg import new_session, remove

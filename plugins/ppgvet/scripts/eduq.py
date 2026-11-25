@@ -13,7 +13,7 @@ Nomes de arquivo da equipe (o Eduq já está organizado assim): "CAPA PRINCIPAL 
 import base64, html as H, io, json, os, re, sys, tempfile, unicodedata
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import acervo, pasta  # noqa: E402
+from comum import abrir_foto, acervo, pasta  # noqa: E402
 from aulas_semana import contraste, pos_tabela  # noqa: E402
 import arte  # noqa: E402
 from psd import Indisponivel, Sessao, Travou, duas_linhas, preencher, quebra, solido  # noqa: E402
@@ -240,7 +240,7 @@ def gerar_psd(pp, ficha, saida, pasta_ficha="."):
             preencher(pp, modelo("fundo", tam), ops, {"png": fundo[tam]}, d)
         for arq, titulo, numero in pecas(ficha):
             ap = Path(d) / f"aparelho-{numero}.png"
-            aparelho(Image.open(foto).convert("RGB"), numero, vertical, foco).save(ap)
+            aparelho(abrir_foto(foto), numero, vertical, foco).save(ap)
             for tam in TAMANHOS:
                 w, h = map(int, tam.split("x"))
                 fazer(arq, "modulo", tam, [{"imagem": "FUNDO", "arquivo": str(fundo[tam]), "inteira": True, "caixa": [0, 0, w, h]},
@@ -252,12 +252,12 @@ def gerar_psd(pp, ficha, saida, pasta_ficha="."):
 
 
 def gerar_codigo(ficha, saida, pasta_ficha="."):
-    from PIL import Image, ImageOps
+    from PIL import Image
     nome, marca = pos_da_ficha(ficha)
     if re.search(r"\bMBA\b", nome, re.I):
         raise SystemExit('"MBA" não entra na capa: o nome é da Pós-Graduação (marca.md)')
     foco = tuple(float(x.rstrip("%")) / 100 for x in str(ficha.get("foco", "50% 40%")).split()[:2])
-    abre = lambda f: ImageOps.exif_transpose(Image.open(f if Path(f).is_absolute() else Path(pasta_ficha) / f)).convert("RGB")
+    abre = lambda f: abrir_foto(f if Path(f).is_absolute() else Path(pasta_ficha) / f)
     foto = abre(ficha["foto"])
     principais = ficha.get("principais") or [{"nome": "", "foto": ficha["foto"]}]
     saida, ok, pngs = Path(saida), True, []
@@ -348,6 +348,9 @@ def teste():
         esperado = sorted(f"{a} - {t}.png" for a in ("CAPA PRINCIPAL", "ABERTURA", "MODULO 1", "MATERIAIS COMPLEMENTARES") for t in TAMANHOS)
         assert gerar(ficha, f"{d}/B", d, codigo=True), "capa limpa não pode reprovar (plano B)"
         assert sorted(p.name for p in Path(d, "B").glob("*.png")) == esperado
+        from comum import igual_referencia
+        for peca in ("CAPA PRINCIPAL", "MODULO 1"):  # o visual não mudou sem querer (cor, posição)
+            igual_referencia(f"{d}/B/{peca} - 1000x1000.png", f"eduq-codigo-{peca.split()[0].lower()}")
         assert gerar(ficha, f"{d}/P", d)  # PSD da equipe; com o Photopea fora, cai sozinho no plano B
         assert sorted(p.name for p in Path(d, "P").glob("*.png")) == esperado
         assert Image.open(f"{d}/P/MODULO 1 - 1000x1000.png").size == (1000, 1000)
@@ -356,6 +359,8 @@ def teste():
             import numpy as np
             pilula = np.asarray(Image.open(f"{d}/P/CAPA PRINCIPAL - 1000x1000.png").convert("RGB").crop((250, 570, 750, 610))).astype(int)
             assert ((pilula[..., 2] > 150) & (pilula[..., 0] < 80)).sum() > 2000, "pílula azul na pós da PPG"
+            for peca in ("CAPA PRINCIPAL", "MODULO 1"):
+                igual_referencia(f"{d}/P/{peca} - 1000x1000.png", f"eduq-psd-{peca.split()[0].lower()}")
             print("PSD ok", end=" ")
         try:
             gerar({"pos": "MBA em Gestão", "marca": "PPG", "foto": "tema.jpg", "modulos": 1}, f"{d}/x", d)

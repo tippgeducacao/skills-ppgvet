@@ -7,10 +7,10 @@ semana.json: {"ano": 2026, "aulas": [{"pos": "CBEA" (ou ["RNGB","NGB","GPL"] em 
   "foto": "<arquivo>" (opcional: sem ela, procura pelo nome em --fotos)}]}
 Confere antes de gerar (sigla, dia da semana pela data, titulação, foto, grafia do nome pela foto) e depois mede
 (texto que não cabe ou encosta, contraste). Uma pasta por marca: PPGVET e PPG nunca no mesmo carrossel."""
-import datetime as dt, difflib, json, os, re, subprocess, sys, tempfile, unicodedata
+import datetime as dt, difflib, json, os, re, sys, tempfile, unicodedata
 from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from comum import NAVEGADORES, acervo, pasta, print_html  # noqa: E402
+from comum import acervo, chrome, pasta, print_html  # noqa: E402
 
 MARCA_MD = Path(__file__).resolve().parent.parent / "regras" / "marca.md"
 W, H, MARGEM = 1080, 1350, 48
@@ -74,7 +74,7 @@ def achar_foto(nome, fotos):
     """foto pelo nome na pasta (nome-sobrenome.jpg); devolve (arquivo, aviso de grafia ou None)"""
     if not fotos or not Path(fotos).is_dir():
         return None, None
-    arqs = {p.stem: p for p in Path(fotos).iterdir() if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")}
+    arqs = {slug(p.stem): p for p in Path(fotos).iterdir() if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")}  # "joão.jpg", acento decomposto do Mac
     partes = slug(nome).split("-")
     for st, p in arqs.items():  # primeiro e último nome batendo
         if partes[0] in st.split("-") and partes[-1] in st.split("-"):
@@ -214,10 +214,7 @@ def lamina(m, a, tam=40):
 
 def medir(html_arq):
     """caixas de cada texto, medidas no navegador depois de a fonte carregar"""
-    nav = next(n for n in NAVEGADORES + ["/usr/bin/google-chrome", "/usr/bin/chromium"] if n and os.path.exists(n))
-    out = subprocess.run([nav, "--headless=new", "--disable-gpu", "--allow-file-access-from-files", f"--window-size={W},{H}",
-                          "--virtual-time-budget=3000", "--dump-dom", Path(html_arq).resolve().as_uri()],
-                         capture_output=True, text=True, encoding="utf-8", check=True).stdout
+    out = chrome(f"--window-size={W},{H}", "--virtual-time-budget=3000", "--dump-dom", Path(html_arq).resolve().as_uri())
     m = re.search(r'<pre id="medida">(.*?)</pre>', out, re.S)
     return json.loads(m.group(1).replace("&quot;", '"')) if m else []
 
@@ -298,6 +295,8 @@ def teste():
         Image.new("RGB", (600, 800), "#888").save(f"{t}/bruno-lima.jpg")
         assert achar_foto("Ana Souza", t)[0].name == "ana-maria-souza.jpg"
         assert "grafia" in achar_foto("Bruno Limma", t)[1]
+        Image.new("RGB", (600, 800), "#888").save(f"{t}/Jo\u0303ao Conceic\u0327a\u0303o.jpg")  # acento decomposto, como vem do Mac
+        assert achar_foto("Dr. João Conceição", t)[0] and achar_foto("João Conceição", t)[0].stem.startswith("Jo")
         d = {"ano": 2026, "aulas": [
             {"pos": "PC", "data": "23/11", "hora": "19h", "professor": "Ana Souza", "tema": "Tema curto de teste"},
             {"pos": ["RNGB", "NGB", "GPL"], "data": "24/11", "hora": "19h30", "professor": "Me. Bruno Lima", "tema": "Outro tema"},
@@ -314,6 +313,9 @@ def teste():
         pastas = gerar({"ano": 2026, "aulas": d["aulas"][:1]}, t, t)  # gera de verdade (precisa do Chrome) e mede
         assert not pastas[0][1], pastas[0][1]
         assert len(list(pastas[0][0].glob("*.png"))) == 2
+        from comum import igual_referencia
+        for png in sorted(pastas[0][0].glob("*.png")):  # o molde não mudou sem querer (cor, posição)
+            igual_referencia(png, f"aulas-semana-{png.stem}")
     print("ok")
 
 
