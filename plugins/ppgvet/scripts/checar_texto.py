@@ -6,6 +6,7 @@ FALHA barra a entrega (corrigir e rodar de novo); AVISO é para olhar e decidir.
 import os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from portao import registrar  # noqa: E402
+import utm  # noqa: E402
 
 LIMITES = {"legenda": 2200, "whatsapp": 600, "anuncio": 600, "arte": 400,  # legenda: limite do Instagram; os outros, da casa
            "roteiro": 1000, "email": 2000, "pauta": 8000}  # roteiro: ~150 palavras, 60 s de fala
@@ -108,9 +109,10 @@ def checar(texto, tipo, titulo=""):
     links = re.findall(r"https?://\S+", texto)
     if tipo == "anuncio" and links:
         avisos.append("link no texto do anúncio: o destino vai no campo do link e o UTM no modelo de parâmetros da plataforma")
-    for l in links:
-        if re.search(r"(ppgvet\.com\.br|ppgeducacao\.com\.br)", l) and "utm_source=" not in l and tipo != "anuncio":
-            avisos.append(f"{l}: link de site nosso sem UTM; pegar no gerador \"Links com UTM\" do sistema")
+    for l in links:  # regra do canais.md: UTM só em site nosso, no formato do gerador (scripts/utm.py)
+        f_l, a_l = utm.conferir(l.rstrip(".,;:!?)"), tipo)
+        falhas += [f"{l}: {x}" for x in f_l]
+        avisos += [f"{l}: {x}" for x in a_l]
     if tipo == "whatsapp" and len(links) > 1:
         avisos.append("mais de um link no WhatsApp: uma ação só")
     if tipo == "anuncio" and titulo and len(titulo) > 40:
@@ -140,8 +142,10 @@ def teste():
     assert not f and a, a
     _, a = checar("Você está endividado e com 40 anos? Mude de área.", "anuncio", "Título com mais de quarenta caracteres aqui dentro")
     assert any("atributo pessoal" in x for x in a) and any("título" in x for x in a), a
-    _, a = checar("Veja https://site.ppgvet.com.br/pos-sa e https://site.ppgvet.com.br/pos-pc?utm_source=whatsapp", "whatsapp")
-    assert sum("sem UTM" in x for x in a) == 1 and any("uma ação só" in x for x in a), a
+    f, a = checar("Veja https://site.ppgvet.com.br/pos-sa e https://site.ppgvet.com.br/pos-pc?utm_source=whatsapp&utm_medium=social", "whatsapp")
+    assert sum("sem UTM" in x for x in f) == 1 and len(f) == 1 and any("uma ação só" in x for x in a), (f, a)
+    f, _ = checar("Ouça no https://open.spotify.com/show/1?utm_source=instagram-ppgvet e no https://site.ppgvet.com.br/x?utm_source=ig_ppgvet&utm_medium=bio", "legenda")
+    assert len(f) == 3, f  # UTM fora do nosso site, fonte antiga e meio errado
     _, a = checar("Comente PÓS que eu te mando o link", "legenda")
     assert any("automação" in x for x in a), a
     f, a = checar("Somos 12 mil profissionais formados. **Inscreva-se** #medicinavetrinaria. Reconhecido pelo MEC, estás à espera?", "legenda")

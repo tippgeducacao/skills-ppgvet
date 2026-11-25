@@ -16,7 +16,7 @@ Cinco linhas, decididas antes de abrir o arquivo. Peça de molde (`acervo/moldes
 ## 2. Recusar (sempre; aparecer derruba a nota de acabamento para abaixo de 8 e vira correção)
 | onde | recusar | o que fazer |
 |---|---|---|
-| tudo | banco ou IA fingindo aluno, professor ou sede; marca misturada, **inclusive na foto** (crachá, camiseta, banner da outra marca) | foto real da marca certa (`sempre.md`) |
+| tudo | banco ou IA fingindo aluno, professor ou sede; marca misturada, **inclusive na foto** (crachá, camiseta, banner da outra marca) | foto real da marca certa (`sempre.md`) ou recorte que tire a outra marca; apagar logo da roupa ou do corpo de pessoa real só com o ok de quem pediu |
 | tudo | cor fora do `marca.md`; neon roxo-azul, vidro fosco, bolhas 3D, brilho, glitch, fumaça | cores do `marca.md`; efeito só com motivo |
 | tudo | cara de template: tudo centralizado, cards iguais, a mesma entrada em tudo | grid com alinhamento à esquerda; centro só em capa e fecho |
 | arte | mais de 3 níveis de texto; palavra sozinha na última linha do título; texto longo na arte | título, apoio, detalhe e um rótulo (`oficio/design.md`) |

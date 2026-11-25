@@ -12,7 +12,7 @@ description: Texto de marketing da PPGVET/PPG como um copywriter da casa - a leg
 ## O que preciso de você
 Se a pessoa chamou sem o material, explicar em poucas linhas:
 - **O que é:** legenda (de qual post), texto da arte, mensagem de WhatsApp, anúncio, e-mail, roteiro de vídeo (quem vai falar) ou pauta da semana (de qual perfil, e o material que existe: vídeos, fotos, aulas e lives da semana); de qual marca e qual pós, aula, live, podcast ou evento.
-- **Os fatos:** data, horário, professor (com titulação comprovada), números, link do gerador "Links com UTM" do sistema. O texto só usa o que vier daqui ou de fonte oficial (`marca.md`, site da pós).
+- **Os fatos:** data, horário, professor (com titulação comprovada), números, link do gerador "Links com UTM" do sistema (sem ele: `utm.py gerar` monta pela regra do `canais.md` e a pessoa confere no gerador; link antigo: `utm.py arrumar`). O texto só usa o que vier daqui ou de fonte oficial (`marca.md`, site da pós).
 - **Para quem e para quê:** quem vai ler e o que deve fazer depois (salvar, clicar no link, responder, confirmar presença).
 - Exemplo: *"legenda do carrossel da live de quinta, pós PS, tema bem-estar na maternidade, com o professor Fulano; link: <do gerador>"*.
 
