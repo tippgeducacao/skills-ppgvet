@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Testes que barram a entrega (regras/nucleo.md, passo 3). Só mede o arquivo final; não muda nada.
-uso: checar.py <video ou áudio> [--srt legenda.srt] [--lufs -16] [--car 25] [--instagram] [--rosto <y>]
+uso: checar.py <video ou áudio> [--srt legenda.srt] [--lufs -16] [--car 25] [--instagram [--story]] [--rosto <y>] [--tol 1]
      checar.py --teste
 Uma linha por teste (PASSA, AVISO ou FALHA); sai com código 1 se algum FALHA.
 --lufs: alvo do volume da skill (padrão -16; chamada -14). --car: caracteres por linha da legenda
-(padrão 25 no vertical, 42 no horizontal). --instagram: confere o formato de Reels e Stories (video.md).
+(padrão 25 no vertical, 42 no horizontal). --instagram: confere o formato de Reels (regras/formatos.md); com --story, o do story (3 a 60 s, 100 MB).
+--tol: tolerância do volume (padrão 1,5; podcast 1, pedido da Apple).
 --rosto <y>: o queixo nunca desce até o texto mais alto da peça (y em pixels; Reels do hf.py: 915, topo da legenda);
 com --srt, só conta quando a legenda está na tela."""
 import json, os, re, struct, subprocess, sys
@@ -97,8 +98,8 @@ def rosto_baixo(video, limite, alt):
     return ruins
 
 
-def checar_formato(v, a, fmt, arquivo):
-    """formato de Reels e Stories do video.md"""
+def checar_formato(v, a, fmt, arquivo, story=False):
+    """formato de Reels ou de story pela API do Instagram (regras/formatos.md)"""
     r = []
     if (v["width"], v["height"]) != (1080, 1920):
         r.append(("FALHA", f"formato: {v['width']}x{v['height']} (Instagram vertical: 1080x1920)"))
@@ -111,10 +112,11 @@ def checar_formato(v, a, fmt, arquivo):
     if a and int(a.get("sample_rate", 0)) > 48000:
         r.append(("FALHA", f"áudio a {a['sample_rate']} Hz (até 48 kHz)"))
     d, tam = float(fmt["duration"]), int(fmt["size"])
-    if not 3 <= d <= 900:
-        r.append(("FALHA", f"duração {d:.1f} s (de 3 s a 15 min)"))
-    if tam > 300e6:
-        r.append(("FALHA", f"{tam / 1e6:.0f} MB (até 300 MB)"))
+    dmax, mb = (60, 100) if story else (900, 300)
+    if not 3 <= d <= dmax:
+        r.append(("FALHA", f"duração {d:.1f} s (de 3 a {dmax} s)"))
+    if tam > mb * 1e6:
+        r.append(("FALHA", f"{tam / 1e6:.0f} MB (até {mb} MB)"))
     if int(v.get("bit_rate") or 0) > 25e6:
         r.append(("FALHA", f"vídeo a {int(v['bit_rate']) / 1e6:.1f} Mbps (até 25)"))
     if not moov_antes(arquivo):
@@ -122,7 +124,7 @@ def checar_formato(v, a, fmt, arquivo):
     return r or [("PASSA", "formato Instagram")]
 
 
-def checar(video, srt=None, lufs=-16.0, car=None, instagram=False, rosto=None):
+def checar(video, srt=None, lufs=-16.0, car=None, instagram=False, rosto=None, story=False, tol=TOL_LUFS):
     info = json.loads(subprocess.run([FFPROBE(), "-v", "error", "-show_streams", "-show_format", "-of", "json", video],
                                      capture_output=True, text=True, check=True).stdout)
     v = next((s for s in info["streams"] if s["codec_type"] == "video"
@@ -134,7 +136,7 @@ def checar(video, srt=None, lufs=-16.0, car=None, instagram=False, rosto=None):
         r.append(("PASSA", "cor BT.709") if cor == ["bt709"] * 3 else ("FALHA", f"cor {cor} (etiquetar BT.709, video.md)"))
     if a:
         i, p = ler_volume(ffmpeg_log(video, "ebur128=peak=true"))
-        r.append(("PASSA" if abs(i - lufs) <= TOL_LUFS else "FALHA", f"volume {i:.1f} LUFS (alvo {lufs:g} ±{TOL_LUFS})"))
+        r.append(("PASSA" if abs(i - lufs) <= tol else "FALHA", f"volume {i:.1f} LUFS (alvo {lufs:g} ±{tol:g})"))
         r.append(("FALHA" if p > PICO_MAX else "AVISO" if p > PICO_AVISO else "PASSA", f"pico {p:.1f} dBTP (até {PICO_AVISO})"))
         if int(a.get("channels", 1)) >= 2:
             med = [float(re.search(r"mean_volume: (-?[\d.]+|-inf)", ffmpeg_log(video, f"pan=mono|c0=c{c},volumedetect")).group(1))
@@ -158,7 +160,7 @@ def checar(video, srt=None, lufs=-16.0, car=None, instagram=False, rosto=None):
         achados = checar_legenda(ler_srt(open(srt, encoding="utf-8").read()), car or (25 if vertical else 42))
         r += achados or [("PASSA", "legenda")]
     if instagram:
-        r += checar_formato(v, a, info["format"], video)
+        r += checar_formato(v, a, info["format"], video, story)
     if rosto:
         ruins = rosto_baixo(video, rosto, v["height"])
         if srt:  # com a legenda, só conta quando há texto na tela
@@ -191,6 +193,9 @@ def teste():
         assert any("volume" in t for _, t in so_audio) and not any("quadro" in t or "cor" in t for _, t in so_audio), so_audio
     v = {"width": 1080, "height": 1920, "r_frame_rate": "30/1", "avg_frame_rate": "30/1", "codec_name": "h264", "bit_rate": "8000000"}
     assert checar_formato(v, {"codec_name": "aac", "sample_rate": "48000"}, {"duration": "30", "size": "20000000"}, f"{__file__}")[0][0] == "FALHA"  # sem faststart
+    ok = {"codec_name": "aac", "sample_rate": "48000"}
+    assert any("de 3 a 60 s" in t for _, t in checar_formato(v, ok, {"duration": "70", "size": "1000"}, f"{__file__}", story=True))
+    assert not any("duração" in t for _, t in checar_formato(v, ok, {"duration": "70", "size": "1000"}, f"{__file__}"))
     assert queixo([(0.4, 0.2, 0.2, 0.25)], 1920) == 0.45 * 1920 and queixo([], 1920) is None
     assert queixo([(0.4, 0.2, 0.2, 0.25), (0.1, 0.7, 0.12, 0.1)], 1920) == 0.45 * 1920 and queixo([(0, 0.8, 0.05, 0.06)], 1920) is None  # vale o maior; plateia ao fundo não conta
     print("ok")
@@ -204,7 +209,7 @@ if __name__ == "__main__":
     if not a or not os.path.exists(a[0]):
         sys.exit(__doc__)
     op = lambda k, f=str: f(a[a.index(k) + 1]) if k in a else None
-    res = checar(a[0], op("--srt"), op("--lufs", float) or -16.0, op("--car", int), "--instagram" in a, op("--rosto", int))
+    res = checar(a[0], op("--srt"), op("--lufs", float) or -16.0, op("--car", int), "--instagram" in a, op("--rosto", int), "--story" in a, op("--tol", float) or TOL_LUFS)
     for nivel, texto in res:
         print(f"{nivel:5} {texto}")
     sys.exit(1 if any(n == "FALHA" for n, _ in res) else 0)

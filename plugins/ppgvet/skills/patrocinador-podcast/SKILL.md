@@ -95,4 +95,4 @@ Encode e som (cena = (INTRO + nº de quadros)/24; T = cena + 3,6; as logos entra
 - Som do Veo nunca entra (ambiente estranho). Música fixa na cena e sobe na cartela (`video.md`). Queda: whoosh com pico no pouso (`$A/sons/transicao/whoosh-longo.wav`; o pico dá `"$PY" "$S/sons.py" pico <som>`) + o impacto do produto (vidro, saco de grãos: gravação real, regra de sons do `bancos-e-referencias.md`). Na cartela, um pop nas logos (`$A/sons/interface/pop.wav`). Nada mais. Como sincronizar: `oficio/som.md`.
 - Cada vídeo com identidade própria: não repetir a trilha do vídeo anterior (ver o roteiro dele); música pela regra do `bancos-e-referencias.md`. Anotar trilha e efeitos no roteiro.
 
-Entregar a versão e esperar a pessoa conferir.
+Entregar a versão e esperar a pessoa conferir. Ao publicar: rótulo de parceria paga com a marca do patrocinador, e marcar como feito com IA onde a plataforma pedir (cena do Veo realista; `formatos.md`).

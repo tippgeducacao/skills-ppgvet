@@ -43,7 +43,8 @@ Fluxo de 10 a 15 min (nível caprichado, ou quando pedirem):
 - animada mas séria, **só instrumental** (sem vocal: conferir com `"$PY" "$S/transcrever.py" musica.mp3 letra`: o `letra.srt` não pode ter frases);
 - nada infantil ou brincalhão (ukulele bobo, assobio, "happy");
 - batida firme, de ~110 a 130 BPM, para fala de professor; calma só quando pedirem e nos posts de cortes de live;
-- **mais longa que o vídeo**, porque nunca vai em loop.
+- **mais longa que o vídeo**, porque nunca vai em loop;
+- música posta pelo app do Instagram, em perfil comercial (os nossos): só da Sound Collection da Meta (`formatos.md`).
 
 **Onde baixar, nesta ordem.** A pessoa baixa no navegador: nenhum banco de música tem API de áudio para uso comercial.
 1. **Drive de insumos da PPGVET:** https://drive.google.com/drive/folders/1vg6Wfy3FcLh9WX-qtrpwFund_bTDHy2p

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Arte estática (post, carrossel, story, anúncio): gera o PNG de uma página HTML e mede antes de entregar.
-uso: arte.py <peca.html> --formato feed|carrossel|story|story-anuncio|quadrado|youtube|email [--saida peca.png]
+uso: arte.py <peca.html> --formato feed|carrossel|story|story-anuncio|quadrado|youtube|email|capa-reels|shorts|podcast [--saida peca.png]  (sai também o .jpg sRGB, o que vai para o Instagram)
      arte.py --teste
 Mede no navegador, depois de a fonte carregar: texto que não cabe ou sai da área segura do formato (elemento com
 `data-sangra` pode encostar na borda, como faixa ou foto de ponta a ponta), fonte que não é Montserrat, contraste
@@ -17,8 +17,22 @@ MARCA_MD = Path(__file__).resolve().parent.parent / "regras" / "marca.md"
 # formato: (largura, altura, margem dos lados, livre em cima, livre embaixo); fontes em regras/oficio/design.md e video.md
 FORMATOS = {"feed": (1080, 1350, 64, 64, 64), "carrossel": (1080, 1350, 64, 64, 64), "quadrado": (1080, 1080, 64, 64, 64),
             "story": (1080, 1920, 64, 250, 250), "story-anuncio": (1080, 1920, 65, 269, 672),  # anúncio: 6% lados, 14% topo, 35% base
-            "youtube": (1920, 1080, 96, 64, 64), "email": (600, 650, 32, 32, 32)}
-ESCALA = {"youtube": 2, "email": 2}  # thumb sai 3840x2160 (ajuda do YouTube); banner de e-mail em dobro para tela retina
+            "youtube": (1920, 1080, 96, 64, 64), "email": (600, 650, 32, 32, 32), "capa-reels": (1080, 1920, 64, 250, 250),
+            "shorts": (1080, 1920, 64, 250, 250), "podcast": (1500, 1500, 96, 96, 96)}
+# saída maior que o desenho, pelos tamanhos oficiais (regras/formatos.md); e-mail em dobro para tela retina
+ESCALA = {"youtube": 2, "email": 2, "shorts": 2, "podcast": 2}
+JPEG_MAX = 8e6  # a API do Instagram (agendador) só aceita JPEG sRGB até 8 MB
+
+
+def jpeg(png, jpg):
+    """JPEG sRGB sem transparência (fundo branco), qualidade alta; devolve o tamanho em bytes"""
+    from PIL import Image, ImageCms
+    im = Image.open(png).convert("RGBA")
+    fundo = Image.new("RGB", im.size, (255, 255, 255))
+    fundo.paste(im, mask=im.split()[3])
+    srgb = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes()
+    fundo.save(jpg, "JPEG", quality=92, subsampling=0, icc_profile=srgb)
+    return os.path.getsize(jpg)
 GRANDE_NEGRITO, GRANDE_NORMAL = 52, 64  # px na peça de 1080 que viram "letra grande" no celular (oficio/design.md)
 NAO_E_MONTSERRAT = re.compile(r"^(?!.*montserrat)", re.I)
 
@@ -140,6 +154,9 @@ def main(html_arq, formato, saida):
         m = medir(medida, w, h)
         falhas, avisos = problemas(m["textos"], formato, html, m["fotos"])
     print_html(Path(html_arq).resolve().as_uri(), w, h, saida, ESCALA.get(formato, 1))
+    jpg = str(Path(saida).with_suffix(".jpg"))
+    if jpeg(saida, jpg) > JPEG_MAX and formato in ("feed", "carrossel", "quadrado", "story", "story-anuncio", "capa-reels"):
+        falhas.append(f"{jpg} passa de 8 MB: a API do Instagram recusa")
     for x in falhas:
         print("FALHA:", x)
     for x in avisos:
@@ -151,6 +168,13 @@ def main(html_arq, formato, saida):
 def teste():
     assert "#D24BA8" in paleta() and "#FAF9FB" in paleta() and "#965594" not in paleta()
     assert FORMATOS["youtube"][0] * ESCALA["youtube"] == 3840 and set(ESCALA) <= set(FORMATOS)
+    assert FORMATOS["podcast"][0] * ESCALA["podcast"] == 3000 and FORMATOS["shorts"][1] * ESCALA["shorts"] == 3840
+    from PIL import Image
+    with tempfile.TemporaryDirectory() as d:  # transparência vira branco e o JPEG leva o perfil sRGB
+        Image.new("RGBA", (40, 40), (0, 0, 0, 0)).save(f"{d}/a.png")
+        assert jpeg(f"{d}/a.png", f"{d}/a.jpg") > 0
+        j = Image.open(f"{d}/a.jpg")
+        assert j.mode == "RGB" and j.getpixel((5, 5))[0] > 250 and j.info.get("icc_profile")
     assert cores_fora("a{color:#d24ba8;background:#fff} b{color:#965594}") == ["#965594"]
     assert round(contraste((255, 255, 255), (0xD2, 0x4B, 0xA8)), 2) == 3.95
     caixa = dict(t="x", x0=100, y0=300, x1=900, y1=400, estoura=False, sangra=False, fonte="Arial, sans-serif", tam=40, peso=800,

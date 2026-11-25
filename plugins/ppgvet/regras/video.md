@@ -21,9 +21,9 @@ Lido pelas skills de vídeo, junto com o `nucleo.md`.
 - Animação de motion design do zero (explicativo, história): plugin **animate**.
 
 ## Padrão Instagram vertical (Reels e Stories)
-- **Arquivo:** 1080x1920 (9:16), MP4 H.264 + AAC (até 48 kHz, 128 kbps), fps fixo entre 23 e 60 (30, ou o da câmera, como 29,97), `-movflags +faststart`, vídeo até 25 Mbps, de 3 s a 15 min, até 300 MB. Doc oficial da Meta, conferida em 13/11/2026: [IG User Media](https://developers.facebook.com/documentation/instagram-platform/instagram-graph-api/reference/ig-user/media) e [Reels Publishing API](https://developers.facebook.com/documentation/video-api/guides/reels-publishing).
+- **Arquivo:** limites oficiais em `formatos.md`; a casa entrega MP4 H.264 + AAC, fps fixo (30, ou o da câmera, como 29,97), `-movflags +faststart`. Reels até 3 min, para chegar a quem não segue.
 - **Prévia no feed** = recorte 4:5 central (y 285 a 1635). Rosto, texto e logo ficam dentro dele.
 - **Margem livre:** nenhum texto nem logo nos 250 px de cima e nos 250 px de baixo.
-- **Anúncio pago** (zona segura da Meta): além disso, 14% de cima, 35% de baixo e 6% dos lados sem texto nem logo. Vídeo orgânico não precisa.
+- **Anúncio pago** [E]: além disso, 14% de cima, 35% de baixo e 6% dos lados sem texto nem logo (a Meta não publica mais os %: conferir na guia do Gerenciador; com aviso legal, 40% de baixo livres, `formatos.md`). Vídeo orgânico não precisa.
 - **Faixas dos Reels** (o `hf.py` já usa), de cima para baixo: rosto até ~y 900; legenda no peito, logo abaixo do queixo (topo em y 915), com contorno escuro; caixinha e cartões de y 1035 a ~1390; logo com 210 px de largura, de y 1470 a 1604. A chamada e os posts de cortes têm o layout deles (está em cada skill).
 - **Ritmo dos Reels:** o zoom muda no máximo a cada 5 s; os outros cortes ficam como jump cut no mesmo plano.

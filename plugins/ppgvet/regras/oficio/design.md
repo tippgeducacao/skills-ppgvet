@@ -19,13 +19,17 @@ Lido quando a peça tem arte, cartão ou carrossel, no nível padrão e no capri
 3. Tirar 3 princípios e desenhar do zero com a nossa marca. Copiar o como, nunca o conteúdo, a logo ou o layout.
 4. Comparar lado a lado, no mesmo tamanho, no celular.
 
-## Instagram (conferir na doc da Meta na hora: muda)
+## Formatos do `arte.py`
+Tamanho e limite oficial de cada canal: `formatos.md`. Aqui, só a área livre da casa. Toda peça sai em PNG e em JPEG sRGB (o JPEG é o que vai para o Instagram).
+
 | formato (`arte.py --formato`) | tamanho | área livre (sem texto nem logo) e nota |
 |---|---|---|
-| `feed`, `carrossel` | 1080x1350 (4:5) | 64 px em volta. O app aceita até 3:4, mas a API (agendador do sistema) só até 4:5. A grade do perfil mostra 3:4: essencial no centro. Carrossel: todos na proporção do primeiro |
+| `feed`, `carrossel` | 1080x1350 (4:5) | 64 px em volta. A grade do perfil mostra 3:4: essencial no centro. Carrossel: todos na proporção do primeiro |
 | `quadrado` | 1080x1080 | 64 px em volta |
-| `story`, `story-anuncio` | 1080x1920 | as margens do 9:16 do `video.md` (o `arte.py` mede) |
-| `youtube` (thumb) | desenha 1920x1080, sai 3840x2160 | 96 px dos lados, 64 em cima e embaixo; nada no canto de baixo à direita (a duração cobre). 16:9, mínimo de 640 de largura ([O] [YouTube](https://support.google.com/youtube/answer/72431)) |
+| `story`, `story-anuncio`, `capa-reels` | 1080x1920 | as margens do 9:16 do `video.md` (o `arte.py` mede) |
+| `shorts` (thumb) | desenha 1080x1920, sai 2160x3840 | as do story |
+| `podcast` (capa) | desenha 1500x1500, sai 3000x3000, sem transparência | 96 px em volta; só o nome do podcast [O] |
+| `youtube` (thumb) | desenha 1920x1080, sai 3840x2160 | 96 px dos lados, 64 em cima e embaixo; nada no canto de baixo à direita (a duração cobre) |
 | `email` (banner) | desenha 600x650, sai em dobro | 32 px em volta [N] |
 
 ## O que os nossos perfis ensinam (estudo de 24/11/2026: 100 posts e as artes dos designers da casa)

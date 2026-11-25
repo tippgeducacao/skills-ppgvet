@@ -10,9 +10,10 @@ body{position:relative;font-family:M;color:#fff;
     radial-gradient(1150px 330px at 100% 100%, rgba(51,5,79,1) 0, rgba(51,5,79,.9) 35%, rgba(51,5,79,.5) 52%, rgba(51,5,79,.18) 72%, rgba(51,5,79,0) 100%),
     #000}
 .abs{position:absolute}
-#foto{left:0;right:0;top:0;height:580px;display:flex;justify-content:center;align-items:flex-start;
-  -webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent 98%)}
-#foto img{margin-top:145px;width:var(--largura,500px);height:auto}
+/* foto encostada na faixa (base em 560, atrás dela), com fade logo acima */
+#foto{left:0;right:0;top:0;height:560px;display:flex;justify-content:center;align-items:flex-end;
+  -webkit-mask-image:linear-gradient(to bottom,#000 86%,transparent 100%)}
+#foto img{width:var(--largura,500px);height:auto}
 .faixa{left:272px;top:554px;width:538px;height:57px;background:#B84482;display:flex;align-items:center;justify-content:center;
   font-weight:700;font-size:31px;letter-spacing:.6px;color:#F3F3F3}
 .link{left:0;right:0;top:603px;text-align:center;font-weight:800;font-size:100px;line-height:83px;letter-spacing:-1.5px;color:#EFEFEF}
