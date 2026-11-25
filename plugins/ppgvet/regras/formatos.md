@@ -19,5 +19,5 @@ Dono dos tamanhos, durações e limites de cada canal. Só fonte oficial, confer
 | Spotify e Apple | capa do podcast | **3000x3000** (Spotify aceita de 1400), PNG ou JPG, sem transparência | o episódio usa a capa do programa | na capa, só o nome | [Spotify](https://creators.spotify.com/resources/dos-donts-showart), [Apple](https://podcasters.apple.com/support/5514-show-cover-template) |
 | Spotify e Apple | áudio e vídeo | MP3 estéreo 128 a 256 kbps; vídeo 16:9 1080p | **-16 LUFS ±1, pico até -1 dB** (Apple) | | [Apple](https://podcasters.apple.com/support/893-audio-requirements), [Spotify vídeo](https://support.spotify.com/us/creators/article/video-specs/) |
 | WhatsApp | modelo de mensagem | imagem até 5 MB; vídeo MP4 H.264 até 16 MB | corpo 1.024 caracteres | | [Mídia](https://developers.facebook.com/documentation/business-messaging/whatsapp/business-phone-numbers/media) |
-| Portal do aluno (Eduq) | capa | 1080x1920 e 1000x1000 | | padrão da casa (artes da equipe), não é norma de plataforma | — |
+| Portal do aluno (Eduq) | capa | 1080x1920 (em pé) e 1000x1000 | | padrão da casa (artes da equipe), não é norma de plataforma; a tarefa diz "1920x1080", mas o portal usa em pé | — |
 | E-mail | Gmail | | | assunto sem "Re:" ou "Fwd:" falso; descadastro visível e em 1 clique acima de 5 mil por dia | [Gmail](https://support.google.com/a/answer/81126) |

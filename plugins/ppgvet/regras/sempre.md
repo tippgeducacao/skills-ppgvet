@@ -1,5 +1,5 @@
 # PPGVET: o que vale sempre (marketing)
-Entra sozinho em toda sessão. Vale para peça de marketing da PPGVET ou da PPG (vídeo, áudio, foto, arte, texto), mesmo sem skill aberta; código de site segue o `DESIGN.md` do site. Detalhes em `regras/` (pasta do pacote na 1ª linha), lidos dentro da tarefa.
+Entra em toda sessão. Vale para peça de marketing da PPGVET ou da PPG (vídeo, áudio, foto, arte, texto), mesmo sem skill aberta; código de site segue o `DESIGN.md` do site. Detalhes em `regras/` (pasta do pacote na 1ª linha), lidos dentro da tarefa.
 
 ## Marca
 - **Duas marcas, nunca misturadas:** PPGVET (veterinária; magenta) e PPG Educação (gestão e cooperativismo; azul). Códigos de cor, nome e cor de cada pós e as exceções: `regras/marca.md`.
@@ -17,7 +17,7 @@ Entra sozinho em toda sessão. Vale para peça de marketing da PPGVET ou da PPG 
 - Português do Brasil simples, sem travessão e sem cara de IA.
 
 ## Máquina e tokens
-- Vídeo se olha por folha de quadros, nunca quadro a quadro; transcrição, log e texto grande por busca ou por trecho.
+- Vídeo se olha por folha de quadros; transcrição, log e texto grande por busca ou por trecho.
 - Render e transcrição em prioridade baixa e em segundo plano, um pesado por vez.
 - Resposta curta: o que foi feito, onde está, o que decidir.
 
@@ -32,7 +32,8 @@ Consulta (cor, nome, como fazer): responder direto. Texto ou peça para publicar
 | texto sem arte: legenda do post, WhatsApp, texto de anúncio, e-mail, roteiro de vídeo, pauta de posts | `ppgvet:copy` |
 | pacote de uma entrega: entrada de professor, episódio de podcast, aquecimento, abertura de turma, lançamento de pós | `ppgvet:pacote` |
 | carrossel "Aulas da semana" | `ppgvet:aulas-da-semana` |
-| pacote da live no vMix (moldura, QR, títulos) | `ppgvet:live-vmix` |
-| boas-vindas a patrocinador de podcast (mascote, Flow) | `ppgvet:patrocinador-podcast` |
+| capas da Eduq | `ppgvet:capas-eduq` |
+| live no vMix (moldura, QR, títulos) | `ppgvet:live-vmix` |
+| patrocinador de podcast (mascote, Flow) | `ppgvet:patrocinador-podcast` |
 | preparar o computador, erro de programa | `ppgvet:instalar` |
 | revisar peça pronta (arte, vídeo, foto) | agente `ppgvet:revisor-peca` |

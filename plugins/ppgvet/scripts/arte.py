@@ -39,7 +39,7 @@ SEM_TEXTO = "<style>*{color:transparent!important;text-shadow:none!important;-we
 GRANDE_NEGRITO, GRANDE_NORMAL = 52, 64  # px na peça de 1080 que viram "letra grande" no celular (oficio/design.md)
 NAO_E_MONTSERRAT = re.compile(r"^(?!.*montserrat)", re.I)
 
-MEDIR = r"""<script>document.fonts.ready.then(()=>{
+MEDIR = r"""<script>Promise.all([document.fonts.ready,new Promise(r=>document.readyState==="complete"?r():addEventListener("load",r))]).then(()=>{
 const out=[], cor=c=>c, sobe=e=>{for(let a=e;a;a=a.parentElement){const s=getComputedStyle(a);
   if(s.backgroundImage&&s.backgroundImage!=='none')return{img:true};
   if(s.backgroundColor&&!/rgba\(0, 0, 0, 0\)|transparent/.test(s.backgroundColor))return{bg:s.backgroundColor};}

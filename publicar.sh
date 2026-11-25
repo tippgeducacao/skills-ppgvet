@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")"
 S=plugins/ppgvet/scripts
 PY="${PY:-$(cat "$HOME/.ppgvet/python" 2>/dev/null || echo python3)}"  # PY=<python> ./publicar.sh para usar outro
-for s in comum transcrever cortar chamada aula treinamento conferir post instalar retocar checar hf live_titulos live_qr sons imagem aulas_semana checar_texto reels arte aftermovie molde portao utm; do
+for s in comum transcrever cortar chamada aula treinamento conferir post instalar retocar checar hf live_titulos live_qr sons imagem aulas_semana checar_texto reels arte aftermovie molde portao utm eduq; do
   printf "teste %-12s " "$s"; "$PY" "$S/$s.py" --teste
 done
 # referência quebrada (skill, agente, regra, script ou peça do acervo citada num .md que não existe) barra a publicação

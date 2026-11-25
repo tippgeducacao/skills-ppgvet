@@ -32,7 +32,7 @@ Tamanho e limite oficial de cada canal: `formatos.md`. Aqui, só a área livre d
 | `podcast` (capa) | desenha 1500x1500, sai 3000x3000, sem transparência | 96 px em volta; só o nome do podcast [O] |
 | `youtube` (thumb) | desenha 1920x1080, sai 3840x2160 | 96 px dos lados, 64 em cima e embaixo; nada no canto de baixo à direita (a duração cobre) |
 | `email` (banner) | desenha 600x650, sai em dobro | 32 px em volta [N] |
-| `portal`, `portal-quadrado` (capa do portal do aluno, Eduq) | 1080x1920 e 1000x1000 | um par por bloco ("ABERTURA", "MÓDULO I"…) [N] |
+| `portal`, `portal-quadrado` (capas da Eduq: skill `capas-eduq`) | 1080x1920 e 1000x1000 | 96 e 64 px em volta [N] |
 
 ## O que os nossos perfis ensinam (estudo de 24/11/2026: 100 posts e as artes dos designers da casa)
 - **Foto e vídeo real vencem:** Reels de campo alcançaram 34 a 50 mil (mediana 2,9 mil); carrossel só com fotos da turma, 28,8 mil. O pior: arte só de texto com foto de banco. Pessoa e lugar de verdade sempre que houver.
@@ -52,7 +52,6 @@ Peça que cabe num molde sai do molde: mesmo sistema em toda a equipe, menos tem
 | `carrossel-capa`, `-conteudo`, `-cta` | carrossel: tese sobre foto, uma ideia por lâmina (foto opcional), uma ação no fim em tom invertido | `carrossel` |
 | `story` | aviso de aula, live ou evento: data na cor da pós, foto de fundo | `story` ou `story-anuncio` |
 | `thumb` | YouTube e podcast: rosto real, 3 a 6 palavras gigantes | `youtube` |
-| `capa-portal` | capa do portal do aluno, um par por bloco | `portal` e `portal-quadrado` |
 
 - **Sistema:** PPGVET em fundo claro `#FAF9FB` (Jaleco Branco), PPG em fundo escuro `#1A1A1A` (Terno Escuro); peça com foto de fundo usa véu escuro e letra branca nas duas. Cor da pós no fio do bloco e na faixa do rótulo; no nome da pós só quando lê (o `molde.py` mede). Destaque do título (`[colchetes]`) na cor da marca, só em letra grande.
 - **Anúncio (patrocinado):** `kv` ou `professor` em `anuncio` e `story` em `story-anuncio`, até 8 variações mudando só o gancho e a foto (o resto fica, para comparar).

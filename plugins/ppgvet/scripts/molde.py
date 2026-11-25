@@ -13,7 +13,6 @@ Moldes, campos (os entre parênteses são opcionais) e formato padrão:
   carrossel-cta       titulo, apoio, cta                                carrossel
   story               foto, rotulo, data ("23/11"), titulo, apoio, (cta)       story ou story-anuncio
   thumb               foto, rotulo, titulo                              youtube
-  capa-portal         foto, titulo ("MÓDULO I"), apoio ("Aulas curriculares")  portal ou portal-quadrado
 Nunca inventa texto: campo obrigatório vazio para antes de gerar."""
 import base64, datetime as dt, html as H, io, json, os, re, string, sys
 from pathlib import Path
@@ -28,14 +27,13 @@ MOLDES = {"kv": (("foto", "rotulo", "titulo"), "feed"),
           "carrossel-conteudo": (("titulo", "texto"), "carrossel"),
           "carrossel-cta": (("titulo", "apoio", "cta"), "carrossel"),
           "story": (("foto", "rotulo", "data", "titulo", "apoio"), "story"),
-          "thumb": (("foto", "rotulo", "titulo"), "youtube"),
-          "capa-portal": (("foto", "titulo", "apoio"), "portal")}
+          "thumb": (("foto", "rotulo", "titulo"), "youtube")}
 CLARO, ESCURO, BRANCO = "#FAF9FB", "#1A1A1A", "#FFFFFF"
 MARCAS = {"PPGVET": dict(marca="#D24BA8", acao="#00B7AB", faixa="#B84482", tom="claro",  # Jaleco Branco (marca.md)
                          logo="logos/ppgvet/logo-ppgvet.png", logo_branco="logos/ppgvet/logo-ppgvet-branco.png"),
           "PPG": dict(marca="#1670C2", acao="#00ADA3", faixa="#1670C2", tom="escuro",  # Terno Escuro
                       logo="logos/ppg/logo-ppg-educacao.png", logo_branco="logos/ppg/logo-ppg-educacao-branco.png")}
-ESCURAS = ("story", "thumb", "capa-portal", "carrossel-capa")  # foto de fundo com véu: letra branca nas duas marcas
+ESCURAS = ("story", "thumb", "carrossel-capa")  # foto de fundo com véu: letra branca nas duas marcas
 MESES = "JAN FEV MAR ABR MAI JUN JUL AGO SET OUT NOV DEZ".split()
 MOLDES_DIR = Path(acervo("moldes"))
 
