@@ -93,6 +93,7 @@ class Sessao:
         try:  # sem abrir, o with não chama o __exit__: o Chrome ficaria rodando
             self.servidor = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Pedido)
             self.servidor.daemon_threads = True
+            self.servidor.handle_error = lambda *a: None  # o Chrome fecha a conexão ao sair: não é erro
             threading.Thread(target=self.servidor.serve_forever, daemon=True).start()
             self.chrome = subprocess.Popen([nav, "--headless=new", "--disable-gpu", f"--user-data-dir={self.pasta / 'perfil'}",
                                             "--window-size=1400,1000", f"http://127.0.0.1:{self.servidor.server_port}/"],
