@@ -335,10 +335,12 @@ def teste():
                 preencher(pp, f"{d}/m.psd", [{"pintar": "FOTO Educação", "cor": "#0000FF"}], {"png": f"{d}/c.png"}, d)
                 c = Image.open(f"{d}/c.png").convert("RGB")
                 assert c.getpixel((70, 60))[2] > 200 and c.getpixel((70, 60))[0] < 60, c.getpixel((70, 60))  # a cor por cima da caixa
-                from comum import acervo
-                pp.abrir(acervo("eduq", "modelos", "modulo-1000x1000.psd"))
-                assert ("Módulo I", True) in textos(pp), "texto do PSD da equipe"
-                pp.script("app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
+                from comum import pasta
+                eduq = Path(pasta("artes"), "eduq", "modelos", "modulo-1000x1000.psd")  # modelo da equipe, se a máquina tem
+                if eduq.exists():
+                    pp.abrir(str(eduq))
+                    assert ("Módulo I", True) in textos(pp), "texto do PSD da equipe"
+                    pp.script("app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
                 preencher(pp, f"{d}/m.psd", [{"apagar": "OBJ"}], {"png": f"{d}/x.png"}, d)
                 assert Image.open(f"{d}/x.png").convert("RGB").getpixel((165, 45)) == (255, 255, 255), "a camada apagada sumiu"
                 print("ao vivo ok", end=" ")

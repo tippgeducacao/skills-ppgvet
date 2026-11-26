@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Capas do portal do aluno (Eduq) de uma pós, no padrão da casa: a capa principal e as individuais (Trilha Inicial de
 Aprendizado, Abertura, Módulo I a N, Materiais Complementares), cada uma em 1000x1000 e 1080x1920.
-Motor: os PSDs da equipe (acervo/eduq/modelos) preenchidos no Photopea (psd.py): sai o PNG e o PSD editável (em editaveis/).
+Motor: os PSDs da equipe (<artes>/eduq/modelos) preenchidos no Photopea (psd.py): sai o PNG e o PSD editável (em editaveis/).
 Plano B, com o Photopea fora: as mesmas capas em código (HTML medido pelo arte.py), sem PSD; o aviso sai na tela.
 uso: eduq.py ficha.json [--saida <pasta>] [--codigo]   (sem --saida: <artes>/eduq/<NOME_DA_POS>/; --codigo: direto o plano B)
      eduq.py --teste
@@ -24,11 +24,11 @@ from portao import registrar  # noqa: E402
 COR = {"PPGVET": dict(fundo="#55978B", pilula="#00857D"), "PPG": dict(fundo="#0080F6", pilula="#047FEF")}  # exceção da Eduq no marca.md
 TAMANHOS = {"1080x1920": "portal", "1000x1000": "portal-quadrado"}
 ROMANOS = "I II III IV V VI VII VIII IX X XI XII XIII XIV XV XVI XVII XVIII XIX XX".split()
-# telas do aparelho (acervo/eduq/aparelho.png, 1204x860, do PSD da equipe): cantos sup-esq, sup-dir, inf-dir, inf-esq
+# telas do aparelho (<artes>/eduq/modelos/aparelho.png, 1204x860, do PSD da equipe): cantos sup-esq, sup-dir, inf-dir, inf-esq
 NOTEBOOK = [(376.7, 37.2), (1180.9, 83.5), (1158.8, 590.7), (385.5, 520.4)]
 CELULAR = [(6.3, 403.9), (192.7, 370.9), (288.3, 800.6), (100.7, 844.2)]
 TELA_NOTEBOOK, TELA_CELULAR = (2255, 1428), (1469, 3129)  # tamanho do conteúdo de cada tela no PSD
-# onde cada coisa fica nos PSDs da equipe (acervo/eduq/modelos/<principal|modulo|fundo>-<tamanho>.psd)
+# onde cada coisa fica nos PSDs da equipe (<artes>/eduq/modelos/<principal|modulo|fundo>-<tamanho>.psd)
 PSD = {"1000x1000": dict(titulo=[61, 540, 940, 884], foto=[0, -94, 1000, 906], aparelho=[119, 85, 847, 605], largura=860, cor="Preenchimento de Cor 2",
                          aulas="aulas curriculares", logo="logo - PPG Educação_branca"),
        "1080x1920": dict(titulo=[84, 1225, 998, 1583], foto=[-240, 0, 1320, 1560], aparelho=[113, 564, 970, 1176], largura=920, cor="Preenchimento de Cor 1 copiar",
@@ -38,7 +38,7 @@ PSD = {"1000x1000": dict(titulo=[61, 540, 940, 884], foto=[0, -94, 1000, 906], a
 DUAS = {"1000x1000": dict(aparelho=[182, 85, 784, 515], titulo=[20, 560, 980, 713], aulas=[350, 755, 655, 826], logo=[424, 859, 576, 909]),
         "1080x1920": dict(aparelho=[187, 564, 896, 1070], titulo=[20, 1123, 1060, 1303], aulas=[366, 1352, 722, 1436], logo=[449, 1475, 628, 1534])}
 NOME_NA_PILULA = [157, 161, 1171, 490]  # caixa do nome da pós dentro do objeto TITULO CURSO (1328x520)
-PILULA_XY = (281, 34)  # onde a pílula (acervo/eduq/pilula-<marca>.png, tirada do PSD) fica dentro do TITULO CURSO
+PILULA_XY = (281, 34)  # onde a pílula (<artes>/eduq/modelos/pilula-<marca>.png, tirada do PSD) fica dentro do TITULO CURSO
 # relevo do título no PSD (relevo almofadado suave + sombra interna), em px da capa vertical; o plano B recalcula em código
 # com estes números, afinados pela diferença de pixels contra a capa do PSD (11/2026)
 RELEVO = dict(tam=27.5, prof=3, altura=35, angulo=-144, giro=288, borr=18, suave=2.75, sombra=.35, sombra_d=6.2, sombra_b=4.1)
@@ -124,8 +124,8 @@ def aparelho(foto, numero, principal_vertical, foco):
     """notebook e celular do acervo com a foto (e o número) na tela do notebook e a capa principal na do celular"""
     import numpy as np
     from PIL import Image
-    base = Image.open(acervo("eduq", "aparelho.png")).convert("RGBA")
-    reflexo = Image.open(acervo("eduq", "aparelho-reflexo.png")).convert("RGBA")
+    base = Image.open(modelo("aparelho.png")).convert("RGBA")
+    reflexo = Image.open(modelo("aparelho-reflexo.png")).convert("RGBA")
     tela = cobrir(foto, TELA_NOTEBOOK, foco).convert("RGBA")
     # degradê preto da tela, com a curva do PSD da equipe (transparente até 1/6 da altura, preto a partir de 5/6)
     curva = np.interp(np.linspace(0, 1, TELA_NOTEBOOK[1]), [0, .167, .25, .333, .417, .5, .583, .667, .75, .833, 1],
@@ -241,10 +241,10 @@ def principal_codigo(foto, foco, nome, marca, tam, pasta):
     capa = Image.new("RGBA", (w, h), (0, 0, 0, 255))
     cf = PSD[tam]["foto"]
     capa.paste(Image.open(recorte(foto, cf, Path(pasta) / "foto.jpg", foco)).resize((cf[2] - cf[0], cf[3] - cf[1]), Image.LANCZOS), cf[:2])
-    capa.alpha_composite(Image.open(acervo("eduq", f"principal-cima-{tam}.png")).convert("RGBA"))
+    capa.alpha_composite(Image.open(modelo(f"principal-cima-{tam}.png")).convert("RGBA"))
     ct = PSD[tam]["titulo"]
     e = (ct[2] - ct[0]) / 1328  # escala do objeto TITULO CURSO na capa
-    pil = Image.open(acervo("eduq", f"pilula-{marca.lower()}.png")).convert("RGBA")
+    pil = Image.open(modelo(f"pilula-{marca.lower()}.png")).convert("RGBA")
     pil = pil.resize((round(pil.width * e), round(pil.height * e)), Image.LANCZOS)
     capa.alpha_composite(pil, (round(ct[0] + PILULA_XY[0] * e), round(ct[1] + PILULA_XY[1] * e)))
     cx = [round(ct[0] + NOME_NA_PILULA[0] * e), round(ct[1] + NOME_NA_PILULA[1] * e),
@@ -306,7 +306,7 @@ def gerar_psd(pp, ficha, saida, pasta_ficha=".", feitos=None):
     nome, marca, foco, foto, principais = _base(ficha, pasta_ficha)
     saida, ok, pngs = Path(saida), True, []
     (saida / "editaveis").mkdir(parents=True, exist_ok=True)
-    modelo = lambda tipo, tam: acervo("eduq", "modelos", f"{tipo}-{tam}.psd")
+    psd_de = lambda tipo, tam: modelo(f"{tipo}-{tam}.psd")
     linhas = "\r".join(quebra(nome.upper(), 18))
 
     def fazer(arquivo, tipo, tam, ops, d):
@@ -315,7 +315,7 @@ def gerar_psd(pp, ficha, saida, pasta_ficha=".", feitos=None):
         psd = saida / "editaveis" / f"{arquivo} - {tam}.psd"
         if feitos is not None:
             feitos.append(psd)
-        preencher(pp, modelo(tipo, tam), ops, {"png": png, "psd": psd}, d)
+        preencher(pp, psd_de(tipo, tam), ops, {"png": png, "psd": psd}, d)
         w, h = map(int, tam.split("x"))
         im = Image.open(png)
         if im.size != (w, h):  # a prancheta do PSD tem 1 px a mais
@@ -345,7 +345,7 @@ def gerar_psd(pp, ficha, saida, pasta_ficha=".", feitos=None):
             if marca == "PPG":
                 ops.append({"imagem": PSD[tam]["cor"], "arquivo": solido(COR["PPG"]["fundo"], Path(d) / "cor.png"), "inteira": True, "caixa": [0, 0, w, h]})
             fundo[tam] = Path(d) / f"fundo-{tam}.png"
-            preencher(pp, modelo("fundo", tam), ops, {"png": fundo[tam]}, d)
+            preencher(pp, psd_de("fundo", tam), ops, {"png": fundo[tam]}, d)
         for arq, titulo, numero in pecas(ficha):
             ap = Path(d) / f"aparelho-{numero}.png"
             aparelho(abrir_foto(foto), numero, vertical, foco).save(ap)
@@ -441,6 +441,14 @@ def pasta_da_pos(nome):
     return re.sub(r"\s+", "_", nome.upper().replace(",", ""))
 
 
+def modelo(nome):
+    """modelos da Eduq: na pasta de artes de quem gera, fora do pacote (o PSD é da equipe e muda com ela)"""
+    p = Path(pasta("artes"), "eduq", "modelos", nome)
+    if not p.exists():
+        sys.exit(f"Falta {p}: preparar os modelos da Eduq (skill capas-eduq, \"Preparar os modelos\")")
+    return str(p)
+
+
 def teste():
     import portao
     from PIL import Image, ImageDraw
@@ -463,6 +471,9 @@ def teste():
     caixa = m.getbbox()
     assert abs(caixa[1] - 198) <= 3 and abs(caixa[3] - 1212) <= 3 and abs((caixa[0] + caixa[2]) / 2 - 1127) <= 6, caixa  # como no PSD
     assert m.getpixel(((caixa[0] + caixa[2]) // 2 + 60, 900)) == 0  # só o contorno: o miolo do número fica vazio
+    if not Path(pasta("artes"), "eduq", "modelos").exists():
+        print("aviso: sem os modelos da Eduq nesta máquina; geração pulada. ok")
+        return
     with tempfile.TemporaryDirectory() as d:
         foto = Image.new("RGB", (1800, 1200), (70, 95, 60))
         ImageDraw.Draw(foto).rectangle((0, 0, 1800, 400), fill=(220, 228, 232))  # céu claro: o véu tem que segurar a letra
