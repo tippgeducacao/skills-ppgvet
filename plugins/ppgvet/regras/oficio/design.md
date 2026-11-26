@@ -44,8 +44,16 @@ Tamanho e limite oficial de cada canal: `formatos.md`. Aqui, só a área livre d
 
 ## Arquivo da equipe primeiro (PSD ou Canva)
 Peça que a equipe já faz (existe o PSD ou o design no Canva da mesma peça) sai do arquivo dela, preenchido, não redesenhado: o visual é o dos designers.
-- **Motor, nesta ordem:** Photoshop (quando houver máquina com ele) → Photopea sem janela (`scripts/psd.py`) → sem os dois: Affinity (pedir para a pessoa instalar) ou o molde em código da melhor forma, dizendo na entrega que não saiu do arquivo da equipe.
-- **Canva:** trabalhar numa cópia do design da equipe, nunca no original; editar texto e foto e exportar não gasta crédito; recurso de IA do Canva (gerar design, imagem, Magic Layers) gasta: só se a pessoa pedir.
+- **Motor, pelo arquivo da equipe:**
+
+| a equipe faz em | ordem |
+|---|---|
+| PSD | Photoshop (máquina com ele) → Photopea sem janela (`scripts/psd.py`) → Affinity (se a pessoa tem; senão sugerir instalar) → na máquina da melhor forma |
+| Canva | Canva (conector) → na máquina da melhor forma |
+
+  Fora do 1º da linha: dizer na entrega qual motor saiu e por quê. PSD não vai para o Canva: a importação do Canva pode chapar efeito de camada, trocar fonte, para em 300 MB e não devolve PSD ([ajuda do Canva](https://www.canva.com/help/ai-import/)).
+- **Antes de mexer:** ler o arquivo inteiro (camadas ou elementos, inclusive os escondidos) e entender o que é fixo e o que muda por peça.
+- **Canva:** trabalhar numa cópia do design da equipe (`copy-design`), nunca no original. Texto, posição, foto (`create-upload-url` + `update_fill`), exportar: sem crédito. IA do Canva (gerar design, imagem, Magic Layers) gasta: só se a pessoa pedir. Conferir a miniatura de cada página editada; salvar (`commit`) só depois do ok da pessoa na prévia; teste se descarta (`cancel`). O conector não duplica nem apaga página: lâmina a mais a pessoa duplica no Canva; a menos sai fora na exportação (`pages`).
 - **Entrega:** PNG + o editável (PSD, ou o link da cópia no Canva) organizado: camada de texto com o nome do texto, texto conferido (`psd.py --conferir`) e, sem instrução do designer, a sobra escondida que é de outra peça (outra pós, outro nome) apagada no editável entregue (`{"apagar": camada}`); variação da mesma peça fica. Dizer o que foi apagado. O arquivo da equipe nunca é mexido. Instrução do designer vale mais que esta regra.
 - Sem arquivo da equipe para a peça: os moldes da casa abaixo.
 

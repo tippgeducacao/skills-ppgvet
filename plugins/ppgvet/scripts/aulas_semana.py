@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Carrossel "Aulas da semana" do Instagram (1080x1350, 4:5): capa + uma lâmina por aula, no molde da equipe.
 uso: aulas_semana.py semana.json [--fotos <pasta das fotos dos professores>] (sem --fotos: acervo/professores)
+     aulas_semana.py semana.json --conferir   (só confere e lista texto e foto de cada lâmina: caminho do Canva)
      aulas_semana.py --teste
 semana.json: {"ano": 2026, "aulas": [{"pos": "CBEA" (ou ["RNGB","NGB","GPL"] em módulo comum), "data": "23/11",
   "hora": "19h", "professor": "Dra. Ana Souza", "tema": "Bem-estar na criação",
@@ -155,12 +156,16 @@ const b=e.getBoundingClientRect();r.push([e.dataset.m,b.left,b.top,b.right,b.bot
 const p=document.createElement('pre');p.id='medida';p.style.display='none';p.textContent=JSON.stringify(r);document.body.appendChild(p);});</script>"""
 
 
-def capa(m, aulas):
+def datas_capa(aulas):
     a, b = aulas[0]["data"], aulas[-1]["data"]
-    datas = (f"{a.day} a {b.day} de {MESES[b.month - 1]}" if a.month == b.month
-             else f"{a.day} de {MESES[a.month - 1]} a {b.day} de {MESES[b.month - 1]}")
     if a == b:
-        datas = f"{a.day} de {MESES[a.month - 1]}"
+        return f"{a.day} de {MESES[a.month - 1]}"
+    return (f"{a.day} a {b.day} de {MESES[b.month - 1]}" if a.month == b.month
+            else f"{a.day} de {MESES[a.month - 1]} a {b.day} de {MESES[b.month - 1]}")
+
+
+def capa(m, aulas):
+    datas = datas_capa(aulas)
     cor = MARCA[m]["cor"]
     return base(m) + f"""<style>
 .bloco{{position:absolute;top:470px;left:{MARGEM}px;right:{MARGEM}px;text-align:center}}
@@ -269,6 +274,23 @@ def gerar(d, fotos=None, saida=None):
     return pastas
 
 
+def conferir(d, fotos=None):
+    """só confere, sem gerar (caminho do Canva): o texto de cada lâmina e a foto que vai nela"""
+    por_marca, erros, avisos = preparar(d, fotos)
+    for a in avisos:
+        print("AVISO:", a)
+    if erros:
+        sys.exit("Corrigir antes:\n- " + "\n- ".join(erros))
+    for m, aulas in por_marca.items():
+        print(f"{m} | capa | {datas_capa(aulas)}")
+        for i, a in enumerate(aulas, 2):
+            dia = a["data"]
+            prof = f"{a['titulo']} {a['nome']}" if a["titulo"] else a["nome"]
+            print(f"{m} | {i:02d} | {DIAS[dia.weekday()]} | {dia.day} de {MESES[dia.month - 1]} | às {a['hora']} | "
+                  f"{a['pos']} | {prof} | {a['tema']} | {a['foto']}")
+    return por_marca
+
+
 def folha(pngs, saida):
     from PIL import Image
     ims = [Image.open(p).convert("RGB").resize((360, 450)) for p in pngs]
@@ -306,6 +328,8 @@ def teste():
         assert pm["PPGVET"][0]["data"].weekday() == 0 and pm["PPGVET"][1]["cor"] is None  # 23/11/2026 = segunda
         assert pm["PPGVET"][1]["pos"] == "Reprodução, Nutrição e Gestão de Bovinos + Gestão na Pecuária Leiteira", pm["PPGVET"][1]["pos"]
         assert pm["PPG"][0]["hora"] == "20h00"
+        assert datas_capa(pm["PPGVET"]) == "23 a 24 de novembro" and datas_capa(pm["PPG"]) == "25 de novembro"
+        assert set(conferir(d, t)) == {"PPGVET", "PPG"}
         _, erros, _ = preparar({"aulas": [{"pos": "XYZ", "data": "1/1", "hora": "19h", "professor": "A B", "tema": "x"}]}, t)
         assert erros and "XYZ" in erros[0]
         assert problemas([["pos", 10, 0, 1070, 100, False]]) == ["pos: encosta na borda"]
@@ -324,6 +348,9 @@ if __name__ == "__main__":
         teste()
     elif len(sys.argv) >= 2:
         fotos = sys.argv[sys.argv.index("--fotos") + 1] if "--fotos" in sys.argv else acervo("professores")
+        if "--conferir" in sys.argv:
+            conferir(json.load(open(sys.argv[1], encoding="utf-8")), fotos)
+            sys.exit(0)
         r = gerar(json.load(open(sys.argv[1], encoding="utf-8")), fotos)
         sys.exit(1 if any(f for _, f in r) else 0)
     else:
