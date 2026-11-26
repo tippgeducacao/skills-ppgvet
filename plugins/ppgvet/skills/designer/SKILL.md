@@ -24,6 +24,7 @@ Se a pessoa chamou sem o material, explicar em poucas linhas:
    - Tirar 3 princípios (grid, hierarquia, cor) e desenhar com a marca: copiar o como, nunca a peça.
 2. **Plano:** a direção em 5 linhas com estes nomes: ideia, referência, ordem do olhar, memória (o que fica em 1 segundo) e proibido aqui (`antislop-midia.md`); o molde (`oficio/design.md`, "Moldes da casa") ou "fora do molde" com o desenho em palavras, o texto exato de cada campo (a `copy` escreve e confere) e a foto. Peça nova fora do molde: protótipo antes do resto. Esperar o ok.
 3. **Montar:**
+   - **Peça que a equipe já faz** (tem o PSD ou o design no Canva): regra "Arquivo da equipe primeiro" do `oficio/design.md`; entrega PNG + o editável. As capas da Eduq já são assim (`ppgvet:capas-eduq`).
    - **Peça de molde:** a ficha em `<artes>/<peca>/ficha.json` (campos no `"$PY" "$S/molde.py"` sem argumento) e `"$PY" "$S/molde.py" <artes>/<peca>/ficha.json --saida <artes>/<peca>`. Ele preenche, gera PNG e JPEG, confere cada peça com o `arte.py` e faz a `folha.jpg`.
    - **Fora do molde:** um HTML por peça ou lâmina (`01-capa.html`…), mesmo grid em todas; fonte `@font-face{font-family:Montserrat;src:url('<$A>/fontes/montserrat-variavel.ttf')}`; logos e títulos pelo acervo (`file://`); cores só do `marca.md`; foto tratada antes (`editar-foto`), nunca esticada; faixa ou foto de ponta a ponta com `data-sangra`. Depois `"$PY" "$S/arte.py" <peca>.html --formato <formato>` em cada um.
    - Foto real sempre; sem foto boa, a peça sai sem foto (`sempre.md`).
@@ -31,6 +32,6 @@ Se a pessoa chamou sem o material, explicar em poucas linhas:
 5. **Revisar:**
    - Rápido: nota de 0 a 10 em hierarquia, leitura no celular (~390 px), marca e acabamento (`antislop-midia.md`, "Conferir"); abaixo de 8, corrigir.
    - Padrão e caprichado: chamar o agente `ppgvet:revisor-peca` (ferramenta Agent) com o pedido, a direção, os caminhos dos PNG e da folha, a referência e a saída da medição. "corrige" ou "refaz": ajustar e mandar de volta (rodadas e saída: `nucleo.md`).
-6. **Entregar** os JPEG (o que vai para o Instagram) e a folha, com a nota ou o veredito em uma linha. Ajuste vira versão nova (`-v2`); a ficha e o HTML ficam para refazer.
+6. **Entregar** os JPEG (o que vai para o Instagram), o editável quando a peça saiu do arquivo da equipe e a folha, com a nota ou o veredito em uma linha. Ajuste vira versão nova (`-v2`); a ficha e o HTML ficam para refazer.
 
 Formatos, tamanhos e área livre: `oficio/design.md`.

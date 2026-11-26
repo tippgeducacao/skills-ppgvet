@@ -10,7 +10,7 @@ uso (Python):
          "ops": [{"texto_exceto": "pós-graduação", "valor": "MEDICINA\\rFELINA", "caixa_texto": [157, 161, 1171, 490]},
                  {"pintar": "Retângulo 3 copiar 5", "cor": "#047FEF"}]},  # camada de cor por cima da caixa da camada
         {"encaixar": "logo", "caixa": [449, 1475, 628, 1534], "ancora": "baixo"},  # cabe na caixa, mesma proporção, centrada
-        {"esconder": "Camada 1"}], {"png": "saida.png", "psd": "saida.psd"})
+        {"esconder": "Camada 1"}, {"apagar": "texto de outra pós"}], {"png": "saida.png", "psd": "saida.psd"})
     psd.py --conferir arte.psd   (PSD que a equipe mandou: todo texto, também dentro de objeto inteligente, pelo checar_texto)
     psd.py --teste
 Camada que não existe para antes de mexer (no Photopea, erro de script trava a sessão inteira)."""
@@ -37,7 +37,7 @@ def camadas(pp):
 
 def _alvos(o):
     nomes = ([] if "texto_exceto" in o else [o.get("imagem") or o.get("texto") or o.get("dentro") or o.get("esconder") or o.get("pintar")
-                                              or o.get("encaixar")])
+                                              or o.get("encaixar") or o.get("apagar")])
     return [unicodedata.normalize("NFC", n) for n in nomes if n]
 
 
@@ -166,6 +166,8 @@ var y=a=="baixo"?c[3]-b[3]:a=="topo"?c[1]-b[1]:(c[1]+c[3])/2-(b[1]+b[3])/2; L.tr
     elif "pintar" in sub:  # camada de cor na caixa da camada, logo acima dela (o que estiver por cima, como textura, continua)
         caixa = next(c["caixa"] for c in lista if c["nome"] == unicodedata.normalize("NFC", sub["pintar"]))
         _imagem(pp, sub["pintar"], solido(sub["cor"], Path(d) / f"cor-{sub['cor'].lstrip('#')}.png"), caixa, trocar=False)
+    elif "apagar" in sub:  # sobra de outra peça no PSD entregue (o modelo da equipe não muda)
+        pp.script(f"camada({js(sub['apagar'])}).remove();")
     else:
         pp.script(f"camada({js(sub['esconder'])}).visible=false;")
 
@@ -337,6 +339,8 @@ def teste():
                 pp.abrir(acervo("eduq", "modelos", "modulo-1000x1000.psd"))
                 assert ("Módulo I", True) in textos(pp), "texto do PSD da equipe"
                 pp.script("app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
+                preencher(pp, f"{d}/m.psd", [{"apagar": "OBJ"}], {"png": f"{d}/x.png"}, d)
+                assert Image.open(f"{d}/x.png").convert("RGB").getpixel((165, 45)) == (255, 255, 255), "a camada apagada sumiu"
                 print("ao vivo ok", end=" ")
         except Indisponivel as e:
             print(f"aviso: Photopea indisponível ({e}); parte ao vivo pulada")

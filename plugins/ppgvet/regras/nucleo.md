@@ -23,7 +23,7 @@ Cada skill faz a sua parte e chama as outras no que a peça tiver; ninguém refa
 |---|---|---|
 | texto: cartão, legenda, CTA, título de arte, legenda do post, WhatsApp | `copy` (`oficio/copy.md`) | `checar_texto.py` |
 | foto: professor, insert, capa, fundo tirado | `editar-foto` (`oficio/foto.md`) | antes e depois, nota |
-| arte parada: capa, thumbnail, card, post, carrossel | `designer` (`oficio/design.md`) | `arte.py` |
+| arte parada: capa, thumbnail, card, post, carrossel | `designer` (`oficio/design.md`; do PSD ou Canva da equipe quando existe) | `arte.py`; do PSD: `psd.py --conferir` |
 | PSD que a equipe fez e pediu para conferir | agente `revisor-peca` no PNG | `psd.py --conferir` (todo texto, também o escondido e o de dentro de objeto inteligente) |
 | movimento: cartão, texto, logo, abertura, vinheta | `video` › `editar-video` (`hf.py`) ou `motion` (`oficio/motion.md`) | folha de quadros, `checar.py` |
 | som: voz, música, efeitos | dentro do vídeo (`oficio/som.md`, acervo `sons/`) | `checar.py` (volume) |

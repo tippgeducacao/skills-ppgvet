@@ -42,6 +42,13 @@ Tamanho e limite oficial de cada canal: `formatos.md`. Aqui, só a área livre d
 - **Texto:** regras de texto em `oficio/copy.md`; titulação e "nunca MBA" no `sempre.md`; marcas e exceções no `marca.md`. Na arte: data sem crase ("23 a 25"), dia da semana tirado da data.
 - **Carrossel:** mesmo grid em todas as lâminas; 1ª = gancho ou capa que muda a cada edição (capa igual toda semana não dá novidade), meio = uma ideia por lâmina, última = chamada; "ARRASTA PARA O LADO" no rodapé, no mesmo lugar.
 
+## Arquivo da equipe primeiro (PSD ou Canva)
+Peça que a equipe já faz (existe o PSD ou o design no Canva da mesma peça) sai do arquivo dela, preenchido, não redesenhado: o visual é o dos designers.
+- **Motor, nesta ordem:** Photoshop (quando houver máquina com ele) → Photopea sem janela (`scripts/psd.py`) → sem os dois: Affinity (pedir para a pessoa instalar) ou o molde em código da melhor forma, dizendo na entrega que não saiu do arquivo da equipe.
+- **Canva:** trabalhar numa cópia do design da equipe, nunca no original; editar texto e foto e exportar não gasta crédito; recurso de IA do Canva (gerar design, imagem, Magic Layers) gasta: só se a pessoa pedir.
+- **Entrega:** PNG + o editável (PSD, ou o link da cópia no Canva) organizado: camada de texto com o nome do texto, texto conferido (`psd.py --conferir`) e, sem instrução do designer, a sobra escondida que é de outra peça (outra pós, outro nome) apagada no editável entregue (`{"apagar": camada}`); variação da mesma peça fica. Dizer o que foi apagado. O arquivo da equipe nunca é mexido. Instrução do designer vale mais que esta regra.
+- Sem arquivo da equipe para a peça: os moldes da casa abaixo.
+
 ## Moldes da casa (`acervo/moldes`, gerados pelo `scripts/molde.py`)
 Peça que cabe num molde sai do molde: mesmo sistema em toda a equipe, menos tempo e menos tokens. HTML livre só para o que não cabe (e com a direção do `antislop-midia.md`).
 
