@@ -95,16 +95,25 @@ def perspectiva(origem, destino):
 
 
 def numero_contorno(n, tam):
-    """o número do módulo só em contorno branco, centrado na tela do notebook"""
-    from PIL import Image, ImageChops, ImageDraw, ImageFont
+    """o número do módulo como no PSD da equipe (tela de 2255x1428): Montserrat Black sem preenchimento, contorno de 16 px por
+    dentro da letra, o "1" de 198 a 1212 px de altura, centrado"""
+    from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
     w, h = tam
-    fonte = ImageFont.truetype(acervo("fontes", "montserrat-variavel.ttf"), round(h * .98))
-    fonte.set_variation_by_name("SemiBold")
-    cheio, miolo = Image.new("L", tam), Image.new("L", tam)
-    for camada, borda in ((cheio, 20), (miolo, 0)):  # contorno da espessura das capas da equipe
-        d = ImageDraw.Draw(camada)
-        d.text((w / 2, h * .5), str(n), font=fonte, anchor="mm", fill=255, stroke_width=borda, stroke_fill=255)
-    return ImageChops.subtract(cheio, miolo)
+    esc = h / 1428
+    fonte = ImageFont.truetype(acervo("fontes", "montserrat-variavel.ttf"), 1000)
+    fonte.set_variation_by_name("Black")
+    b = fonte.getbbox("1")
+    fonte = ImageFont.truetype(acervo("fontes", "montserrat-variavel.ttf"), round(1000 * 1014 * esc / (b[3] - b[1])))
+    fonte.set_variation_by_name("Black")
+    solta = Image.new("L", (w * 2, h * 2))  # desenha, mede o que saiu e põe no lugar (a medida da fonte variável não bate com o desenho)
+    ImageDraw.Draw(solta).text((w // 2, h // 2), str(n), font=fonte, fill=255)
+    solta = solta.crop(solta.getbbox())
+    letra = Image.new("L", tam)
+    letra.paste(solta, (round(1127 * w / 2255 - solta.width / 2), round(198 * esc)))
+    miolo = letra
+    for _ in range(max(1, round(16 * esc / 2))):  # contorno por dentro: a letra menos ela mesma afinada 16 px
+        miolo = miolo.filter(ImageFilter.MinFilter(5))
+    return ImageChops.subtract(letra, miolo)
 
 
 def aparelho(foto, numero, principal_vertical, foco):
@@ -114,8 +123,11 @@ def aparelho(foto, numero, principal_vertical, foco):
     base = Image.open(acervo("eduq", "aparelho.png")).convert("RGBA")
     reflexo = Image.open(acervo("eduq", "aparelho-reflexo.png")).convert("RGBA")
     tela = cobrir(foto, TELA_NOTEBOOK, foco).convert("RGBA")
-    veu = Image.linear_gradient("L").resize(TELA_NOTEBOOK).point(lambda v: max(0, min(255, (v - 115) * 2)))  # escurece o pé da tela
-    tela = Image.composite(Image.new("RGBA", TELA_NOTEBOOK, (26, 26, 26, 255)), tela, veu)
+    # degradê preto da tela, com a curva do PSD da equipe (transparente até 1/6 da altura, preto a partir de 5/6)
+    curva = np.interp(np.linspace(0, 1, TELA_NOTEBOOK[1]), [0, .167, .25, .333, .417, .5, .583, .667, .75, .833, 1],
+                      [0, 1, 10, 29, 56, 90, 135, 188, 240, 255, 255])
+    veu = Image.fromarray(np.repeat(curva.astype("uint8")[:, None], TELA_NOTEBOOK[0], 1), "L")
+    tela = Image.composite(Image.new("RGBA", TELA_NOTEBOOK, (0, 0, 0, 255)), tela, veu)
     if numero:
         tela.paste((255, 255, 255, 255), mask=numero_contorno(numero, TELA_NOTEBOOK))
     cel = cobrir(principal_vertical.convert("RGB"), TELA_CELULAR, (.5, .5)).convert("RGBA")
@@ -362,8 +374,10 @@ def teste():
     for c in COR.values():  # pílula da equipe (a da PPG dá 4,0:1): passa como letra grande em negrito
         assert contraste("#FFFFFF", c["pilula"]) >= 3, c
         assert contraste("#FFFFFF", c.get("pilula_codigo", c["pilula"])) >= 4.5  # o plano B passa no arte.py
-    m = numero_contorno(0, (400, 250))
-    assert m.getbbox() and m.getpixel((200, 125)) == 0  # só o contorno: o miolo do número fica vazio
+    m = numero_contorno(1, TELA_NOTEBOOK)
+    caixa = m.getbbox()
+    assert abs(caixa[1] - 198) <= 3 and abs(caixa[3] - 1212) <= 3 and abs((caixa[0] + caixa[2]) / 2 - 1127) <= 6, caixa  # como no PSD
+    assert m.getpixel(((caixa[0] + caixa[2]) // 2 + 60, 900)) == 0  # só o contorno: o miolo do número fica vazio
     with tempfile.TemporaryDirectory() as d:
         foto = Image.new("RGB", (1800, 1200), (70, 95, 60))
         ImageDraw.Draw(foto).rectangle((0, 0, 1800, 400), fill=(220, 228, 232))  # céu claro: o véu tem que segurar a letra
