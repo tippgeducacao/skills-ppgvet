@@ -5,10 +5,11 @@ uso (Python):
     from psd import preencher
     preencher(pp, "modelo.psd", [
         {"imagem": "FOTO", "arquivo": "foto.jpg", "foco": (.5, .4)},  # entra no lugar e no tamanho da camada (cobre e corta)
-        {"texto": "Módulo I", "valor": "Módulo XIII", "largura": 880, "sobe": ["NOTEBOOK"]},  # 2 linhas: cresce para cima
+        {"texto": "Módulo I", "valor": "Módulo XIII", "largura": 880},  # largo demais: duas linhas
         {"dentro": "TITULO CURSO", "caixa": [61, 540, 940, 884],      # objeto inteligente: edita dentro e volta editável
          "ops": [{"texto_exceto": "pós-graduação", "valor": "MEDICINA\\rFELINA", "caixa_texto": [157, 161, 1171, 490]},
-                 {"pintar": "Retângulo 3 copiar 5", "cor": "#0072D6"}]},  # camada de cor por cima da caixa da camada
+                 {"pintar": "Retângulo 3 copiar 5", "cor": "#047FEF"}]},  # camada de cor por cima da caixa da camada
+        {"encaixar": "logo", "caixa": [449, 1475, 628, 1534], "ancora": "baixo"},  # cabe na caixa, mesma proporção, centrada
         {"esconder": "Camada 1"}], {"png": "saida.png", "psd": "saida.psd"})
     psd.py --conferir arte.psd   (PSD que a equipe mandou: todo texto, também dentro de objeto inteligente, pelo checar_texto)
     psd.py --teste
@@ -35,8 +36,9 @@ def camadas(pp):
 
 
 def _alvos(o):
-    nomes = ([] if "texto_exceto" in o else [o.get("imagem") or o.get("texto") or o.get("dentro") or o.get("esconder") or o.get("pintar")])
-    return [unicodedata.normalize("NFC", n) for n in nomes + o.get("sobe", []) if n]
+    nomes = ([] if "texto_exceto" in o else [o.get("imagem") or o.get("texto") or o.get("dentro") or o.get("esconder") or o.get("pintar")
+                                              or o.get("encaixar")])
+    return [unicodedata.normalize("NFC", n) for n in nomes if n]
 
 
 def _falta(ops, lista):
@@ -154,8 +156,13 @@ def srgb(png):
 
 
 def _sub(pp, sub, lista, d):
+    """uma operação no documento ativo; devolve (nome, nome novo) quando a camada deve ser renomeada no fim"""
     if "texto" in sub or "texto_exceto" in sub:
-        _texto(pp, sub, lista)
+        return _texto(pp, sub, lista)
+    elif "encaixar" in sub:  # cabe na caixa sem distorcer, centrada; ancora "baixo" ou "topo" prende o pé ou o topo
+        pp.script(f"""var L=camada({js(sub['encaixar'])}), b=caixa(L), c={js(sub['caixa'])}, a={js(sub.get('ancora', ''))};
+var f=Math.min((c[2]-c[0])/(b[2]-b[0]), (c[3]-c[1])/(b[3]-b[1])); L.resize(f*100, f*100); b=caixa(L);
+var y=a=="baixo"?c[3]-b[3]:a=="topo"?c[1]-b[1]:(c[1]+c[3])/2-(b[1]+b[3])/2; L.translate((c[0]+c[2])/2-(b[0]+b[2])/2, y);""")
     elif "pintar" in sub:  # camada de cor na caixa da camada, logo acima dela (o que estiver por cima, como textura, continua)
         caixa = next(c["caixa"] for c in lista if c["nome"] == unicodedata.normalize("NFC", sub["pintar"]))
         _imagem(pp, sub["pintar"], solido(sub["cor"], Path(d) / f"cor-{sub['cor'].lstrip('#')}.png"), caixa, trocar=False)
@@ -164,15 +171,14 @@ def _sub(pp, sub, lista, d):
 
 
 def _texto(pp, op, lista):
-    """troca o texto; largo demais quebra em duas linhas. Com "sobe", o texto cresce para cima (o de baixo fica no lugar) e as
-    camadas de cima encolhem, com topo e centro fixos, para dar o espaço (como a equipe faz na capa de título longo)"""
+    """troca o texto; largo demais quebra em duas linhas (e diminui se ainda não couber)"""
     nome = op.get("texto")
     if "texto_exceto" in op:
         nome = next(c["nome"] for c in lista if c["texto"] is not None and op["texto_exceto"].lower() not in c["texto"].lower())
     valor = op["valor"]
     saida = pp.script(f"""var t=camada({js(nome)}), a=caixa(t); t.textItem.contents={js(valor)}; var b=caixa(t);
 app.echoToOE(JSON.stringify([a,b]));""")
-    antes, depois = json.loads(saida)
+    _, depois = json.loads(saida)
     if op.get("largura") and depois[2] - depois[0] > op["largura"] and " " in valor and "\r" not in valor:
         valor = "\r".join(duas_linhas(valor))
         depois = json.loads(pp.script(f"var t=camada({js(nome)}); t.textItem.contents={js(valor)}; app.echoToOE(JSON.stringify(caixa(t)));"))
@@ -184,15 +190,14 @@ app.echoToOE(JSON.stringify(caixa(t)));"""))
         pp.script(f"""var t=camada({js(nome)}), b=caixa(t), cx={js(cx)};
 var f=Math.min((cx[2]-cx[0])/(b[2]-b[0]), (cx[3]-cx[1])/(b[3]-b[1])); t.textItem.size=t.textItem.size*f;
 b=caixa(t); t.translate((cx[0]+cx[2])/2-(b[0]+b[2])/2, cx[1]-b[1]);""")
-    dy = (depois[3] - depois[1]) - (antes[3] - antes[1])
-    if dy > 0 and op.get("sobe"):
-        pp.script(f"camada({js(nome)}).translate(0,{antes[3] - depois[3]});")  # o pé do texto fica onde estava
-        for outra in op["sobe"]:
-            pp.script(f"""var L=camada({js(outra)}), a=caixa(L), f=(a[3]-a[1]-{dy})/(a[3]-a[1]); L.resize(f*100, f*100);
-var b=caixa(L); L.translate((a[0]+a[2])/2-(b[0]+b[2])/2, a[1]-b[1]);""")
     so = lambda t: " ".join(unicodedata.normalize("NFC", t or "").split()).lower()
     if so(next((c["texto"] for c in lista if c["nome"] == unicodedata.normalize("NFC", nome)), "")) == so(nome):
-        pp.script(f"camada({js(nome)}).name={js(' '.join(valor.split()))};")  # como no Photoshop: a camada com o nome do texto segue o texto
+        return nome, " ".join(valor.split())  # como no Photoshop, a camada com o nome do texto segue o texto (no fim: outras operações a acham pelo nome velho)
+
+
+def _renomear(pp, pares):
+    for nome, novo in filter(None, pares):
+        pp.script(f"camada({js(nome)}).name={js(novo)};")
 
 
 def preencher(pp, modelo, ops, saidas, pasta_trabalho=None):
@@ -204,6 +209,7 @@ def preencher(pp, modelo, ops, saidas, pasta_trabalho=None):
     if falta:
         pp.script("app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
         raise ValueError(f"{Path(modelo).name}: camada que não existe no modelo: {', '.join(map(str, falta))}")
+    renomear = []
     for i, op in enumerate(ops):
         if "imagem" in op:
             caixa = op.get("caixa") or next(c["caixa"] for c in lista if c["nome"] == unicodedata.normalize("NFC", op["imagem"]))
@@ -216,14 +222,14 @@ def preencher(pp, modelo, ops, saidas, pasta_trabalho=None):
             if falta:
                 pp.script("while(app.documents.length)app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
                 raise ValueError(f"{op['dentro']}: camada que não existe dentro do objeto: {', '.join(map(str, falta))}")
-            for sub in op.get("ops", []):
-                _sub(pp, sub, dentro, d)
+            _renomear(pp, [_sub(pp, sub, dentro, d) for sub in op.get("ops", [])])
             pp.script(JS_LIMITE)
             editavel = pp.exportar("psd")
             pp.script("app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
             _objeto(pp, op["dentro"], editavel, op["caixa"])
         else:
-            _sub(pp, op, lista, d)
+            renomear.append(_sub(pp, op, lista, d))
+    _renomear(pp, renomear)
     for formato, caminho in saidas.items():
         Path(caminho).parent.mkdir(parents=True, exist_ok=True)
         Path(caminho).write_bytes(srgb(pp.exportar(formato)) if formato == "png" else pp.exportar(formato))
@@ -283,7 +289,7 @@ def teste():
     assert quebra("Fitoterapia Veterinária com Ênfase em Plantas Medicinais", 18) == ["Fitoterapia", "Veterinária com", "Ênfase em Plantas", "Medicinais"]
     assert quebra("Crédito Rural, Cooperativismo e Vendas", 18) == ["Crédito Rural,", "Cooperativismo", "e Vendas"]
     assert duas_linhas("Trilha inicial de aprendizado") == ["Trilha inicial", "de aprendizado"]
-    assert _falta([{"texto": "Educação", "sobe": ["X"]}], [{"nome": "Educação"}]) == ["X"]
+    assert _falta([{"texto": "Educação"}, {"encaixar": "X", "caixa": [0, 0, 1, 1]}], [{"nome": "Educação"}]) == ["X"]
     assert grafia_pos(["Gestao de Cooperativas de Credito"]) and not grafia_pos(["Gestão de Cooperativas de Crédito", "aulas curriculares"])
     with tempfile.TemporaryDirectory() as d:
         Image.new("RGB", (400, 100), (10, 200, 10)).save(f"{d}/larga.jpg")

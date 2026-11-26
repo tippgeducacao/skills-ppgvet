@@ -7,7 +7,9 @@ uso: eduq.py ficha.json [--saida <pasta>] [--codigo]   (sem --saida: <artes>/edu
      eduq.py --teste
 ficha.json: {"pos": "NGB" (sigla do marca.md) ou o nome por extenso, "marca": "PPGVET" ou "PPG" (só para pós fora do marca.md),
              "foto": "<foto real do tema da pós>", "foco": "50% 40%" (opcional), "modulos": 12, "trilha": true,
-             "principais": [{"nome": "TURMA 01-27 #01", "foto": "<outra foto>"}] (opcional: variantes da capa principal)}
+             "principais": [{"nome": "TURMA 01-27 #01", "foto": "<outra foto>", "foco": "80% 40%"}] (opcional: variantes da capa
+             principal, cada uma com o seu enquadramento; o celular dos módulos mostra a última),
+             "fundos": {"1000x1000": "<foto>", "1080x1920": "<foto>"} (opcional: outra foto no fundo dos módulos; sem ela, a "foto")}
 Regras (marca.md): logo PPG Educação em todas (o portal é do Grupo PPG); fundo na cor da marca da pós; nunca "MBA".
 Nomes de arquivo da equipe (o Eduq já está organizado assim): "CAPA PRINCIPAL - 1080x1920.png", "MODULO 3 - 1000x1000.png"."""
 import base64, html as H, io, json, os, re, sys, tempfile, unicodedata
@@ -19,7 +21,8 @@ import arte  # noqa: E402
 from psd import Indisponivel, Sessao, Travou, duas_linhas, preencher, quebra, solido  # noqa: E402
 from portao import registrar  # noqa: E402
 
-COR = {"PPGVET": dict(fundo="#55978B", pilula="#00857D"), "PPG": dict(fundo="#0A84E8", pilula="#0072D6")}  # exceção da Eduq no marca.md (cores das capas publicadas)
+COR = {"PPGVET": dict(fundo="#55978B", pilula="#00857D"),
+       "PPG": dict(fundo="#0080F6", pilula="#047FEF", pilula_codigo="#0072D6")}  # plano B: a pílula da equipe não passa 4,5:1 em letra pequena  # exceção da Eduq no marca.md (cores das capas publicadas)
 TAMANHOS = {"1080x1920": "portal", "1000x1000": "portal-quadrado"}
 ROMANOS = "I II III IV V VI VII VIII IX X XI XII XIII XIV XV XVI XVII XVIII XIX XX".split()
 # telas do aparelho (acervo/eduq/aparelho.png, 1204x860, do PSD da equipe): cantos sup-esq, sup-dir, inf-dir, inf-esq
@@ -27,8 +30,14 @@ NOTEBOOK = [(376.7, 37.2), (1180.9, 83.5), (1158.8, 590.7), (385.5, 520.4)]
 CELULAR = [(6.3, 403.9), (192.7, 370.9), (288.3, 800.6), (100.7, 844.2)]
 TELA_NOTEBOOK, TELA_CELULAR = (2255, 1428), (1469, 3129)  # tamanho do conteúdo de cada tela no PSD
 # onde cada coisa fica nos PSDs da equipe (acervo/eduq/modelos/<principal|modulo|fundo>-<tamanho>.psd)
-PSD = {"1000x1000": dict(titulo=[61, 540, 940, 884], aparelho=[119, 85, 847, 605], largura=860, cor="Preenchimento de Cor 2"),
-       "1080x1920": dict(titulo=[84, 1225, 998, 1583], aparelho=[113, 564, 970, 1176], largura=920, cor="Preenchimento de Cor 1 copiar")}
+PSD = {"1000x1000": dict(titulo=[61, 540, 940, 884], aparelho=[119, 85, 847, 605], largura=860, cor="Preenchimento de Cor 2",
+                         aulas="aulas curriculares", logo="logo - PPG Educação_branca"),
+       "1080x1920": dict(titulo=[84, 1225, 998, 1583], aparelho=[113, 564, 970, 1176], largura=920, cor="Preenchimento de Cor 1 copiar",
+                         aulas="aulas curriculares copiar 16", logo="logo - PPG Educação_branca copiar 18")}
+# título de duas linhas (Trilha, Materiais): aparelho a 82% (topo e centro fixos), título de altura fixa, "aulas" e logo a ~81%.
+# 1080x1920 medido na Trilha da Fitoterapia da equipe; 1000x1000 nas mesmas proporções (a equipe não tinha esse)
+DUAS = {"1000x1000": dict(aparelho=[182, 85, 784, 515], titulo=[20, 560, 980, 713], aulas=[350, 755, 655, 826], logo=[424, 859, 576, 909]),
+        "1080x1920": dict(aparelho=[187, 564, 896, 1070], titulo=[20, 1123, 1060, 1303], aulas=[366, 1352, 722, 1436], logo=[449, 1475, 628, 1534])}
 NOME_NA_PILULA = [157, 161, 1171, 490]  # caixa do nome da pós dentro do objeto TITULO CURSO (1328x520)
 FIT = """<script>document.fonts.ready.then(()=>{const cabe=e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1;
 for(const e of document.querySelectorAll('[data-cabe]')){let t=parseFloat(getComputedStyle(e).fontSize);while(e.scrollWidth>e.clientWidth+1&&t>24){t-=2;e.style.fontSize=t+'px'}}
@@ -58,6 +67,11 @@ def uri(im, fmt="PNG"):
     b = io.BytesIO()
     im.save(b, fmt, **({"quality": 88} if fmt == "JPEG" else {}))
     return f"data:image/{fmt.lower()};base64," + base64.b64encode(b.getvalue()).decode()
+
+
+def _foco(texto, padrao=None):
+    """"50% 40%" -> (.5, .4): o ponto da foto que fica no recorte (sem texto: o padrão)"""
+    return padrao if not texto and padrao else tuple(float(x.rstrip("%")) / 100 for x in str(texto or "50% 40%").split()[:2])
 
 
 def cobrir(im, tam, foco=(.5, .4)):
@@ -190,7 +204,7 @@ def _base(ficha, pasta_ficha):
     nome, marca = pos_da_ficha(ficha)
     if re.search(r"\bMBA\b", nome, re.I):
         raise SystemExit('"MBA" não entra na capa: o nome é da Pós-Graduação (marca.md)')
-    foco = tuple(float(x.rstrip("%")) / 100 for x in str(ficha.get("foco", "50% 40%")).split()[:2])
+    foco = _foco(ficha.get("foco"))
     caminho = lambda f: str(f if Path(f).is_absolute() else Path(pasta_ficha) / f)
     principais = [dict(p, foto=caminho(p["foto"])) for p in (ficha.get("principais") or [{"nome": "", "foto": ficha["foto"]}])]
     return nome, marca, foco, caminho(ficha["foto"]), principais
@@ -227,13 +241,14 @@ def gerar_psd(pp, ficha, saida, pasta_ficha="."):
             if marca == "PPG":  # o modelo é da PPGVET (pílula verde): a pílula da PPG ganha a cor dela por cima
                 dentro.append({"pintar": "Retângulo 3 copiar 5", "cor": COR["PPG"]["pilula"]})
             for tam in TAMANHOS:
-                png = fazer(arq, "principal", tam, [{"imagem": "FOTO", "arquivo": p["foto"], "foco": foco},
+                png = fazer(arq, "principal", tam, [{"imagem": "FOTO", "arquivo": p["foto"], "foco": _foco(p.get("foco"), foco)},
                                                     {"dentro": "TITULO CURSO", "caixa": PSD[tam]["titulo"], "ops": dentro}], d)
-                if vertical is None and tam == "1080x1920":
+                if tam == "1080x1920":  # o celular dos módulos mostra a última capa principal (a equipe põe a #02)
                     vertical = Image.open(png).convert("RGB")
         for tam in TAMANHOS:  # o fundo das capas individuais: a foto sobre a cor da marca, uma vez por tamanho
             w, h = map(int, tam.split("x"))
-            ops = [{"imagem": "foto-fundo", "arquivo": foto, "foco": foco}]
+            outra = (ficha.get("fundos") or {}).get(tam)
+            ops = [{"imagem": "foto-fundo", "arquivo": str(Path(pasta_ficha) / outra) if outra and not Path(outra).is_absolute() else outra or foto, "foco": foco}]
             if marca == "PPG":
                 ops.append({"imagem": PSD[tam]["cor"], "arquivo": solido(COR["PPG"]["fundo"], Path(d) / "cor.png"), "inteira": True, "caixa": [0, 0, w, h]})
             fundo[tam] = Path(d) / f"fundo-{tam}.png"
@@ -243,9 +258,16 @@ def gerar_psd(pp, ficha, saida, pasta_ficha="."):
             aparelho(abrir_foto(foto), numero, vertical, foco).save(ap)
             for tam in TAMANHOS:
                 w, h = map(int, tam.split("x"))
-                fazer(arq, "modulo", tam, [{"imagem": "FUNDO", "arquivo": str(fundo[tam]), "inteira": True, "caixa": [0, 0, w, h]},
-                                           {"imagem": "NOTEBOOK E CELULAR", "arquivo": str(ap), "inteira": True, "caixa": PSD[tam]["aparelho"]},
-                                           {"texto": "Módulo I", "valor": titulo.upper(), "largura": PSD[tam]["largura"], "sobe": ["NOTEBOOK E CELULAR"]}], d)
+                duas, cx = len(titulo) > 14, DUAS[tam]
+                ops = [{"imagem": "FUNDO", "arquivo": str(fundo[tam]), "inteira": True, "caixa": [0, 0, w, h]},
+                       {"imagem": "NOTEBOOK E CELULAR", "arquivo": str(ap), "inteira": True, "caixa": cx["aparelho"] if duas else PSD[tam]["aparelho"]}]
+                if duas:  # como a equipe faz no título longo
+                    ops += [{"texto": "Módulo I", "valor": "\r".join(duas_linhas(titulo.upper()))},
+                            {"encaixar": "Módulo I", "caixa": cx["titulo"], "ancora": "baixo"},
+                            {"encaixar": PSD[tam]["aulas"], "caixa": cx["aulas"]}, {"encaixar": PSD[tam]["logo"], "caixa": cx["logo"]}]
+                else:
+                    ops.append({"texto": "Módulo I", "valor": titulo.upper(), "largura": PSD[tam]["largura"]})
+                fazer(arq, "modulo", tam, ops, d)
     folha(pngs, saida.parent / f"{saida.name}-folha.jpg")
     print("folha:", saida.parent / f"{saida.name}-folha.jpg")
     return ok
@@ -256,13 +278,13 @@ def gerar_codigo(ficha, saida, pasta_ficha="."):
     nome, marca = pos_da_ficha(ficha)
     if re.search(r"\bMBA\b", nome, re.I):
         raise SystemExit('"MBA" não entra na capa: o nome é da Pós-Graduação (marca.md)')
-    foco = tuple(float(x.rstrip("%")) / 100 for x in str(ficha.get("foco", "50% 40%")).split()[:2])
+    foco = _foco(ficha.get("foco"))
     abre = lambda f: abrir_foto(f if Path(f).is_absolute() else Path(pasta_ficha) / f)
     foto = abre(ficha["foto"])
     principais = ficha.get("principais") or [{"nome": "", "foto": ficha["foto"]}]
     saida, ok, pngs = Path(saida), True, []
     saida.mkdir(parents=True, exist_ok=True)
-    comum = dict(COR[marca], foco=H.escape(str(ficha.get("foco", "50% 40%"))))
+    comum = dict(COR[marca], pilula=COR[marca].get("pilula_codigo", COR[marca]["pilula"]), foco=H.escape(str(ficha.get("foco", "50% 40%"))))
 
     def fazer(arquivo, tipo, tam, valores, d):
         nonlocal ok
@@ -281,8 +303,8 @@ def gerar_codigo(ficha, saida, pasta_ficha="."):
             im = abre(p["foto"])
             for tam in TAMANHOS:
                 w, h = map(int, tam.split("x"))
-                png = fazer(arq, "principal", tam, dict(foto=uri(cobrir(im, (w, h), foco), "JPEG"), titulo=H.escape(nome)), d)
-                if vertical is None and tam == "1080x1920":
+                png = fazer(arq, "principal", tam, dict(foto=uri(cobrir(im, (w, h), _foco(p.get("foco"), foco)), "JPEG"), titulo=H.escape(nome)), d)
+                if tam == "1080x1920":  # o celular mostra a última capa principal
                     vertical = Image.open(png)
         for arq, titulo, numero in pecas(ficha):
             ap = uri(aparelho(foto, numero, vertical, foco))
@@ -335,9 +357,11 @@ def teste():
         assert "marca" in str(e)
     assert [p[0] for p in pecas({"modulos": 2, "trilha": True})] == ["TRILHA INICIAL DE APRENDIZADO", "ABERTURA", "MODULO 1", "MODULO 2", "MATERIAIS COMPLEMENTARES"]
     assert pecas({"modulos": 13})[-2][1] == "Módulo XIII"
+    assert _foco("80% 30%") == (.8, .3) and _foco(None, (.5, .45)) == (.5, .45) and _foco(None) == (.5, .4)
     assert pasta_da_pos("Piscicultura e Produção de Tilápia") == "PISCICULTURA_E_PRODUÇÃO_DE_TILÁPIA"
-    for c in COR.values():  # letra branca da pílula passa em letra pequena
-        assert contraste("#FFFFFF", c["pilula"]) >= 4.5, c
+    for c in COR.values():  # pílula da equipe (a da PPG dá 4,0:1): passa como letra grande em negrito
+        assert contraste("#FFFFFF", c["pilula"]) >= 3, c
+        assert contraste("#FFFFFF", c.get("pilula_codigo", c["pilula"])) >= 4.5  # o plano B passa no arte.py
     m = numero_contorno(0, (400, 250))
     assert m.getbbox() and m.getpixel((200, 125)) == 0  # só o contorno: o miolo do número fica vazio
     with tempfile.TemporaryDirectory() as d:
@@ -349,7 +373,7 @@ def teste():
         assert gerar(ficha, f"{d}/B", d, codigo=True), "capa limpa não pode reprovar (plano B)"
         assert sorted(p.name for p in Path(d, "B").glob("*.png")) == esperado
         from comum import igual_referencia
-        for peca in ("CAPA PRINCIPAL", "MODULO 1"):  # o visual não mudou sem querer (cor, posição)
+        for peca in ("CAPA PRINCIPAL", "MODULO 1", "MATERIAIS COMPLEMENTARES"):  # o visual não mudou sem querer (cor, posição)
             igual_referencia(f"{d}/B/{peca} - 1000x1000.png", f"eduq-codigo-{peca.split()[0].lower()}")
         assert gerar(ficha, f"{d}/P", d)  # PSD da equipe; com o Photopea fora, cai sozinho no plano B
         assert sorted(p.name for p in Path(d, "P").glob("*.png")) == esperado
@@ -359,7 +383,7 @@ def teste():
             import numpy as np
             pilula = np.asarray(Image.open(f"{d}/P/CAPA PRINCIPAL - 1000x1000.png").convert("RGB").crop((250, 570, 750, 610))).astype(int)
             assert ((pilula[..., 2] > 150) & (pilula[..., 0] < 80)).sum() > 2000, "pílula azul na pós da PPG"
-            for peca in ("CAPA PRINCIPAL", "MODULO 1"):
+            for peca in ("CAPA PRINCIPAL", "MODULO 1", "MATERIAIS COMPLEMENTARES"):
                 igual_referencia(f"{d}/P/{peca} - 1000x1000.png", f"eduq-psd-{peca.split()[0].lower()}")
             print("PSD ok", end=" ")
         try:

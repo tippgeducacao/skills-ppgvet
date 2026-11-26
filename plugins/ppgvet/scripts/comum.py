@@ -168,16 +168,22 @@ NAVEGADORES = ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
 
 
 def chrome(*args):
-    """Chrome (ou Edge) sem janela; devolve o que ele escreveu (o DOM, no --dump-dom). Às vezes ele sai com erro sem motivo
-    (visto em 11/2026): tenta de novo uma vez antes de desistir, para uma folha de 36 peças não cair por uma"""
+    """Chrome (ou Edge) sem janela; devolve o que ele escreveu (o DOM, no --dump-dom). Às vezes ele sai com erro sem motivo,
+    no meio de um lote (visto em 11/2026): até 3 tentativas, para uma folha de 36 peças não cair por uma"""
     import shutil
     nav = next((n for n in NAVEGADORES + [shutil.which(x) for x in ("google-chrome", "chromium", "msedge")]
                 if n and os.path.exists(n)), None)
     if not nav:
         sys.exit("Falta o Google Chrome (ou o Edge) para gerar a imagem: instale o Chrome e rode de novo")
+    import time
     cmd = [nav, "--headless=new", "--disable-gpu", "--allow-file-access-from-files", *args]
-    r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
-    return (r if r.returncode == 0 else subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", check=True)).stdout
+    for vez in range(3):
+        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if r.returncode == 0:
+            return r.stdout
+        time.sleep(1 + vez)
+    erro = [l for l in r.stderr.splitlines() if "cv_display_link" not in l and "allocator" not in l][-3:]
+    raise RuntimeError(f"o Chrome falhou 3 vezes (código {r.returncode}): " + " | ".join(erro))
 
 
 def print_html(url, largura, altura, saida, escala=1):
