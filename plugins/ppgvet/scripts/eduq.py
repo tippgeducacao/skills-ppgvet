@@ -18,11 +18,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from comum import abrir_foto, acervo, pasta  # noqa: E402
 from aulas_semana import contraste, pos_tabela  # noqa: E402
 import arte  # noqa: E402
-from psd import Indisponivel, Sessao, Travou, duas_linhas, preencher, quebra, solido  # noqa: E402
+from psd import Indisponivel, Sessao, Travou, duas_linhas, preencher, quebra, recorte, solido  # noqa: E402
 from portao import registrar  # noqa: E402
 
-COR = {"PPGVET": dict(fundo="#55978B", pilula="#00857D"),
-       "PPG": dict(fundo="#0080F6", pilula="#047FEF", pilula_codigo="#0072D6")}  # plano B: a pílula da equipe não passa 4,5:1 em letra pequena  # exceção da Eduq no marca.md (cores das capas publicadas)
+COR = {"PPGVET": dict(fundo="#55978B", pilula="#00857D"), "PPG": dict(fundo="#0080F6", pilula="#047FEF")}  # exceção da Eduq no marca.md
 TAMANHOS = {"1080x1920": "portal", "1000x1000": "portal-quadrado"}
 ROMANOS = "I II III IV V VI VII VIII IX X XI XII XIII XIV XV XVI XVII XVIII XIX XX".split()
 # telas do aparelho (acervo/eduq/aparelho.png, 1204x860, do PSD da equipe): cantos sup-esq, sup-dir, inf-dir, inf-esq
@@ -30,15 +29,20 @@ NOTEBOOK = [(376.7, 37.2), (1180.9, 83.5), (1158.8, 590.7), (385.5, 520.4)]
 CELULAR = [(6.3, 403.9), (192.7, 370.9), (288.3, 800.6), (100.7, 844.2)]
 TELA_NOTEBOOK, TELA_CELULAR = (2255, 1428), (1469, 3129)  # tamanho do conteúdo de cada tela no PSD
 # onde cada coisa fica nos PSDs da equipe (acervo/eduq/modelos/<principal|modulo|fundo>-<tamanho>.psd)
-PSD = {"1000x1000": dict(titulo=[61, 540, 940, 884], aparelho=[119, 85, 847, 605], largura=860, cor="Preenchimento de Cor 2",
+PSD = {"1000x1000": dict(titulo=[61, 540, 940, 884], foto=[0, -94, 1000, 906], aparelho=[119, 85, 847, 605], largura=860, cor="Preenchimento de Cor 2",
                          aulas="aulas curriculares", logo="logo - PPG Educação_branca"),
-       "1080x1920": dict(titulo=[84, 1225, 998, 1583], aparelho=[113, 564, 970, 1176], largura=920, cor="Preenchimento de Cor 1 copiar",
+       "1080x1920": dict(titulo=[84, 1225, 998, 1583], foto=[-240, 0, 1320, 1560], aparelho=[113, 564, 970, 1176], largura=920, cor="Preenchimento de Cor 1 copiar",
                          aulas="aulas curriculares copiar 16", logo="logo - PPG Educação_branca copiar 18")}
 # título de duas linhas (Trilha, Materiais): aparelho a 82% (topo e centro fixos), título de altura fixa, "aulas" e logo a ~81%.
 # 1080x1920 medido na Trilha da Fitoterapia da equipe; 1000x1000 nas mesmas proporções (a equipe não tinha esse)
 DUAS = {"1000x1000": dict(aparelho=[182, 85, 784, 515], titulo=[20, 560, 980, 713], aulas=[350, 755, 655, 826], logo=[424, 859, 576, 909]),
         "1080x1920": dict(aparelho=[187, 564, 896, 1070], titulo=[20, 1123, 1060, 1303], aulas=[366, 1352, 722, 1436], logo=[449, 1475, 628, 1534])}
 NOME_NA_PILULA = [157, 161, 1171, 490]  # caixa do nome da pós dentro do objeto TITULO CURSO (1328x520)
+PILULA_XY = (281, 34)  # onde a pílula (acervo/eduq/pilula-<marca>.png, tirada do PSD) fica dentro do TITULO CURSO
+# relevo do título no PSD (relevo almofadado suave + sombra interna), em px da capa vertical; o plano B recalcula em código
+# com estes números, afinados pela diferença de pixels contra a capa do PSD (11/2026)
+RELEVO = dict(tam=27.5, prof=3, altura=35, angulo=-144, giro=288, borr=18, suave=2.75, sombra=.35, sombra_d=6.2, sombra_b=4.1)
+ANEL = [(0, 0), (32, 110), (64, 237), (96, 239), (128, 138), (159, 32), (191, 6), (223, 99), (255, 255)]  # curva de brilho "Ring"
 FIT = """<script>document.fonts.ready.then(()=>{const cabe=e=>e.scrollWidth<=e.clientWidth+1&&e.scrollHeight<=e.clientHeight+1;
 for(const e of document.querySelectorAll('[data-cabe]')){let t=parseFloat(getComputedStyle(e).fontSize);while(e.scrollWidth>e.clientWidth+1&&t>24){t-=2;e.style.fontSize=t+'px'}}
 for(const e of document.querySelectorAll('[data-enche]')){let t=parseFloat(getComputedStyle(e).fontSize);const f=e.style;f.display='block';f.overflow='hidden';
@@ -147,19 +151,10 @@ CSS = """@font-face{font-family:Montserrat;src:url('${fonte}')}
 .foto{position:absolute;inset:0}.foto img{width:100%;height:100%;object-fit:cover;display:block}
 .veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) ${veu0}%,rgba(0,0,0,.72) ${veu1}%,rgba(0,0,0,1) ${veu2}%)}
 .bloco{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;text-align:center}
-.pilula{display:flex;align-items:center;justify-content:center;width:${pw}px;height:${ph}px;background:${pilula};color:#FFFFFF;font-weight:900;font-size:${p}px;letter-spacing:.03em;text-transform:uppercase}
 .titulo{text-transform:uppercase}
-.principal .titulo{font-weight:900;letter-spacing:-.05em;line-height:1.06;width:${tw}px;height:${th}px;display:flex;align-items:center;justify-content:center;
-  -webkit-text-stroke:${traco}px rgba(20,20,20,.95);paint-order:stroke fill;text-shadow:0 ${sombra}px ${sombra}px rgba(0,0,0,.55)}
 .individual .titulo{font-weight:800;line-height:1;width:${tw}px;white-space:nowrap}
 .apoio{font-weight:500;text-transform:uppercase;line-height:1}
 .logo{width:${logo}px}"""
-
-# a capa principal: foto, pílula, nome da pós crescendo até encher a caixa do título (como no PSD) e o logo
-PRINCIPAL = """<div class="principal"><div class="foto" data-sangra><img alt="foto" src="${foto}" style="object-position:${foco}"><div class="veu"></div></div>
-<div class="bloco" style="top:${pt}px"><div class="pilula">Pós-Graduação</div></div>
-<div class="bloco" style="top:${tt}px"><h1 class="titulo" data-enche style="font-size:${t}px">${titulo}</h1></div>
-<div class="bloco" style="top:${lt}px"><img class="logo" alt="logo-sobre-foto" src="${logo_src}"></div></div>"""
 
 INDIVIDUAL = """<div class="individual"><div class="foto" data-sangra style="background:${fundo}"><img alt="foto" src="${foto}" style="opacity:.5;mix-blend-mode:soft-light;object-position:${foco}"><div class="veu"></div></div>
 <img alt="aparelho-sobre-foto" src="${aparelho}" style="position:absolute;left:${ax}px;top:${ay}px;width:${aw}px">
@@ -167,13 +162,9 @@ INDIVIDUAL = """<div class="individual"><div class="foto" data-sangra style="bac
 <p class="apoio" style="font-size:${a}px;margin-top:${g2}px">Aulas<br>curriculares</p><img class="logo" alt="logo-sobre-foto" src="${logo_src}" style="margin-top:${g3}px"></div></div>"""
 
 # medidas tiradas dos PSDs da equipe (posição, tamanho e fonte de cada camada) e das capas publicadas
-MEDIDAS = {"1080x1920": dict(principal=dict(t=110, pt=1250, pw=523, ph=63, p=39, tt=1330, tw=760, th=240, lt=1672, logo=190, traco=6, sombra=6,
-                                            veu0=46, veu1=64, veu2=78),
-                             individual=dict(t=116, tt=1150, tw=880, th=210, a=54, g2=39, g3=54, logo=221, ax=113, ay=564, aw=857,
+MEDIDAS = {"1080x1920": dict(individual=dict(t=116, tt=1150, tw=880, th=210, a=54, g2=39, g3=54, logo=221, ax=113, ay=564, aw=857,
                                              veu0=55, veu1=72, veu2=84)),
-           "1000x1000": dict(principal=dict(t=100, pt=565, pw=502, ph=60, p=37, tt=630, tw=694, th=236, lt=895, logo=155, traco=5, sombra=5,
-                                            veu0=34, veu1=56, veu2=80),
-                             individual=dict(t=98, tt=587, tw=860, th=170, a=46, g2=34, g3=45, logo=189, ax=203, ay=121, aw=652,
+           "1000x1000": dict(individual=dict(t=98, tt=587, tw=860, th=170, a=46, g2=34, g3=45, logo=189, ax=203, ay=121, aw=652,
                                              veu0=52, veu1=74, veu2=90))}
 
 
@@ -181,12 +172,90 @@ def pagina(tipo, tam, valores):
     import string
     w, h = map(int, tam.split("x"))
     _, lado, cima, baixo = arte.FORMATOS[TAMANHOS[tam]][1:]
-    v = {"pw": 0, "ph": 0, "p": 0, "th": 0, "traco": 0, "sombra": 0, **MEDIDAS[tam][tipo], "w": w, "h": h,
+    v = {"th": 0, **MEDIDAS[tam][tipo], "w": w, "h": h,
          "fonte": Path(acervo("fontes", "montserrat-variavel.ttf")).as_uri(),
          "logo_src": Path(acervo("logos", "ppg", "logo-ppg-educacao-branco.png")).as_uri(), **valores}
     css = string.Template(CSS).substitute(v)
-    corpo = string.Template(PRINCIPAL if tipo == "principal" else INDIVIDUAL).substitute(v)
+    corpo = string.Template(INDIVIDUAL).substitute(v)
     return f"<!doctype html><meta charset=utf-8><style>{css}</style><body>{corpo}{FIT}</body>"
+
+
+def letras(linhas, caixa, esc=3, track=.05, entre=.92):
+    """máscara do nome da pós como no PSD (Montserrat Black, tracking -50, uma linha por item) encaixada na caixa
+    (cabe na largura e na altura, topo fixo, centrada), em esc vezes o tamanho"""
+    from PIL import Image, ImageDraw, ImageFont
+
+    def desenha(tam):
+        f = ImageFont.truetype(acervo("fontes", "montserrat-variavel.ttf"), tam)
+        f.set_variation_by_name("Black")
+        larg = lambda t: sum(f.getlength(c) for c in t) - track * tam * (len(t) - 1)
+        im = Image.new("L", (int(max(larg(l) for l in linhas)) + 40, int(tam * entre * len(linhas) + tam)))
+        d = ImageDraw.Draw(im)
+        for i, l in enumerate(linhas):
+            x = (im.width - larg(l)) / 2
+            for c in l:
+                d.text((x, i * tam * entre), c, font=f, fill=255)
+                x += f.getlength(c) - track * tam
+        return im.crop(im.getbbox())
+    w, h = (caixa[2] - caixa[0]) * esc, (caixa[3] - caixa[1]) * esc
+    im = desenha(200)
+    im = desenha(int(200 * min(w / im.width, h / im.height)))
+    m = Image.new("L", (w, h))
+    m.paste(im, ((w - im.width) // 2, 0))
+    return m
+
+
+def relevo(mascara, esc, escala=1.0, tam=27.5, prof=3, altura=35, angulo=-144, giro=288, borr=18, suave=2.75, sombra=.35,
+           sombra_d=6.2, sombra_b=4.1):
+    """os dois efeitos do título no PSD, como o Photoshop calcula: relevo almofadado suave (luz por ângulo e altura, curva
+    de brilho em anel, brilho branco em modo tela, que só aparece fora da letra) e sombra interna preta para baixo.
+    escala: o tamanho da capa em relação à vertical (os números do RELEVO são dela)"""
+    import cv2
+    import numpy as np
+    from PIL import Image
+    a = np.asarray(mascara, np.float32) / 255
+    px = lambda r: max(.5, r * escala * esc)
+    alm = 1 - np.abs(2 * cv2.GaussianBlur(a, (0, 0), px(tam / borr)) - 1)  # almofadado: o alto fica na borda
+    alm = cv2.GaussianBlur(alm, (0, 0), px(suave / 2))
+    gy, gx = np.gradient(alm * prof * tam * escala * esc)
+    az, al = np.radians(angulo + giro), np.radians(altura)
+    luz = np.array([np.cos(al) * np.cos(az), -np.cos(al) * np.sin(az), np.sin(al)])
+    n = np.dstack([-gx, -gy, np.full_like(gx, tam * escala * esc / 4)])
+    n /= np.linalg.norm(n, axis=2, keepdims=True)
+    brilho = np.clip((np.clip(n @ luz, 0, 1) - np.sin(al)) / (1 - np.sin(al)), 0, 1)  # só o que fica mais claro que o plano
+    brilho = np.interp(brilho * 255, *zip(*ANEL)) / 255
+    desl, k = np.zeros_like(a), max(1, round(sombra_d * escala * esc))
+    desl[k:] = a[:-k]
+    si = cv2.GaussianBlur(1 - desl, (0, 0), px(sombra_b / 2)) * a * sombra  # sombra interna
+    fora = (1 - a) * brilho
+    alfa = np.clip(a + fora, 0, 1)
+    v = np.clip((a * (1 - si) + fora) / np.maximum(alfa, 1e-6), 0, 1)
+    return Image.fromarray(np.dstack([np.repeat(v[..., None] * 255, 3, 2), alfa[..., None] * 255]).astype("uint8"), "RGBA")
+
+
+def principal_codigo(foto, foco, nome, marca, tam, pasta):
+    """capa principal sem PSD (plano B): as peças fixas tiradas do PSD (degradê e logo, pílula com textura) + a foto no
+    lugar da camada FOTO + o nome da pós com o relevo do PSD recalculado em código"""
+    from PIL import Image
+    w, h = map(int, tam.split("x"))
+    capa = Image.new("RGBA", (w, h), (0, 0, 0, 255))
+    cf = PSD[tam]["foto"]
+    capa.paste(Image.open(recorte(foto, cf, Path(pasta) / "foto.jpg", foco)).resize((cf[2] - cf[0], cf[3] - cf[1]), Image.LANCZOS), cf[:2])
+    capa.alpha_composite(Image.open(acervo("eduq", f"principal-cima-{tam}.png")).convert("RGBA"))
+    ct = PSD[tam]["titulo"]
+    e = (ct[2] - ct[0]) / 1328  # escala do objeto TITULO CURSO na capa
+    pil = Image.open(acervo("eduq", f"pilula-{marca.lower()}.png")).convert("RGBA")
+    pil = pil.resize((round(pil.width * e), round(pil.height * e)), Image.LANCZOS)
+    capa.alpha_composite(pil, (round(ct[0] + PILULA_XY[0] * e), round(ct[1] + PILULA_XY[1] * e)))
+    cx = [round(ct[0] + NOME_NA_PILULA[0] * e), round(ct[1] + NOME_NA_PILULA[1] * e),
+          round(ct[0] + NOME_NA_PILULA[2] * e), round(ct[1] + NOME_NA_PILULA[3] * e)]
+    esc, folga = 3, 30  # desenha em 3x e com folga para o brilho de fora não ser cortado
+    m = letras(quebra(nome.upper(), 18), cx, esc)
+    caixa = Image.new("L", (m.width + 2 * folga * esc, m.height + 2 * folga * esc))
+    caixa.paste(m, (folga * esc, folga * esc))
+    t = relevo(caixa, esc, e / (914 / 1328), **RELEVO).resize((caixa.width // esc, caixa.height // esc), Image.LANCZOS)
+    capa.alpha_composite(t, (cx[0] - folga, cx[1] - folga))
+    return capa.convert("RGB")
 
 
 def pecas(ficha):
@@ -308,7 +377,7 @@ def gerar_codigo(ficha, saida, pasta_ficha="."):
     principais = ficha.get("principais") or [{"nome": "", "foto": ficha["foto"]}]
     saida, ok, pngs = Path(saida), True, []
     saida.mkdir(parents=True, exist_ok=True)
-    comum = dict(COR[marca], pilula=COR[marca].get("pilula_codigo", COR[marca]["pilula"]), foco=H.escape(str(ficha.get("foco", "50% 40%"))))
+    comum = dict(COR[marca], foco=H.escape(str(ficha.get("foco", "50% 40%"))))
 
     def fazer(arquivo, tipo, tam, valores, d):
         nonlocal ok
@@ -324,10 +393,14 @@ def gerar_codigo(ficha, saida, pasta_ficha="."):
         vertical = None
         for p in principais:
             arq = "CAPA PRINCIPAL" + (f" - {p['nome']}" if p.get("nome") else "")
-            im = abre(p["foto"])
+            arq_foto = p["foto"] if Path(p["foto"]).is_absolute() else Path(pasta_ficha) / p["foto"]
             for tam in TAMANHOS:
-                w, h = map(int, tam.split("x"))
-                png = fazer(arq, "principal", tam, dict(foto=uri(cobrir(im, (w, h), _foco(p.get("foco"), foco)), "JPEG"), titulo=H.escape(nome)), d)
+                png = saida / f"{arq} - {tam}.png"
+                principal_codigo(arq_foto, _foco(p.get("foco"), foco), nome, marca, tam, d).save(png, optimize=True)
+                certo = Image.open(png).size == tuple(map(int, tam.split("x")))
+                registrar(png, certo, [] if certo else ["tamanho"])
+                ok = ok and certo
+                pngs.append(png)
                 if tam == "1080x1920":  # o celular mostra a última capa principal
                     vertical = Image.open(png)
         for arq, titulo, numero in pecas(ficha):
@@ -386,7 +459,6 @@ def teste():
     assert pasta_da_pos("Piscicultura e Produção de Tilápia") == "PISCICULTURA_E_PRODUÇÃO_DE_TILÁPIA"
     for c in COR.values():  # pílula da equipe (a da PPG dá 4,0:1): passa como letra grande em negrito
         assert contraste("#FFFFFF", c["pilula"]) >= 3, c
-        assert contraste("#FFFFFF", c.get("pilula_codigo", c["pilula"])) >= 4.5  # o plano B passa no arte.py
     m = numero_contorno(1, TELA_NOTEBOOK)
     caixa = m.getbbox()
     assert abs(caixa[1] - 198) <= 3 and abs(caixa[3] - 1212) <= 3 and abs((caixa[0] + caixa[2]) / 2 - 1127) <= 6, caixa  # como no PSD
