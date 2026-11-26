@@ -204,12 +204,21 @@ def gerar(ficha, saida, pasta_ficha=".", codigo=False):
     """PSD da equipe pelo Photopea; fora do ar (ou codigo=True), o plano B em código"""
     _base(ficha, pasta_ficha)  # ficha errada (MBA, pós sem marca) para antes de abrir o Photopea
     if not codigo:
+        feitos = []
         try:
             with Sessao() as pp:
-                return gerar_psd(pp, ficha, saida, pasta_ficha)
+                ok = gerar_psd(pp, ficha, saida, pasta_ficha, feitos)
+            print("motor: PSD da equipe pelo Photopea (PNG + PSD editável em editaveis/)")
+            return ok
         except (Indisponivel, Travou) as e:
+            for f in feitos:  # PSD desta rodada que parou no meio: não bate com os PNGs do plano B
+                Path(f).unlink(missing_ok=True)
             print(f"aviso: Photopea fora ({e}); plano B: capas em código, sem PSD editável. Dizer isso na entrega.")
-    return gerar_codigo(ficha, saida, pasta_ficha)
+    ok = gerar_codigo(ficha, saida, pasta_ficha)
+    if any(Path(saida, "editaveis").glob("*.psd")):
+        print("aviso: os PSDs em editaveis/ são de uma rodada anterior pelo Photopea e não batem com estes PNGs")
+    print("motor: plano B em código, sem PSD editável")
+    return ok
 
 
 def _base(ficha, pasta_ficha):
@@ -222,7 +231,7 @@ def _base(ficha, pasta_ficha):
     return nome, marca, foco, caminho(ficha["foto"]), principais
 
 
-def gerar_psd(pp, ficha, saida, pasta_ficha="."):
+def gerar_psd(pp, ficha, saida, pasta_ficha=".", feitos=None):
     """preenche os PSDs da equipe: foto, nome da pós (e a pílula azul na PPG), fundo, aparelho e título de cada capa"""
     from PIL import Image
     nome, marca, foco, foto, principais = _base(ficha, pasta_ficha)
@@ -234,7 +243,10 @@ def gerar_psd(pp, ficha, saida, pasta_ficha="."):
     def fazer(arquivo, tipo, tam, ops, d):
         nonlocal ok
         png = saida / f"{arquivo} - {tam}.png"
-        preencher(pp, modelo(tipo, tam), ops, {"png": png, "psd": saida / "editaveis" / f"{arquivo} - {tam}.psd"}, d)
+        psd = saida / "editaveis" / f"{arquivo} - {tam}.psd"
+        if feitos is not None:
+            feitos.append(psd)
+        preencher(pp, modelo(tipo, tam), ops, {"png": png, "psd": psd}, d)
         w, h = map(int, tam.split("x"))
         im = Image.open(png)
         if im.size != (w, h):  # a prancheta do PSD tem 1 px a mais
@@ -330,7 +342,8 @@ def gerar_codigo(ficha, saida, pasta_ficha="."):
                     texto = "<br>".join(H.escape(x) for x in duas_linhas(titulo))
                 else:
                     texto = H.escape(titulo)
-                fazer(arq, "individual", tam, dict(foto=uri(cobrir(foto, (w, h), foco), "JPEG"), aparelho=ap, titulo=texto, **extra), d)
+                fundo = abre(ficha["fundos"][tam]) if tam in (ficha.get("fundos") or {}) else foto  # mesma ficha, mesmo fundo do PSD
+                fazer(arq, "individual", tam, dict(foto=uri(cobrir(fundo, (w, h), foco), "JPEG"), aparelho=ap, titulo=texto, **extra), d)
     folha(pngs, saida.parent / f"{saida.name}-folha.jpg")
     print("folha:", saida.parent / f"{saida.name}-folha.jpg")
     return ok
@@ -384,7 +397,28 @@ def teste():
         foto.save(f"{d}/tema.jpg")
         ficha = {"pos": "Medicina Felina", "marca": "PPG", "foto": "tema.jpg", "modulos": 1}
         esperado = sorted(f"{a} - {t}.png" for a in ("CAPA PRINCIPAL", "ABERTURA", "MODULO 1", "MATERIAIS COMPLEMENTARES") for t in TAMANHOS)
-        assert gerar(ficha, f"{d}/B", d, codigo=True), "capa limpa não pode reprovar (plano B)"
+        g = globals()  # o Photopea trava no meio: o PSD que saiu é apagado e o plano B faz o jogo inteiro
+        reais = g["Sessao"], g["gerar_psd"]
+
+        class SemPhotopea:
+            def __enter__(self):
+                return None
+
+            def __exit__(self, *a):
+                return False
+
+        def trava(pp, ficha, saida, pasta_ficha, feitos):
+            meio = Path(saida, "editaveis", "CAPA PRINCIPAL - 1000x1000.psd")
+            meio.parent.mkdir(parents=True, exist_ok=True)
+            feitos.append(meio)
+            meio.write_bytes(b"pela metade")
+            raise Travou("teste")
+        g["Sessao"], g["gerar_psd"] = SemPhotopea, trava
+        try:
+            assert gerar(ficha, f"{d}/B", d), "capa limpa não pode reprovar (plano B)"
+        finally:
+            g["Sessao"], g["gerar_psd"] = reais
+        assert not any(Path(d, "B", "editaveis").glob("*.psd")), "PSD pela metade ficou"
         assert sorted(p.name for p in Path(d, "B").glob("*.png")) == esperado
         from comum import igual_referencia
         for peca in ("CAPA PRINCIPAL", "MODULO 1", "MATERIAIS COMPLEMENTARES"):  # o visual não mudou sem querer (cor, posição)

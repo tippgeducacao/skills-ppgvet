@@ -75,6 +75,8 @@ def abrir_foto(arq, modo="RGB"):
     from PIL import Image, ImageCms, ImageOps
     im = ImageOps.exif_transpose(Image.open(arq))
     icc = im.info.get("icc_profile")
+    if im.mode in ("P", "PA", "LA", "La") or "transparency" in im.info:  # PNG de paleta (TinyPNG) guarda a transparência à parte
+        im = im.convert("RGBA")
     alfa = im.getchannel("A") if "A" in im.getbands() else None
     im = im.convert("RGB")
     if icc:
@@ -253,6 +255,11 @@ elif __name__ == "__main__":
         assert abrir_foto(f"{d}/q.png").getpixel((2, 2)) == (70, 138, 127)
         Image.new("RGBA", (8, 8), (1, 2, 3, 40)).save(f"{d}/t.png")
         assert abrir_foto(f"{d}/t.png", "RGBA").getpixel((2, 2))[3] == 40
+        pal = Image.new("P", (8, 8), 0)
+        pal.putpalette([0, 0, 0, 200, 30, 30])
+        pal.paste(1, (4, 0, 8, 8))
+        pal.save(f"{d}/p8.png", transparency=0)  # PNG de 8 bits com fundo transparente (como o TinyPNG salva)
+        assert abrir_foto(f"{d}/p8.png", "RGBA").getpixel((1, 1))[3] == 0 and abrir_foto(f"{d}/p8.png", "RGBA").getpixel((6, 1))[3] == 255
         Image.new("RGB", (64, 64), (200, 30, 30)).save(f"{d}/p.png")
         REFERENCIAS = Path(d) / "ref"
         igual_referencia(f"{d}/p.png", "t")  # sem referência: grava

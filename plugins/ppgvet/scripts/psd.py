@@ -174,7 +174,8 @@ def _texto(pp, op, lista):
     """troca o texto; largo demais quebra em duas linhas (e diminui se ainda não couber)"""
     nome = op.get("texto")
     if "texto_exceto" in op:
-        nome = next(c["nome"] for c in lista if c["texto"] is not None and op["texto_exceto"].lower() not in c["texto"].lower())
+        nfc = lambda t: unicodedata.normalize("NFC", t).lower()  # texto do PSD do Mac pode vir decomposto
+        nome = next(c["nome"] for c in lista if c["texto"] is not None and nfc(op["texto_exceto"]) not in nfc(c["texto"]))
     valor = op["valor"]
     saida = pp.script(f"""var t=camada({js(nome)}), a=caixa(t); t.textItem.contents={js(valor)}; var b=caixa(t);
 app.echoToOE(JSON.stringify([a,b]));""")
@@ -202,7 +203,10 @@ def _renomear(pp, pares):
 
 def preencher(pp, modelo, ops, saidas, pasta_trabalho=None):
     """aplica as operações no modelo e grava as saídas ({"png": caminho, "psd": caminho}); devolve a lista de camadas"""
-    d = Path(pasta_trabalho or tempfile.mkdtemp())
+    if pasta_trabalho is None:  # recortes e imagens de passagem somem no fim
+        with tempfile.TemporaryDirectory() as t:
+            return preencher(pp, modelo, ops, saidas, t)
+    d = Path(pasta_trabalho)
     pp.abrir(modelo)
     lista = camadas(pp)
     falta = _falta(ops, lista)
@@ -237,12 +241,17 @@ def preencher(pp, modelo, ops, saidas, pasta_trabalho=None):
     return lista
 
 
+JS_UNICOS = """var k=0;function u(c){for(var i=0;i<c.layers.length;i++){var l=c.layers[i];
+if(l.kind==LayerKind.SMARTOBJECT){k++;l.name=l.name+" #"+k;}if(l.typename=="LayerSet")u(l);}}u(app.activeDocument);"""
+
+
 def textos(pp, fundo=2, visivel=True):
     """(texto, aparece) de cada camada do documento ativo, também dentro dos objetos inteligentes (até `fundo` níveis);
     texto em camada escondida (ou dentro de objeto escondido) vem com aparece=False"""
+    pp.script(JS_UNICOS)  # objeto inteligente com nome repetido: cada um ganha um nome só dele (o documento não é salvo)
     lista = camadas(pp)
     saida = [(" ".join(c["texto"].split()), visivel and c["visivel"]) for c in lista if c["texto"] and c["texto"].strip()]
-    for nome, vis in dict(((c["nome"], c["visivel"]) for c in lista if c.get("so")) if fundo else ()).items():
+    for nome, vis in ((c["nome"], c["visivel"]) for c in lista if c.get("so")) if fundo else ():
         abrir_dentro(pp, nome)
         saida += textos(pp, fundo - 1, visivel and vis)
         pp.script("app.activeDocument.close(SaveOptions.DONOTSAVECHANGES);")
